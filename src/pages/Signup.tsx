@@ -4,6 +4,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import axios from "axios";
 import { signupValidation } from "../helper/validate";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "../../firebase/firebaseConfig";
 
 const Signup: React.FC = () => {
   const baseUrl: string = "http://localhost:4000/api/auth/user";
@@ -47,23 +49,51 @@ const Signup: React.FC = () => {
     },
   });
 
+  const GoogleAuth=async()=>{
+    try {
+      const provider = await new GoogleAuthProvider();
+    const googleAuth= signInWithPopup(auth,provider)
+    return googleAuth
+    
+  } catch (error) {
+    console.log('Error in the the gogle auth firebase',error);
+    
+  }
+}
+
+const handleGoogle = async (e: any) => {
+  e.preventDefault();
+  await GoogleAuth().then(async (data: any) => {
+    const userData = {
+      profile: data.user.photoURL,
+      email: data.user.email,
+      name: data.user.displayName,
+      isGoogle: true,
+      isFacebook: false,
+    };
+    console.log(userData);
+    // The rest of the code within the function is not provided in the snippet
+    // ...
+  });
+};
+
   return (
     <div className="flex items-center justify-center h-screen">
       <Toaster position="top-right" reverseOrder={false}></Toaster>
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm border px-7 py-3 rounded-2xl bg-white">
-        <h2 className="mt-10 text-center text-4xl font-bold text-indigo-600 hover:text-indigo-500">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm border px-7  rounded-2xl bg-white">
+        <h2 className="mt-5 text-center text-4xl font-bold text-indigo-600 hover:text-indigo-500">
           {"<EchoBlog/>"}
         </h2>
 
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-5 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">
             Create New Account
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
           <form
-            className="space-y-6"
+            className="space-y-4"
             method="POST"
             onSubmit={formik.handleSubmit}
             noValidate
@@ -75,7 +105,7 @@ const Signup: React.FC = () => {
               >
                 Email address*
               </label>
-              <div className="mt-2">
+              <div className="">
                 <input
                   id="email"
                   name="email"
@@ -96,7 +126,7 @@ const Signup: React.FC = () => {
               >
                 Name*
               </label>
-              <div className="mt-2">
+              <div className="">
                 <input
                   id="name"
                   name="name"
@@ -116,7 +146,7 @@ const Signup: React.FC = () => {
               >
                 Phone*
               </label>
-              <div className="mt-2">
+              <div className="">
                 <input
                   id="phone"
                   name="phone"
@@ -136,7 +166,7 @@ const Signup: React.FC = () => {
               >
                 Password*
               </label>
-              <div className="mt-2">
+              <div className="">
                 <input
                   id="password"
                   name="password"
@@ -159,7 +189,7 @@ const Signup: React.FC = () => {
                   Confirm Password*
                 </label>
               </div>
-              <div className="mt-2">
+              <div className="">
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
@@ -183,6 +213,18 @@ const Signup: React.FC = () => {
               </button>
             </div>
           </form>
+          <div className="">
+  <h6>Signup using:</h6>
+</div>
+          <div className="mt-2 flex items-center space-x-2 justify-center">
+            
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue active:bg-blue-800" onClick={handleGoogle}>
+              Google
+            </button>
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue active:bg-blue-800" onClick={handleGoogle}>
+               Github
+            </button>
+          </div>
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Already a member?

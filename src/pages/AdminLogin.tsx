@@ -4,18 +4,19 @@ import { loginValidation } from "../helper/validate";
 import axios from "axios";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
-// import {GoogleButton} from 'react-google-button'
+import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+// import {GoogleButton} from 'react-google-button'
 
-const Login = () => {
-  const baseUrl: string = "http://localhost:4000/api/auth/user";
+const AdminLogin = () => {
+  const baseUrl: string = "http://localhost:4000/api/auth/admin";
 
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      email: "dipint2023@gmail.com",
-      password: "dipin@123",
+      email: "admin@echoblog.com",
+      password: "admin@123",
     },
     validate: loginValidation,
     validateOnBlur: false,
@@ -27,58 +28,38 @@ const Login = () => {
           .post(`${baseUrl}/login`, values, { withCredentials: true })
           .then((res) => {
             console.log(res.data);
+            if (res.data.status) {
+              navigate("/");
+            } else {
+              toast.error(res.data?.message);
+            }
+          })
+          .catch((error) => {
+            toast.error(error?.response?.data?.message);
           });
       }
     },
   });
 
-  // const handleGoogle = async () => {
-  //   return signInWithPopup(auth, provider);
-  // };
-  const GoogleAuth = async () => {
-    try {
-      const provider = await new GoogleAuthProvider();
-      const googleAuth = signInWithPopup(auth, provider);
-      return googleAuth;
-    } catch (error) {
-      console.log("Error in the the gogle auth firebase", error);
-    }
-  };
-
-  const handleGoogle = async (e: any) => {
-    e.preventDefault();
-    await GoogleAuth().then(async (data: any) => {
-      const userData = {
-        profile: data.user.photoURL,
-        email: data.user.email,
-        name: data.user.displayName,
-        isGoogle: true,
-        isFacebook: false,
-      };
-      console.log(userData);
-      // The rest of the code within the function is not provided in the snippet
-      // ...
-    });
-  };
-
   return (
     <div className="flex items-center justify-center h-screen">
       <Toaster position="top-right" reverseOrder={false}></Toaster>
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm border px-7 py-4 rounded-2xl bg-white">
-        <h2 className="mt-10 text-center text-4xl font-bold text-indigo-600 hover:text-indigo-500">
+      <div className="sm:mx-auto  sm:w-full sm:max-w-sm border px-7 py-4 rounded-2xl bg-gray-100">
+        <h6 className="mt-5 ml-10 ps-44 text-gray-500">admin</h6>
+        <h2 className=" text-center text-4xl font-bold text-red-600 hover:text-red-500 ">
           {"<EchoBlog/>"}
         </h2>
 
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
+            Sign in to your Admin account
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form
-            className="space-y-6"
+            className="space-y-6 mb-5"
             method="POST"
             onSubmit={formik.handleSubmit}
             noValidate
@@ -116,7 +97,7 @@ const Login = () => {
                 <div className="text-sm">
                   <a
                     href="#"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
+                    className="font-semibold text-red-600 hover:text-red-500"
                   >
                     Forgot password?
                   </a>
@@ -139,33 +120,16 @@ const Login = () => {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
             </div>
           </form>
-
-          <button
-            className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            onClick={handleGoogle}
-          >
-            signin with google
-          </button>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?
-            <a
-              href="#"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            >
-              Sign Up
-            </a>
-          </p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default AdminLogin;

@@ -4,13 +4,14 @@ import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import axios from "axios";
 import { signupValidation } from "../helper/validate";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from "../../firebase/firebaseConfig";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../../firebase/firebaseConfig";
 
 const Signup: React.FC = () => {
   const baseUrl: string = "http://localhost:4000/api/auth/user";
 
   const navigate = useNavigate();
+
 
   const formik = useFormik({
     initialValues: {
@@ -48,34 +49,36 @@ const Signup: React.FC = () => {
       }
     },
   });
-
-  const GoogleAuth=async()=>{
+  const handleGoogle = async () => {
     try {
-      const provider = await new GoogleAuthProvider();
-    const googleAuth= signInWithPopup(auth,provider)
-    return googleAuth
-    
-  } catch (error) {
-    console.log('Error in the the gogle auth firebase',error);
-    
-  }
-}
-
-const handleGoogle = async (e: any) => {
-  e.preventDefault();
-  await GoogleAuth().then(async (data: any) => {
-    const userData = {
-      profile: data.user.photoURL,
-      email: data.user.email,
-      name: data.user.displayName,
-      isGoogle: true,
-      isFacebook: false,
-    };
-    console.log(userData);
-    // The rest of the code within the function is not provided in the snippet
-    // ...
-  });
-};
+      const data = await signInWithPopup(auth, provider);
+      const userData = {
+        profile: data.user.photoURL,
+        email: data.user.email,
+        name: data.user.displayName,
+        uid: data.user.uid,
+        isGoogle: true,
+        isFacebook: false,
+      };
+  
+      axios.post(`${baseUrl}/google-login`, userData, { withCredentials: true })
+        .then((res) => {
+          console.log('res');
+          console.log(res);
+          if(res.data.status){
+            navigate('/')
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Sign in with Google failed!");
+        });
+    } catch (error) {
+      console.log(error);
+      toast.error("Sign in with Google failed!");
+    }
+  };
+  
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -214,22 +217,27 @@ const handleGoogle = async (e: any) => {
             </div>
           </form>
           <div className="">
-  <h6>Signup using:</h6>
-</div>
+            <h6>Signup using:</h6>
+          </div>
           <div className="mt-2 flex items-center space-x-2 justify-center">
-            
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue active:bg-blue-800" onClick={handleGoogle}>
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+              onClick={handleGoogle}
+            >
               Google
             </button>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue active:bg-blue-800" onClick={handleGoogle}>
-               Github
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+              onClick={handleGoogle}
+            >
+              Github
             </button>
           </div>
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Already a member?
             <Link
-              to="#"
+              to="/login"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
               Sign In

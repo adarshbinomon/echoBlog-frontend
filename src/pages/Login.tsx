@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginValidation } from "../helper/validate";
 import axios from "axios";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -155,12 +155,12 @@ const Login = () => {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?
-            <a
-              href="#"
+            <Link
+              to="/signup"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
               Sign Up
-            </a>
+            </Link>
           </p>
         </div>
       </div>

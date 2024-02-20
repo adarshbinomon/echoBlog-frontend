@@ -4,8 +4,8 @@ import { loginValidation } from "../helper/validate";
 import axios from "axios";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
-// import {GoogleButton} from 'react-google-button'
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+
 
 const Login = () => {
   const baseUrl: string = "http://localhost:4000/api/auth/user";
@@ -26,15 +26,20 @@ const Login = () => {
         axios
           .post(`${baseUrl}/login`, values, { withCredentials: true })
           .then((res) => {
-            console.log(res.data);
-          });
+            if(res.status){
+              console.log({status: true, message: "User login successful"});
+              navigate('/')
+            }
+          })
+          .catch((error)=>{
+            console.log("error", error);
+            toast.error(error.message)
+            
+          })
       }
     },
   });
 
-  // const handleGoogle = async () => {
-  //   return signInWithPopup(auth, provider);
-  // };
   const GoogleAuth = async () => {
     try {
       const provider = await new GoogleAuthProvider();
@@ -56,8 +61,6 @@ const Login = () => {
         isFacebook: false,
       };
       console.log(userData);
-      // The rest of the code within the function is not provided in the snippet
-      // ...
     });
   };
 

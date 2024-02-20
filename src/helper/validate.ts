@@ -6,14 +6,25 @@ interface Errors {
   email?: string;
   phone?: string;
   confirmPassword?: string;
+  gender?: string;
+  dateOfBirth?: string;
+  accountType?: string;
+  userName?: string;
+  bio?: string;
 }
 
 interface Values {
-  password?: string;
-  name?: string;
   email?: string;
+  userName?: string;
+  name?: string;
   phone?: string;
+  password?: string;
   confirmPassword?: string;
+  gender?: string;
+  dateOfBirth?: string;
+  accountType?: string;
+  bio?: string;
+  // _id: string;
 }
 
 export const signupValidation = async (values: Values) => {
@@ -31,7 +42,7 @@ export const signupValidation = async (values: Values) => {
 
 export const loginValidation = async (values: Values) => {
   console.log(values);
-  
+
   let error: Errors = {};
 
   await Promise.all([
@@ -39,7 +50,24 @@ export const loginValidation = async (values: Values) => {
     passwordVerify(error, values),
   ]);
   console.log(error);
-  
+
+  return error;
+};
+
+export const userDetailsValidation = async (values: Values) => {
+  console.log(values);
+
+  let error: Errors = {};
+
+  await Promise.all([
+    userNameVerify(error, values),
+    bioVerify(error, values),
+    genderVerify(error, values),
+    dateOfBirthVerify(error, values),
+    accountTypeVerify(error, values),
+  ]);
+  console.log(error);
+
   return error;
 };
 
@@ -112,5 +140,63 @@ const phoneVerify = (error: Errors = {}, values: Values) => {
   } else if (!phoneRegex.test(values.phone)) {
     error.phone = toast.error("Invalid phone number!");
   }
+  return error;
+};
+
+const genderVerify = (error: Errors = {}, values: Values) => {
+  const allowedGenders = ["Male", "Female", "Other"];
+
+  if (!values.gender) {
+    error.gender = toast.error("Gender required!");
+  } else if (!allowedGenders.includes(values.gender)) {
+    error.gender = toast.error("Invalid gender!");
+  }
+
+  return error;
+};
+
+const dateOfBirthVerify = (error: Errors = {}, values: Values) => {
+  const dateOfBirthRegex = /^\d{4}-\d{2}-\d{2}$/; // Assuming date format YYYY-MM-DD
+
+  if (!values.dateOfBirth) {
+    error.dateOfBirth = toast.error("Date of Birth required!");
+  } else if (!dateOfBirthRegex.test(values.dateOfBirth)) {
+    error.dateOfBirth = toast.error("Invalid date format (YYYY-MM-DD)!");
+  }
+
+  return error;
+};
+
+const accountTypeVerify = (error: Errors = {}, values: Values) => {
+  const allowedAccountTypes = ["Public", "Private"]; // Assuming these are the valid account types
+
+  if (!values.accountType) {
+    error.accountType = toast.error("Account Type required!");
+  } else if (!allowedAccountTypes.includes(values.accountType)) {
+    error.accountType = toast.error("Invalid Account Type!");
+  }
+
+  return error;
+};
+
+const userNameVerify = (error: Errors = {}, values: Values) => {
+  const userNameRegex = /^[a-zA-Z0-9_]+$/;
+
+  if (!values.userName) {
+    error.userName = toast.error("Username required!");
+  } else if (!userNameRegex.test(values.userName)) {
+    error.userName = toast.error(
+      "Invalid username. It can contain only letters, numbers, and underscores (_)."
+    );
+  }
+
+  return error;
+};
+
+const bioVerify = (error: Errors = {}, values: Values) => {
+  if (!values.bio) {
+    error.bio = toast.error("Bio cannot be empty!");
+  }
+
   return error;
 };

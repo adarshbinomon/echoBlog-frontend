@@ -41,7 +41,9 @@ const OtpVerify: React.FC = () => {
         .post(`${baseUrl}/verify-otp`, enteredOtp, { withCredentials: true })
         .then((res) => {
           if (res.data?.status) {
-            navigate("/");
+            const userId = res.data.user._id 
+            
+            navigate(`/user-details/${userId}`);
           }else{
             toast.error(res.data.message)
           }

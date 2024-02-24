@@ -1,9 +1,9 @@
-import { Routes, Route, useParams } from "react-router-dom";
-import Signup from "../pages/Signup";
-import Login from "../pages/Login";
-import OtpVerify from "../pages/OtpVerify";
-import Home from "../pages/Home";
-import UserDetails from "../pages/UserDetails";
+import { Routes, Route } from "react-router-dom";
+import Signup from "../pages/user/Signup";
+import Login from "../pages/user/Login";
+import OtpVerify from "../pages/user/OtpVerify";
+import Home from "../pages/user/Home";
+import UserDetails from "../pages/user/UserDetails";
 
 const UserRoutes = () => {
   return (

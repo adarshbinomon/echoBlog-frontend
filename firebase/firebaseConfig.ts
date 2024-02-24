@@ -1,20 +1,29 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
+const authDomain = import.meta.env.VITE_FIREBASE_AUTH_DOMAIN;
+const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
+const storageBucket = import.meta.env.VITE_FIREBASE_STORAGE_BUCKET;
+const messagingSenderId = import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID;
+const appId = import.meta.env.VITE_FIREBASE_APP_ID;
+
+console.log(apiKey);
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDy0n67gbd9vf8gTd7OXwqqNp10-7Qj6V4",
-  authDomain: "echoblog-authentication.firebaseapp.com",
-  projectId: "echoblog-authentication",
-  storageBucket: "echoblog-authentication.appspot.com",
-  messagingSenderId: "1055433462005",
-  appId: "1:1055433462005:web:0d6bf6aaa9ae4618a275bc",
+  apiKey: apiKey,
+  authDomain: authDomain,
+  projectId: projectId,
+  storageBucket: storageBucket,
+  messagingSenderId: messagingSenderId,
+  appId: appId,
 };
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const provider = new GoogleAuthProvider()
+export const provider = new GoogleAuthProvider();
 provider.setCustomParameters({
-  prompt: 'select_account'
+  prompt: "select_account",
 });
 
 export default app;

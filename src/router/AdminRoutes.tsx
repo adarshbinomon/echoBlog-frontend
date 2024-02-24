@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import AdminLogin from "../pages/AdminLogin";
-import AdminHome from "../pages/AdminHome";
+import AdminLogin from "../pages/admin/AdminLogin";
+import AdminHome from "../pages/admin/AdminHome";
 
 const AdminRoutes = () => {
   return (

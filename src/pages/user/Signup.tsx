@@ -3,15 +3,23 @@ import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import axios from "axios";
-import { signupValidation } from "../helper/validate";
+import { signupValidation } from "../../helper/validate";
 import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "../../firebase/firebaseConfig";
+import { auth, provider } from "../../../firebase/firebaseConfig";
+import { useEffect } from "react";
+
 
 const Signup: React.FC = () => {
   const baseUrl: string = "http://localhost:4000/api/auth/user";
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const formik = useFormik({
     initialValues: {
@@ -60,13 +68,15 @@ const Signup: React.FC = () => {
         isGoogle: true,
         isFacebook: false,
       };
-  
-      axios.post(`${baseUrl}/google-login`, userData, { withCredentials: true })
+
+      axios
+        .post(`${baseUrl}/google-login`, userData, { withCredentials: true })
         .then((res) => {
-          console.log('res');
+          console.log("res");
           console.log(res);
-          if(res.data.status){
-            navigate('/')
+          if (res.data.status) {
+            navigate("/");
+            localStorage.setItem("accessToken", res.data?.accessToken);
           }
         })
         .catch((error) => {
@@ -78,7 +88,6 @@ const Signup: React.FC = () => {
       toast.error("Sign in with Google failed!");
     }
   };
-  
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -226,12 +235,12 @@ const Signup: React.FC = () => {
             >
               Google
             </button>
-            <button
+            {/* <button
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
               onClick={handleGoogle}
             >
               Github
-            </button>
+            </button> */}
           </div>
 
           <p className="mt-10 text-center text-sm text-gray-500">

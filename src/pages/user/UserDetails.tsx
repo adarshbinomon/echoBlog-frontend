@@ -1,16 +1,18 @@
 import React from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import axios from "axios";
-import { userDetailsValidation } from "../helper/validate";
-import { GenderEnum, AccountTypeEnum } from "../helper/enum";
+import { userDetailsValidation } from "../../helper/validate";
+import { GenderEnum, AccountTypeEnum } from "../../helper/enum";
+import { useSelector } from "react-redux";
+
 
 const UserDetails: React.FC = () => {
   const baseUrl: string = "http://localhost:4001/api/user";
 
   const { userId } = useParams();
-  console.log(userId);
+//   console.log(userId);
 
   const navigate = useNavigate();
 
@@ -31,21 +33,31 @@ const UserDetails: React.FC = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: (values) => {
-      console.log("Form values submitted:", values);
+    //   console.log("Form values submitted:", values);
       if (formik.isValid) {
-        axios.post(`${baseUrl}/user-details`, values, {withCredentials: true})
-        .then((res)=>{
-            if(res.data.status){
-                navigate('/')
-            }            
-        })
+        axios
+          .post(`${baseUrl}/user-details`, values, { withCredentials: true })
+          .then((res) => {
+            if (res.data.status) {
+              navigate("/");
+            }
+          });
       }
     },
   });
 
+  const userData = useSelector((state: any) => state.persisted.user.userData);
+
+
   return (
     <div className="flex items-center justify-center h-screen">
       <Toaster position="top-right" reverseOrder={true}></Toaster>
+      <div>
+      <h2>User Details</h2>
+      <p>Name: {userData.name}</p>
+      <p>Email: {userData.email}</p>
+      {/* Add more details as needed */}
+    </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm border px-7  rounded-2xl bg-white">
         <h2 className="mt-5 text-center text-4xl font-bold text-indigo-600 hover:text-indigo-500">
           {"<EchoBlog/>"}

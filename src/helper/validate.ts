@@ -24,7 +24,7 @@ interface Values {
   dateOfBirth?: string;
   accountType?: string;
   bio?: string;
-  // _id: string;
+  _id?: string;
 }
 
 export const signupValidation = async (values: Values) => {

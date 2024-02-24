@@ -2,10 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { addUser } from "../../redux/slices/ userSlices";
+import { useDispatch } from "react-redux";
 
 const OtpVerify: React.FC = () => {
   const baseUrl: string = "http://localhost:4000/api/auth/user";
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const [otp, setOtp] = useState(["", "", "", ""]);
   const refs = [
@@ -41,17 +44,22 @@ const OtpVerify: React.FC = () => {
         .post(`${baseUrl}/verify-otp`, enteredOtp, { withCredentials: true })
         .then((res) => {
           if (res.data?.status) {
-            const userId = res.data.user._id 
-            
+            const userId = res.data.user._id;
+            console.log(res.data.user);
+            dispatch(addUser(res.data.user));
+
+
+            localStorage.setItem("accessToken", res.data?.accessToken);
             navigate(`/user-details/${userId}`);
-          }else{
-            toast.error(res.data.message)
+            
+          } else {
+            toast.error(res.data.message);
           }
         })
         .catch((error: any) => {
-            console.error("error", error);
-            toast.error("An error occured!");
-          });
+          console.error("error", error);
+          toast.error("An error occured!");
+        });
     }
   };
 

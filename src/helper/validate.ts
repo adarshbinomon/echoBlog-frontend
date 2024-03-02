@@ -1,31 +1,5 @@
 import toast from "react-hot-toast";
-
-interface Errors {
-  password?: string;
-  name?: string;
-  email?: string;
-  phone?: string;
-  confirmPassword?: string;
-  gender?: string;
-  dateOfBirth?: string;
-  accountType?: string;
-  userName?: string;
-  bio?: string;
-}
-
-interface Values {
-  email?: string;
-  userName?: string;
-  name?: string;
-  phone?: string;
-  password?: string;
-  confirmPassword?: string;
-  gender?: string;
-  dateOfBirth?: string;
-  accountType?: string;
-  bio?: string;
-  _id?: string;
-}
+import { Errors, Values } from "../utils/interfaces/inteface";
 
 export const signupValidation = async (values: Values) => {
   let error: Errors = {};
@@ -156,7 +130,7 @@ const genderVerify = (error: Errors = {}, values: Values) => {
 };
 
 const dateOfBirthVerify = (error: Errors = {}, values: Values) => {
-  const dateOfBirthRegex = /^\d{4}-\d{2}-\d{2}$/; // Assuming date format YYYY-MM-DD
+  const dateOfBirthRegex = /^\d{4}-\d{2}-\d{2}$/; 
 
   if (!values.dateOfBirth) {
     error.dateOfBirth = toast.error("Date of Birth required!");
@@ -168,7 +142,7 @@ const dateOfBirthVerify = (error: Errors = {}, values: Values) => {
 };
 
 const accountTypeVerify = (error: Errors = {}, values: Values) => {
-  const allowedAccountTypes = ["Public", "Private"]; // Assuming these are the valid account types
+  const allowedAccountTypes = ["Public", "Private"]; 
 
   if (!values.accountType) {
     error.accountType = toast.error("Account Type required!");

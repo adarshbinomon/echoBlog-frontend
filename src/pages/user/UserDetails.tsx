@@ -6,24 +6,21 @@ import axios from "axios";
 import { userDetailsValidation } from "../../helper/validate";
 import { GenderEnum, AccountTypeEnum } from "../../helper/enum";
 import { useSelector } from "react-redux";
-
+import { UserData } from "../../utils/interfaces/inteface";
 
 const UserDetails: React.FC = () => {
   const baseUrl: string = "http://localhost:4001/api/user";
+  const userData = useSelector((state: UserData) => state.persisted.user.userData);
 
   const { userId } = useParams();
-//   console.log(userId);
 
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      name: "",
       userName: "",
-      phone: "",
+      phone: userData.phone,
       bio: "",
-      confirmPassword: "",
       gender: "",
       dateOfBirth: "",
       accountType: "",
@@ -33,7 +30,6 @@ const UserDetails: React.FC = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: (values) => {
-    //   console.log("Form values submitted:", values);
       if (formik.isValid) {
         axios
           .post(`${baseUrl}/user-details`, values, { withCredentials: true })
@@ -46,18 +42,9 @@ const UserDetails: React.FC = () => {
     },
   });
 
-  const userData = useSelector((state: any) => state.persisted.user.userData);
-
-
   return (
     <div className="flex items-center justify-center h-screen">
       <Toaster position="top-right" reverseOrder={true}></Toaster>
-      <div>
-      <h2>User Details</h2>
-      <p>Name: {userData.name}</p>
-      <p>Email: {userData.email}</p>
-      {/* Add more details as needed */}
-    </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm border px-7  rounded-2xl bg-white">
         <h2 className="mt-5 text-center text-4xl font-bold text-indigo-600 hover:text-indigo-500">
           {"<EchoBlog/>"}
@@ -78,7 +65,7 @@ const UserDetails: React.FC = () => {
           >
             <div>
               <label
-                htmlFor="gender"
+                htmlFor="userName"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 User name*
@@ -90,6 +77,25 @@ const UserDetails: React.FC = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.userName}
+                  className="px-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                ></input>
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Phone*
+              </label>
+              <div className="">
+                <input
+                  id="phone"
+                  name="phone"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.phone}
                   className="px-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 ></input>
               </div>
@@ -209,7 +215,7 @@ const UserDetails: React.FC = () => {
                 type="submit"
                 className="mb-7 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Save Date
+                Save Data
               </button>
             </div>
           </form>

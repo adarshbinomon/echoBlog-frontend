@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { addUser } from "../../redux/slices/ userSlices";
+import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
 
 const OtpVerify: React.FC = () => {

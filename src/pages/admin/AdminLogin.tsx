@@ -2,12 +2,9 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { loginValidation } from "../../helper/validate";
 import axios from "axios";
-// import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-// import { auth } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
-// import {GoogleButton} from 'react-google-button'
 
 const AdminLogin = () => {
   const baseUrl: string = "http://localhost:4000/api/auth/admin";

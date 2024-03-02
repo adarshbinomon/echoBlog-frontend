@@ -6,12 +6,16 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseConfig";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
+import { addUser } from "../../redux/slices/userSlices";
+import { useDispatch } from "react-redux";
 
 
 const Login = () => {
   const baseUrl: string = "http://localhost:4000/api/auth/user";
 
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+
 
   const formik = useFormik({
     initialValues: {
@@ -30,6 +34,7 @@ const Login = () => {
             if(res.status){
               console.log({status: true, message: "User login successful"});
               localStorage.setItem('accessToken',res.data?.accessToken)
+              dispatch(addUser(res.data.user));
               navigate('/')
             }
           })

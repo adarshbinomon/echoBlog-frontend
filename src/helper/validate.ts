@@ -45,6 +45,33 @@ export const userDetailsValidation = async (values: Values) => {
   return error;
 };
 
+export const editAccountValidation = async (values: Values) => {
+  let error: Errors = {};
+  console.log('validate');
+  
+
+  await Promise.all([
+    userNameVerify(error, values),
+    phoneVerify(error, values),
+    genderVerify(error, values),
+    dateOfBirthVerify(error, values),
+  ]);
+  console.log(error);
+  return error;
+};
+
+export const editProfileValidation = async (values: Values) => {
+  let error: Errors = {};
+
+  await Promise.all([
+    accountTypeVerify(error, values),
+    nameVerify(error, values),
+    bioVerify(error, values),
+  ]);
+  console.log(error);
+  return error;
+};
+
 //functions
 
 const nameVerify = (error: Errors = {}, values: Values) => {
@@ -130,7 +157,7 @@ const genderVerify = (error: Errors = {}, values: Values) => {
 };
 
 const dateOfBirthVerify = (error: Errors = {}, values: Values) => {
-  const dateOfBirthRegex = /^\d{4}-\d{2}-\d{2}$/; 
+  const dateOfBirthRegex = /^\d{4}-\d{2}-\d{2}$/;
 
   if (!values.dateOfBirth) {
     error.dateOfBirth = toast.error("Date of Birth required!");
@@ -142,7 +169,7 @@ const dateOfBirthVerify = (error: Errors = {}, values: Values) => {
 };
 
 const accountTypeVerify = (error: Errors = {}, values: Values) => {
-  const allowedAccountTypes = ["Public", "Private"]; 
+  const allowedAccountTypes = ["Public", "Private"];
 
   if (!values.accountType) {
     error.accountType = toast.error("Account Type required!");
@@ -172,5 +199,20 @@ const bioVerify = (error: Errors = {}, values: Values) => {
     error.bio = toast.error("Bio cannot be empty!");
   }
 
+  return error;
+};
+
+const profilePictureVerify = (error: Errors = {}, values: Values) => {
+  if (!values.profilePicture) {
+    error.profilePicture = toast.error("Profile picture is required!");
+  }
+  return error;
+};
+const coverPictureVerify = (error: Errors = {}, values: Values) => {
+  const fileExtensionRegex = /\.(jpg|jpeg|png)$/i;
+
+  if (!values.coverPicture) {
+    error.coverPicture = toast.error("cover picture is required!");
+  }
   return error;
 };

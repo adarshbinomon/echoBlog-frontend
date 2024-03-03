@@ -7,7 +7,8 @@ import Footer from "../../components/Footer";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
 import { useDispatch } from "react-redux";
-import {clearUser} from '../../redux/slices/userSlices'
+import { clearUser } from "../../redux/slices/userSlices";
+import { addUser } from "../../redux/slices/userSlices";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -17,13 +18,24 @@ const Home = () => {
     (state: UserData) => state.persisted.user.userData
   );
   console.log(userData);
+  const id = userData._id;
 
-  const baseUrl: string = "http://localhost:4000/api/auth/user";
+  const authServiceBaseUrl: string = "http://localhost:4000/api/auth/user";
+  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       navigate("/");
+      axios
+        .get(`${userServiceBaseUrl}/user-profile/${id}`)
+        .then((res) => {
+          console.log(res.data.user);
+          dispatch(addUser(res.data.user));
+        })
+        .catch((error) => {
+          console.log(error.response.data.message);
+        });
     } else {
       navigate("/login");
     }
@@ -31,7 +43,7 @@ const Home = () => {
 
   const handleLogout = () => {
     axios
-      .get(`${baseUrl}/logout`, { withCredentials: true })
+      .get(`${authServiceBaseUrl}/logout`, { withCredentials: true })
       .then((res) => {
         if (res.data.status) {
           localStorage.removeItem("accessToken");

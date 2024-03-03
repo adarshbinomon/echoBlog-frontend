@@ -1,10 +1,85 @@
 import { AccountTypeEnum } from "../helper/enum";
+import { useSelector } from "react-redux";
+import { UserData } from "../utils/interfaces/inteface";
+import { useFormik } from "formik";
+import { editProfileValidation } from "../helper/validate";
+import { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const EditProfileProfileTab = () => {
+  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
+
+  const userData = useSelector(
+    (state: UserData) => state.persisted.user.userData
+  );
+
+  const [profilePicture, setProfilePicture] = useState(
+    "userData.profilePicture"
+  );
+  const [coverPicture, setCoverPicture] = useState("userData.CoverPicture");
+  const userId = userData._id;
+
+  const handleProfileUpload = () => {
+    const formData = new FormData();
+    formData.append("profilePicture", profilePicture);
+    formData.append("_id", userId);
+
+    console.log(Array.from(formData.entries()));
+
+    axios
+      .post(`${userServiceBaseUrl}/upload-profile-picture`, formData)
+      .then(() => toast.success("Cover Picture Updated!"))
+      .catch((err) => console.error("Upload error:", err));
+  };
+
+  const handleCoverUpload = () => {
+    const formData = new FormData();
+    formData.append("coverPicture", coverPicture);
+    formData.append("_id", userId);
+
+    console.log(Array.from(formData.entries()));
+
+    axios
+      .post(`${userServiceBaseUrl}/upload-cover-picture`, formData)
+      .then(() => toast.success("Cover Picture Updated!"))
+      .catch((err) => console.error("Upload error:", err));
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      accountType: userData.accountType,
+      name: userData.name,
+      bio: userData.bio,
+      _id: userData._id,
+    },
+    validate: editProfileValidation,
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: (values) => {
+      if (formik.isValid) {
+        axios
+          .put(`${userServiceBaseUrl}/edit-profile`, values, {
+            withCredentials: true,
+          })
+          .then(() => toast.success("User Details Updated!"))
+          .catch((error) => {
+            toast.error("User Data Update Failed!");
+            console.log(error, "error");
+          });
+      }
+    },
+  });
+
   return (
     <>
       <div>
-        <form action="" className="space-y-6" method="post" noValidate>
+        <form
+          className="space-y-6"
+          onSubmit={formik.handleSubmit}
+          method="post"
+          noValidate
+        >
           <div className="flex flex-row items-center ">
             <div className="w-1/3 flex justify-start">
               {" "}
@@ -19,9 +94,9 @@ const EditProfileProfileTab = () => {
               <select
                 id="accountType"
                 name="accountType"
-                // onChange={formik.handleChange}
-                // onBlur={formik.handleBlur}
-                // value={formik.values.accountType}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.accountType}
                 className="px-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               >
                 <option value="">Select Type</option>
@@ -36,22 +111,22 @@ const EditProfileProfileTab = () => {
           <div className="flex flex-row items-center ">
             <div className="w-1/3 flex justify-start">
               <label
-                htmlFor="email"
+                htmlFor="name"
                 className="block text-sm font-medium leading-6 text-gray-900 "
               >
-                User name:
+                Name:
               </label>
             </div>
             <div className="w-2/3 ms-[50px]">
               <input
-                id="userName"
-                name="userName"
-                type="userName"
-                autoComplete="userName"
+                id="name"
+                name="name"
+                type="name"
+                autoComplete="name"
                 required
-                // onChange={formik.handleChange}
-                // onBlur={formik.handleBlur}
-                // value={formik.values.userName}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.name}
                 className="px-1  block w-full rounded-full border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -72,22 +147,31 @@ const EditProfileProfileTab = () => {
                 type="bio"
                 autoComplete="bio"
                 required
-                // onChange={formik.handleChange}
-                // onBlur={formik.handleBlur}
-                // value={formik.values.bio}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.bio}
                 className="px-1  block w-full rounded-full border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
-
-          <div className="flex flex-row items-center ">
+          <div className="">
+            <button
+              type="submit"
+              className="float-right w-auto px-2 ms-24 mb-5 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
+            >
+              Save Changes
+            </button>{" "}
+          </div>
+        </form>
+        <hr className="w-full " />
+        <form method="post" encType="multipart/form-data">
+          <div className="flex flex-row items-center mt-10">
             <div className="w-1/3 flex justify-start">
-              {" "}
               <label
                 htmlFor="profilePicture"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                ProfilePicture:
+                Profile Picture:
               </label>
             </div>
             <div className="w-1/3 ms-[50px]">
@@ -98,15 +182,21 @@ const EditProfileProfileTab = () => {
                 id="profilePicture"
                 name="profilePicture"
                 type="file"
-                required
-                // onChange={formik.handleChange}
-                // onBlur={formik.handleBlur}
-                // value={formik.values.dateOfBirth}
+                onChange={(e: any) => setProfilePicture(e.target.files[0])}
                 className="px-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
+        </form>
 
+        <button
+          onClick={handleProfileUpload}
+          className="float-right w-auto px-2 ms-24 mb-5 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
+        >
+          Upload Profile Picture{" "}
+        </button>
+        <hr className="mt-10 w-full mb-10" />
+        <form method="post" encType="multipart/form-data">
           <div className="flex flex-row items-center ">
             <div className="w-1/3 flex justify-start">
               {" "}
@@ -123,10 +213,7 @@ const EditProfileProfileTab = () => {
                   id="coverPicture"
                   name="coverPicture"
                   type="file"
-                  required
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // value={formik.values.coverPicture}
+                  onChange={(e: any) => setCoverPicture(e.target.files[0])}
                   className="px-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -136,6 +223,12 @@ const EditProfileProfileTab = () => {
             </div>
           </div>
         </form>
+        <button
+          onClick={handleCoverUpload}
+          className="float-right w-auto px-2 ms-24 mt-5 mb-5 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
+        >
+          Upload Cover Photo{" "}
+        </button>
       </div>
     </>
   );

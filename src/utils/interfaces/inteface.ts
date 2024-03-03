@@ -9,6 +9,8 @@ export interface Errors {
   accountType?: string;
   userName?: string;
   bio?: string;
+  coverPicture?: string;
+  profilePicture?: string;
 }
 
 export interface Values {
@@ -23,6 +25,8 @@ export interface Values {
   accountType?: string;
   bio?: string;
   _id?: string;
+  coverPicture?: string;
+  profilePicture?: string;
 }
 
 export interface UserData {

@@ -8,7 +8,7 @@ const EditProfile = () => {
   return (
     <>
       <Navbar />
-      <div className="h-screen pt-16 flex justify-center ">
+      <div className="h-auto pt-16 flex justify-center ">
         <div className="mt-10 flex-col text-center w-[700px]">
           <div className="space-x-9 text-gray-600">
             <Link to="/edit-profile/">
@@ -36,7 +36,6 @@ const EditProfile = () => {
             <hr />
             </div>
           <div className=" mt-10 ">
-            
             <Routes>
               <Route path="/" element={<EditProfileAccountTab />}></Route>
               <Route path="/profile" element={<EditProfileProfileTab />}></Route>

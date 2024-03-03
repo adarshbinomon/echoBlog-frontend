@@ -2,50 +2,18 @@ import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { FileText, CalendarDays } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { dateParser } from "../../helper/dateParser";
 
 
 const Profile = () => {
-  const baseUrl = "http://localhost:4001/api/user";
   const navigate = useNavigate()
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
-  const [userDetails, setUserDetails] = useState<UserData>();
 
-  useEffect(() => {
-    const id = userData._id;
-    axios
-      .get(`${baseUrl}/user-profile/${id}`)
-      .then((res) => {
-        console.log(res.data.user);
-        setUserDetails(res.data.user);
-      })
-      .catch((error) => {
-        console.log(error.response.data.message);
-      });
-  }, []);
-
-  //date convertion for joining date
-
-  const inputDate: string | undefined = userDetails?.createdOn;
-
-  if (!inputDate) {
-    return <div>No date available</div>;
-  }
-
-  const parsedDate = new Date(inputDate as string);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  };
-
-  const createdOn = parsedDate.toLocaleDateString("en-US", options);
-
+  const createdOn = dateParser(userData.createdOn)
   //edit profile on click
 
   const handleEditProfile = () =>{
@@ -86,15 +54,15 @@ const Profile = () => {
             <div className="flex flex-col space-y-2 ms-[-20px]">
               <div
                 id="name"
-                className="flex justify-start text-xl font-bold text-gray-900 w-[150px] mt-5 font"
+                className="flex container justify-start text-xl font-bold text-gray-900 w-auto mt-5 font"
               >
-                <p>{userDetails?.name}</p>
+                <p>{userData?.name}</p>
               </div>
               <div
-                id="name"
+                id="userName"
                 className="flex justify-start mt-[5px] font-thin font-mono text-gray-500 w-[150px] "
               >
-                <p>@{userDetails?.userName}</p>
+                <p>@{userData?.userName}</p>
               </div>
 
               <div className=" flex space-x-2 text-gray-500">
@@ -109,8 +77,8 @@ const Profile = () => {
 
               <div className=" flex space-x-2 text-gray-500">
                 <p>
-                  {userDetails?.followers.length} Followers{" "}
-                  {userDetails?.following.length} Following
+                  {userData?.followers.length} Followers{" "}
+                  {userData?.following.length} Following
                 </p>
               </div>
               <div className="flex flex-row  ">

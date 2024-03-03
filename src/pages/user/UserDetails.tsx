@@ -18,7 +18,7 @@ const UserDetails: React.FC = () => {
 
   const formik = useFormik({
     initialValues: {
-      userName: "",
+      userName: "", 
       phone: userData.phone,
       bio: "",
       gender: "",

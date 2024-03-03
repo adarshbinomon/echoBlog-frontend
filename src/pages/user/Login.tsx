@@ -5,7 +5,7 @@ import axios from "axios";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseConfig";
 import toast, { Toaster } from "react-hot-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
 
@@ -19,11 +19,11 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: "dipint2023@gmail.com",
-      password: "dipin@123",
+      email: "adarsh@echoblog.com",
+      password: "a@1234",
     },
     validate: loginValidation,
-    validateOnBlur: false,
+    validateOnBlur: true,
     validateOnChange: false,
     onSubmit: (values) => {
       console.log("form values submitted", values);

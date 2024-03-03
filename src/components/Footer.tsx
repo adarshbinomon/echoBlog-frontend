@@ -5,7 +5,7 @@ const Footer = () => {
 
   return (
     <>
-    <div className=""></div>
+    <div className="mt-10"></div>
       <div className="bg-gray-200 flex-col py-5 space-y-5 text-gray-800">
         <div className="mb-5 text-indigo-600 font-bold text-2xl hover:text-indigo-500">
           <LogoSmall />

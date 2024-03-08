@@ -47,8 +47,7 @@ export const userDetailsValidation = async (values: Values) => {
 
 export const editAccountValidation = async (values: Values) => {
   let error: Errors = {};
-  console.log('validate');
-  
+  console.log("validate");
 
   await Promise.all([
     userNameVerify(error, values),
@@ -71,6 +70,19 @@ export const editProfileValidation = async (values: Values) => {
   console.log(error);
   return error;
 };
+
+export const profilePictureValidation = async (values: Values) => {
+  let error: Errors = {};
+  await Promise.resolve(profilePictureVerify(error, values));
+  return error;
+};
+
+export const coverPictureValidation = async (values: Values) => {
+  let error: Errors = {};
+  await Promise.resolve(coverPictureVerify(error, values)); 
+  return error;
+};
+
 
 //functions
 
@@ -203,16 +215,28 @@ const bioVerify = (error: Errors = {}, values: Values) => {
 };
 
 const profilePictureVerify = (error: Errors = {}, values: Values) => {
+  const fileExtensionRegex = /\.(jpg|jpeg|png)$/i;
+
   if (!values.profilePicture) {
     error.profilePicture = toast.error("Profile picture is required!");
+  } else if (!fileExtensionRegex.test(values.profilePicture)) {
+    error.coverPicture = toast.error(
+      "Invalid file format. Please use JPG, JPEG, or PNG."
+    );
   }
   return error;
 };
+
 const coverPictureVerify = (error: Errors = {}, values: Values) => {
   const fileExtensionRegex = /\.(jpg|jpeg|png)$/i;
 
   if (!values.coverPicture) {
-    error.coverPicture = toast.error("cover picture is required!");
+    error.coverPicture = toast.error("Cover picture is required!");
+  } else if (!fileExtensionRegex.test(values.coverPicture)) {
+    error.coverPicture = toast.error(
+      "Invalid file format. Please use JPG, JPEG, or PNG."
+    );
   }
+
   return error;
 };

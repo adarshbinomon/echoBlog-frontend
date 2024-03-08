@@ -5,34 +5,70 @@ import { UserData } from "../../utils/interfaces/inteface";
 import { FileText, CalendarDays } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { dateParser } from "../../helper/dateParser";
+import QuillViewer from "../../components/QuillViewer";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
+interface Post {
+  content: string;
+  _id: string;
+}
 
 const Profile = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
 
-  const createdOn = dateParser(userData.createdOn)
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  const postServiceBaseUrl: string = "http://localhost:4002/api/post";
+
+  const createdOn = dateParser(userData.createdOn);
+
   //edit profile on click
 
-  const handleEditProfile = () =>{
-    navigate("/edit-profile")
-  }
+  const handleEditProfile = () => {
+    navigate("/edit-profile");
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${postServiceBaseUrl}/get-posts/${userData._id}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setPosts(res.data.posts);
+        console.log(posts);
+        //  console.log(posts.length)
+      })
+      .catch((error) => {
+        console.log("error", error);
+      })
+      .finally(() => {
+        console.log(posts.length);
+      });
+  }, [userData._id]);
+
+  const handlePost = (id: string) => {
+    // navigate("/post");
+    console.log(id);
+    navigate(`/post/${id}` )
+  };
 
   return (
     <>
-      <div className="w-screen h-screen bg-white">
+      <div className="w-screen   relative ">
         <Navbar />
-        <div className="p-16 flex h-screen items-center flex-col  ">
+        <div className="p-16 flex items-center flex-col  ">
           <div className=" border border-gray-200 w-[700px] h-[200px] mt-8 overflow-hidden ">
-            <img src="9ae8fc22197c56c5e5b0c2c22b05186e .jpeg" alt="coverPicture" />
+            <img src={userData.coverPicture} alt="coverPicture" />
           </div>
           <div className="justify-start px-5  w-[700px] mt-[-75px]">
             <div className="border border-gray-200 w-[150px] h-[150px] rounded-full justify-center flex items-center overflow-hidden">
               <img
                 className=""
-                src="/dummy-profile.png"
+                src={userData.profilePicture}
                 alt="profile-picture"
               />
             </div>
@@ -92,9 +128,23 @@ const Profile = () => {
               <hr className="w-[700px] "></hr>
             </div>
           </div>
+          <div>
+            {posts.length &&
+              posts.map((post: Post, i: number) => (
+                <div
+                  key={i}
+                  className="w-[700px] border m-5 text-center font-semibold "
+                  onClick={() => handlePost(post?._id)}
+                >
+                  {/* <QuillViewer content={post.content} /> */}
+                  <p className="mt-2">{post.content.slice(30, 91)}...</p>
+                  <br />
+                </div>
+              ))}
+          </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 };

@@ -10,7 +10,7 @@ const EditProfile = () => {
       <Navbar />
       <div className="h-auto pt-16 flex justify-center ">
         <div className="mt-10 flex-col text-center w-[700px]">
-          <div className="space-x-9 text-gray-600">
+          <div className="flex justify-between text-gray-600">
             <Link to="/edit-profile/">
               <span className="hover:text-indigo-600 hover:font-bold ">
                 Account

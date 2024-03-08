@@ -1,14 +1,17 @@
 import { GenderEnum } from "../helper/enum";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserData } from "../utils/interfaces/inteface";
 import { useFormik } from "formik";
 import { dateParser } from "../helper/dateParser";
 import axios from "axios";
 import { editAccountValidation } from "../helper/validate";
 import toast from "react-hot-toast";
+import { addUser } from "../redux/slices/userSlices";
 
 const EditProfileAccountTab = () => {
   const userServiceBaseUrl: string = "http://localhost:4001/api/user";
+
+  const dispatch = useDispatch();
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -23,7 +26,7 @@ const EditProfileAccountTab = () => {
       phone: userData.phone,
       gender: userData.gender,
       dateOfBirth: userData.dateOfBirth,
-      _id: userData._id
+      _id: userData._id,
     },
     validate: editAccountValidation,
     validateOnBlur: false,
@@ -35,7 +38,10 @@ const EditProfileAccountTab = () => {
           .put(`${userServiceBaseUrl}/edit-profile`, values, {
             withCredentials: true,
           })
-          .then(() => toast.success("User Details Updated!"))
+          .then((res) => {
+            dispatch(addUser(res.data.user));
+            toast.success("User Details Updated!");
+          })
           .catch((error) => {
             toast.error("User Data Update Failed!");
             console.log(error, "error");
@@ -47,7 +53,12 @@ const EditProfileAccountTab = () => {
   return (
     <>
       <div>
-      <form onSubmit={formik.handleSubmit} className="space-y-6" method="post" noValidate>
+        <form
+          onSubmit={formik.handleSubmit}
+          className="space-y-6"
+          method="post"
+          noValidate
+        >
           <div className="flex flex-row ">
             <div className="w-1/3 flex justify-start">
               <label

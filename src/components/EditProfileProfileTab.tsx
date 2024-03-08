@@ -6,18 +6,19 @@ import { editProfileValidation } from "../helper/validate";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { addUser } from "../redux/slices/userSlices";
+import { useDispatch } from "react-redux";
 
 const EditProfileProfileTab = () => {
   const userServiceBaseUrl: string = "http://localhost:4001/api/user";
+  const dispatch = useDispatch();
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
 
-  const [profilePicture, setProfilePicture] = useState(
-    "userData.profilePicture"
-  );
-  const [coverPicture, setCoverPicture] = useState("userData.CoverPicture");
+  const [profilePicture, setProfilePicture] = useState(userData.profilePicture);
+  const [coverPicture, setCoverPicture] = useState(userData.CoverPicture);
   const userId = userData._id;
 
   const handleProfileUpload = () => {
@@ -29,7 +30,10 @@ const EditProfileProfileTab = () => {
 
     axios
       .post(`${userServiceBaseUrl}/upload-profile-picture`, formData)
-      .then(() => toast.success("Cover Picture Updated!"))
+      .then((res) => {
+        toast.success("Profile Picture Updated!");
+        dispatch(addUser(res.data.user));
+      })
       .catch((err) => console.error("Upload error:", err));
   };
 
@@ -42,7 +46,10 @@ const EditProfileProfileTab = () => {
 
     axios
       .post(`${userServiceBaseUrl}/upload-cover-picture`, formData)
-      .then(() => toast.success("Cover Picture Updated!"))
+      .then((res) => {
+        toast.success("Cover Picture Updated!");
+        dispatch(addUser(res.data.user));
+      })
       .catch((err) => console.error("Upload error:", err));
   };
 
@@ -62,7 +69,10 @@ const EditProfileProfileTab = () => {
           .put(`${userServiceBaseUrl}/edit-profile`, values, {
             withCredentials: true,
           })
-          .then(() => toast.success("User Details Updated!"))
+          .then((res) => {
+            toast.success("User Details Updated!");
+            dispatch(addUser(res.data.user));
+          })
           .catch((error) => {
             toast.error("User Data Update Failed!");
             console.log(error, "error");
@@ -175,7 +185,7 @@ const EditProfileProfileTab = () => {
               </label>
             </div>
             <div className="w-1/3 ms-[50px]">
-              <img src="/dummy-profile.png" alt="" />
+              <img src={userData.profilePicture} alt={userData.userName} />
             </div>
             <div className="w-1/3 ms-[50px]">
               <input
@@ -218,7 +228,7 @@ const EditProfileProfileTab = () => {
                 />
               </div>
               <div className=" ms-[50px]">
-                <img src="/9ae8fc22197c56c5e5b0c2c22b05186e .jpeg" alt="" />
+                <img src={userData.coverPicture} alt={userData.userName} />
               </div>
             </div>
           </div>

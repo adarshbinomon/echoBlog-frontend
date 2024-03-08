@@ -26,8 +26,9 @@ const navbar = () => {
       });
   };
 
+  
   return (
-    <nav className="bg-indigo-600 p-4 fixed w-full">
+    <nav className="bg-indigo-600 p-4 fixed w-full z-50">
       <Toaster position="top-right" reverseOrder={false}></Toaster>
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
@@ -47,11 +48,11 @@ const navbar = () => {
             <a href="/profile" className="text-white hover:text-gray-300">
               Profile
             </a>
+            <Link to="/write-post" className="text-white hover:text-gray-300">
+              <a>Write</a>
+            </Link>
             <a href="#" className="text-white hover:text-gray-300">
               About
-            </a>
-            <a href="#" className="text-white hover:text-gray-300">
-              Contact
             </a>
             <a
               onClick={handleLogout}

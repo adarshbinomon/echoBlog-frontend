@@ -6,6 +6,8 @@ import Home from "../pages/user/Home";
 import UserDetails from "../pages/user/UserDetails";
 import Profile from "../pages/user/Profile";
 import EditProfile from "../pages/user/EditProfile";
+import WritePost from "../pages/user/WritePost";
+import Post from "../pages/user/Post";
 
 const UserRoutes = () => {
   return (
@@ -17,6 +19,8 @@ const UserRoutes = () => {
       <Route path="/profile" element={<Profile />} />
       <Route path="/user-details/:userId" element={<UserDetails />} />
       <Route path="/edit-profile/*" element={<EditProfile />} />
+      <Route path="/write-post/*" element={<WritePost />} />
+      <Route path="/post/:id" element={<Post />} />
     </Routes>
   );
 };

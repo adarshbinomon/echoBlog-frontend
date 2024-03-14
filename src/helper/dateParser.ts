@@ -1,13 +1,13 @@
-export const dateParser = (date: string | undefined) => {
-  const inputDate: string | undefined = date;
+export const dateParser = (date: Date | undefined) => {
+  const inputDate: Date | undefined = date;
 
-  const parsedDate = new Date(inputDate as string);
+  const parsedDate = new Date(inputDate as Date);
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "long",
     year: "numeric",
   };
 
-  const newDate = parsedDate.toLocaleDateString("en-US", options);
+  const newDate = parsedDate.toLocaleDateString("en-IN", options);
   return newDate;
 };

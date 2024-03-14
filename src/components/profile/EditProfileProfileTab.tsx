@@ -1,12 +1,12 @@
-import { AccountTypeEnum } from "../helper/enum";
+import { AccountTypeEnum } from "../../helper/enum";
 import { useSelector } from "react-redux";
-import { UserData } from "../utils/interfaces/inteface";
+import { UserData } from "../../utils/interfaces/inteface";
 import { useFormik } from "formik";
-import { editProfileValidation } from "../helper/validate";
+import { editProfileValidation } from "../../helper/validate";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { addUser } from "../redux/slices/userSlices";
+import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
 
 const EditProfileProfileTab = () => {
@@ -184,7 +184,7 @@ const EditProfileProfileTab = () => {
                 Profile Picture:
               </label>
             </div>
-            <div className="w-1/3 ms-[50px]">
+            <div className="w-1/3 ms-[50px] h-[200px] overflow-hidden">
               <img src={userData.profilePicture} alt={userData.userName} />
             </div>
             <div className="w-1/3 ms-[50px]">

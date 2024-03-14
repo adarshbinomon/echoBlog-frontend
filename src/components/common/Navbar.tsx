@@ -1,7 +1,7 @@
-import Logo from "../components/Logo";
+import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { clearUser } from "../redux/slices/userSlices";
+import { clearUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 

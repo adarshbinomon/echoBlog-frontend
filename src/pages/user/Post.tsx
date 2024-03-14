@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../../components/Footer";
-import Navbar from "../../components/Navbar";
+import Footer from "../../components/common/Footer";
+import Navbar from "../../components/common/Navbar";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import QuillViewer from "../../components/QuillViewer";
+import QuillViewer from "../../components/quill/QuillViewer";
 
 interface Post {
   content: string;

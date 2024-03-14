@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { UserData } from "../utils/interfaces/inteface";
+import { UserData } from "../../utils/interfaces/inteface";
 import toast from "react-hot-toast";
 
 const QuillEditor: React.FC = () => {
@@ -15,6 +15,14 @@ const QuillEditor: React.FC = () => {
     (state: UserData) => state.persisted.user.userData
   );
 
+  const [title, setTitle] = useState<string>('');
+
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+    console.log(title);
+    
+  };
+
   useEffect(() => {
     if (quillRef.current) {
       quillRef.current.root.parentNode?.removeChild(quillRef.current.root);
@@ -23,6 +31,7 @@ const QuillEditor: React.FC = () => {
 
     quillRef.current = new Quill("#editor", {
       theme: "snow",
+      placeholder: 'Write your content here.',
       modules: {
         toolbar: [
           ["bold", "italic", "underline", "strike"],
@@ -53,6 +62,7 @@ const QuillEditor: React.FC = () => {
       const data = {
         content: content,
         createdBy: userData._id,
+        title: title
       };
       axios
         .post(`${baseUrl}/create`, data, { withCredentials: true })
@@ -72,7 +82,32 @@ const QuillEditor: React.FC = () => {
 
   return (
     <>
-      <div>
+      <div className="mt-5 mb-5">
+        <label
+          htmlFor="title" 
+          className="block text-sm font-medium leading-6 text-gray-900" 
+        >
+          Title:
+        </label>
+        <div className="mt-2">
+          <input
+            id="title"
+            name="title"
+            type="title"
+            autoComplete="title"
+            required
+            onBlur={(e)=>handleTitleChange(e)}
+            className="px-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+        </div>
+      </div>
+      <div className="">
+        <label
+          htmlFor="content"
+          className="block text-sm font-medium leading-6 text-gray-900"
+        >
+          Content:
+        </label>
         <div id="editor" style={{ height: "400px" }} />
       </div>
       <button
@@ -82,13 +117,7 @@ const QuillEditor: React.FC = () => {
       >
         Save Content
       </button>
-      <div className="text-gray-500 font-light ">
-        <p>
-          Select the text to change font size or effects like bold, italics,
-          etc.
-        </p>
-        <p>Use numbers to add a numbered list.</p>
-      </div>
+      
     </>
   );
 };

@@ -1,8 +1,8 @@
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
+import Navbar from "../../components/common/Navbar";
+import Footer from "../../components/common/Footer";
 import { Link, Route, Routes } from "react-router-dom";
-import EditProfileAccountTab from "../../components/EditProfileAccountTab";
-import EditProfileProfileTab from "../../components/EditProfileProfileTab";
+import EditProfileAccountTab from "../../components/profile/EditProfileAccountTab";
+import EditProfileProfileTab from "../../components/profile/EditProfileProfileTab";
 
 const EditProfile = () => {
   return (

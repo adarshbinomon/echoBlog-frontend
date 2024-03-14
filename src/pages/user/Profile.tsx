@@ -1,18 +1,14 @@
-import Footer from "../../components/Footer";
-import Navbar from "../../components/Navbar";
+import Footer from "../../components/common/Footer";
+import Navbar from "../../components/common/Navbar";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
 import { FileText, CalendarDays } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { dateParser } from "../../helper/dateParser";
-import QuillViewer from "../../components/QuillViewer";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Link, Route, Routes } from "react-router-dom";
+import PostList from "../../components/profile/PostList";
+import CommunityList from "../../components/profile/CommunityList";
 
-interface Post {
-  content: string;
-  _id: string;
-}
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -20,40 +16,12 @@ const Profile = () => {
     (state: UserData) => state.persisted.user.userData
   );
 
-  const [posts, setPosts] = useState<Post[]>([]);
-
-  const postServiceBaseUrl: string = "http://localhost:4002/api/post";
-
   const createdOn = dateParser(userData.createdOn);
 
   //edit profile on click
 
   const handleEditProfile = () => {
     navigate("/edit-profile");
-  };
-
-  useEffect(() => {
-    axios
-      .get(`${postServiceBaseUrl}/get-posts/${userData._id}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setPosts(res.data.posts);
-        console.log(posts);
-        //  console.log(posts.length)
-      })
-      .catch((error) => {
-        console.log("error", error);
-      })
-      .finally(() => {
-        console.log(posts.length);
-      });
-  }, [userData._id]);
-
-  const handlePost = (id: string) => {
-    // navigate("/post");
-    console.log(id);
-    navigate(`/post/${id}` )
   };
 
   return (
@@ -118,29 +86,25 @@ const Profile = () => {
                 </p>
               </div>
               <div className="flex flex-row  ">
-                <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer pe-10 hover:pe-9 ">
-                  Blogs
-                </span>
-                <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer px-10 hover:pe-9">
-                  Communities{" "}
-                </span>
+                <Link to={"/profile/"}>
+                  <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer pe-10 hover:pe-9 ">
+                    Blogs
+                  </span>
+                </Link>
+                <Link to={"profile/community"}>
+                  <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer px-10 hover:pe-9">
+                    Communities{" "}
+                  </span>
+                </Link>
               </div>
               <hr className="w-[700px] "></hr>
             </div>
           </div>
-          <div>
-            {posts.length &&
-              posts.map((post: Post, i: number) => (
-                <div
-                  key={i}
-                  className="w-[700px] border m-5 text-center font-semibold "
-                  onClick={() => handlePost(post?._id)}
-                >
-                  {/* <QuillViewer content={post.content} /> */}
-                  <p className="mt-2">{post.content.slice(30, 91)}...</p>
-                  <br />
-                </div>
-              ))}
+          <div className="">
+            <Routes>
+              <Route path="/" element={<PostList />}></Route>
+              <Route path="/community" element={<CommunityList />}></Route>
+            </Routes>
           </div>
         </div>
       </div>

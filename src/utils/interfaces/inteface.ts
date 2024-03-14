@@ -50,3 +50,10 @@ export interface UserData {
   following: any[];
   _id: string;
 }
+
+export interface PostData {
+  content: string;
+  _id: string;
+  title: string;
+  createdOn: Date;
+}

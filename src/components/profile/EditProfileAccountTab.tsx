@@ -1,12 +1,12 @@
-import { GenderEnum } from "../helper/enum";
+import { GenderEnum } from "../../helper/enum";
 import { useDispatch, useSelector } from "react-redux";
-import { UserData } from "../utils/interfaces/inteface";
+import { UserData } from "../../utils/interfaces/inteface";
 import { useFormik } from "formik";
-import { dateParser } from "../helper/dateParser";
+import { dateParser } from "../../helper/dateParser";
 import axios from "axios";
-import { editAccountValidation } from "../helper/validate";
+import { editAccountValidation } from "../../helper/validate";
 import toast from "react-hot-toast";
-import { addUser } from "../redux/slices/userSlices";
+import { addUser } from "../../redux/slices/userSlices";
 
 const EditProfileAccountTab = () => {
   const userServiceBaseUrl: string = "http://localhost:4001/api/user";

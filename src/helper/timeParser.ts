@@ -1,4 +1,4 @@
-export const timeParser=(timestamp: Date): string => {
+export const timeParser=(timestamp: Date | undefined ): string | undefined => {
     const date = new Date(timestamp);
     let hours = date.getHours();
     const minutes = date.getMinutes();

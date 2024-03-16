@@ -169,8 +169,8 @@ const EditProfileAccountTab = () => {
         </form>{" "}
       </div>
 
-      <div className="w-full mt-10">
-        <hr className="w-full" />
+      <div className="w-full pt-[80px]">
+        <hr className="w-full mb-10" />
       </div>
 
       <div className="flex flex-row mt-10">

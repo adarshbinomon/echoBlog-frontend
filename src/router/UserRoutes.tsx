@@ -8,6 +8,8 @@ import Profile from "../pages/user/Profile";
 import EditProfile from "../pages/user/EditProfile";
 import WritePost from "../pages/user/WritePost";
 import Post from "../pages/user/Post";
+import EditPost from "../pages/user/EditPost";
+import ThirdProfile from "../pages/user/ThirdProfile";
 
 const UserRoutes = () => {
   return (
@@ -15,12 +17,14 @@ const UserRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/otp-verify" element={<OtpVerify />} />
-      <Route path="/" element={<Home />} />
+      <Route path="/*" element={<Home />} />
       <Route path="/profile/*" element={<Profile />} />
       <Route path="/user-details/:userId" element={<UserDetails />} />
       <Route path="/edit-profile/*" element={<EditProfile />} />
       <Route path="/write-post/*" element={<WritePost />} />
       <Route path="/post/:id" element={<Post />} />
+      <Route path="/edit-post/:postId" element={<EditPost />} />
+      <Route path="/user/:userId" element={<ThirdProfile />} />
     </Routes>
   );
 };

@@ -1,19 +1,20 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
 import { useDispatch } from "react-redux";
-import { clearUser } from "../../redux/slices/userSlices";
 import { addUser } from "../../redux/slices/userSlices";
+import { Link, Route, Routes } from "react-router-dom";
+import Following from "../../components/home/Following";
+import ForYou from "../../components/home/ForYou";
 
 const Home = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -23,6 +24,7 @@ const Home = () => {
 
   const authServiceBaseUrl: string = "http://localhost:4000/api/auth/user";
   const userServiceBaseUrl: string = "http://localhost:4001/api/user";
+  const postServiceBaseUrl: string = "http://localhost:4002/api/post";
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -40,41 +42,57 @@ const Home = () => {
     } else {
       navigate("/login");
     }
-  }, [navigate]);
-
-  const handleLogout = () => {
-    axios
-      .get(`${authServiceBaseUrl}/logout`, { withCredentials: true })
-      .then((res) => {
-        if (res.data.status) {
-          localStorage.removeItem("accessToken");
-          dispatch(clearUser());
-          navigate("/login");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Error in logout");
-      });
-  };
+  }, []);
 
   return (
     <>
       <Navbar />
-      <div className="flex items-center justify-center h-screen">
-        <Toaster position="top-right" reverseOrder={false}></Toaster>
-        <div className="items-center sm:mx-auto sm:w-full sm:max-w-sm border px-7 rounded-2xl bg-white">
-          <h2 className="mt-5 mb-5 text-center text-4xl font-bold text-indigo-600 hover:text-indigo-500">
-            {"<EchoBlog/>"}
-          </h2>
+      {/* main div */}
+      <div className="flex justify-center min-h-screen pt-[100px]">
+        {/* left div for posts */}
+        <div className="ms-10 w-2/3 h-auto flex flex-col border-right-4">
+          <div className="flex justify-between font-semibold">
+            <Link to="/">
+              <span
+                className={
+                  location.pathname === "/"
+                    ? "text-indigo-600 font-bold"
+                    : "hover:text-indigo-600 hover:font-bold"
+                }
+              >
+                For You
+              </span>
+            </Link>
 
-          <button
-            onClick={handleLogout}
-            className="w-1/3 ms-24 mb-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-500"
-          >
-            Logout
-          </button>
+            <Link to="/following">
+              <span
+                className={
+                  location.pathname === "/following"
+                    ? "text-indigo-600 font-bold"
+                    : "hover:text-indigo-600 hover:font-bold"
+                }
+              >
+                Following
+              </span>
+            </Link>
+            <span className="hover:text-indigo-600 hover:font-bold ">Q&A</span>
+            <span className="hover:text-indigo-600 hover:font-bold ">
+              Topics You Follow
+            </span>
+            <span className="hover:text-indigo-600 hover:font-bold ">
+              Explore Topics
+            </span>
+          </div>
+          <hr />
+          <div className="h-full">
+            <Routes>
+              <Route path="/" element={<ForYou />} />
+              <Route path="/following" element={<Following />} />
+            </Routes>
+          </div>
         </div>
+        {/* right sidebar */}
+        <div className="bg-green- w-1/4 border"></div>
       </div>
       <Footer />
     </>

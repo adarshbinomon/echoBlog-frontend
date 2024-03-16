@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 const OtpVerify: React.FC = () => {
   const baseUrl: string = "http://localhost:4000/api/auth/user";
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [otp, setOtp] = useState(["", "", "", ""]);
   const refs = [
@@ -17,6 +17,8 @@ const OtpVerify: React.FC = () => {
     useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
   ];
+
+  const [countdown, setCountdown] = useState(5); // Countdown timer state
 
   const handleOtpChange = (index: number, value: string) => {
     if (/^\d*$/.test(value) && value.length <= 1) {
@@ -27,11 +29,23 @@ const OtpVerify: React.FC = () => {
   };
 
   useEffect(() => {
-    const currentRef = refs[otp.findIndex((digit) => digit === "")];
-    if (currentRef && currentRef.current) {
-      currentRef.current.focus();
-    }
-  }, [otp]);
+    const timer = setInterval(() => {
+      if (countdown > 0) {
+        setCountdown((prevCount) => prevCount - 1);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [countdown]);
+
+  const handleResendOtp = () => {
+    axios.get(`${baseUrl}/resend-otp`).then((res) => {
+      if (res.status) {
+        toast.success("OTP Resent Successfully!");
+        setCountdown(30); 
+      }
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,17 +62,15 @@ const OtpVerify: React.FC = () => {
             console.log(res.data.user);
             dispatch(addUser(res.data.user));
 
-
             localStorage.setItem("accessToken", res.data?.accessToken);
             navigate(`/user-details/${userId}`);
-            
           } else {
             toast.error(res.data.message);
           }
         })
         .catch((error: any) => {
           console.error("error", error);
-          toast.error("An error occured!");
+          toast.error("An error occurred!");
         });
     }
   };
@@ -76,6 +88,16 @@ const OtpVerify: React.FC = () => {
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Enter OTP
           </h2>
+          <p className="mt-2 text-center text-gray-600">
+            Resend OTP in {countdown} seconds
+          </p>
+          <button
+            onClick={handleResendOtp}
+            disabled={countdown > 0}
+            className="mt-2 w-full text-center text-sm text-indigo-600 hover:text-indigo-500 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-600 focus-visible:ring-opacity-50"
+          >
+            Resend OTP
+          </button>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">

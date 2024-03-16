@@ -49,11 +49,15 @@ export interface UserData {
   followers: any[];
   following: any[];
   _id: string;
+  __v: number;
 }
 
 export interface PostData {
+  createdBy: any;
   content: string;
   _id: string;
   title: string;
   createdOn: Date;
+  like: any[];
+  comment: any[];
 }

@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
 import 'quill/dist/quill.snow.css';
-import QuillEditor from "../../components/quill/Quill";
+import QuillEditor from "../../components/post/Quill";
 
 
 const WritePost: React.FC = () => {

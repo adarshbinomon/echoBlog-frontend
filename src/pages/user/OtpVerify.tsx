@@ -39,7 +39,7 @@ const OtpVerify: React.FC = () => {
   }, [countdown]);
 
   const handleResendOtp = () => {
-    axios.get(`${baseUrl}/resend-otp`).then((res) => {
+    axios.get(`${baseUrl}/resend-otp`, {withCredentials: true}).then((res) => {
       if (res.status) {
         toast.success("OTP Resent Successfully!");
         setCountdown(30); 

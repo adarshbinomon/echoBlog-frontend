@@ -26,7 +26,7 @@ const PostPage = () => {
   const [like, setLike] = useState(0);
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState<CommentData[]>([]);
-  const [loadingComments, setLoadingComments] = useState(false); // Added state for loading comments
+  const [loadingComments, setLoadingComments] = useState(false); 
 
   const userData = useSelector(
     (state: { persisted: { user: { userData: UserData } } }) =>
@@ -46,9 +46,9 @@ const PostPage = () => {
       }
       setLike(res.data.post.like.length);
       setComments(res.data.post.comment);
-      setLoadingComments(false); // Set loadingComments to false after fetching comments
+      setLoadingComments(false); 
     });
-  }, [id, userData._id]);
+  }, [id, userData._id,comments]);
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> | undefined = post
     ? () => {
@@ -103,8 +103,7 @@ const PostPage = () => {
       return;
     }
   
-    setLoadingComments(true); // Set loadingComments to true while adding comment
-  
+    setLoadingComments(true); 
     axios
       .post(`${baseUrl}/comment-post/${post?._id}`, {
         userId: userData._id,
@@ -114,10 +113,9 @@ const PostPage = () => {
       })
       .then((res: any) => {
         if (res.data.status) {
-          // Extract the comment data from res.data.comment
           const newComment = res.data.comment[0];
           setComments([...comments, newComment]);
-          toast.success("Comment added successfully!");
+          // toast.success("Comment added successfully!");
           setCommentInput("");
           setLoadingComments(false);
         } else {

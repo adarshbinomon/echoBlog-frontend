@@ -10,6 +10,7 @@ import { addUser } from "../../redux/slices/userSlices";
 import { Link, Route, Routes } from "react-router-dom";
 import Following from "../../components/home/Following";
 import ForYou from "../../components/home/ForYou";
+import UserList from "../../components/home/UserList";
 
 const Home = () => {
   const location = useLocation();
@@ -92,7 +93,9 @@ const Home = () => {
           </div>
         </div>
         {/* right sidebar */}
-        <div className="bg-green- w-1/4 border"></div>
+        <div className="w-1/4">
+          <UserList/>
+        </div>
       </div>
       <Footer />
     </>

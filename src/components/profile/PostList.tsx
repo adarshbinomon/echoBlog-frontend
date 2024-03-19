@@ -1,40 +1,59 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { UserData, PostData } from "../../utils/interfaces/inteface"; 
+import { MouseEventHandler, useEffect, useState } from "react";
+import { UserData, PostData } from "../../utils/interfaces/inteface";
 import { useSelector } from "react-redux";
 import { dateParser } from "../../helper/dateParser";
 import { timeParser } from "../../helper/timeParser";
-import { Save } from "lucide-react";
+import { Heart, MessageCircle, Bookmark, BookmarkCheck } from "lucide-react";
 import { calculateReadTime } from "../../helper/wordCountToReadTime";
-import { BookOpenText } from 'lucide-react';
+import { BookOpenText } from "lucide-react";
 
-const PostList = () => {
+interface PostListProps {
+  userId: string | undefined;
+}
+
+const PostList: React.FC<PostListProps> = ({ userId }) => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<PostData[]>([]);
   const postServiceBaseUrl: string = "http://localhost:4002/api/post";
+  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
+
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
 
   useEffect(() => {
-    axios
-      .get(`${postServiceBaseUrl}/get-posts/${userData?._id}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setPosts(res.data.posts);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      })
-      .finally(() => {
-        console.log(posts.length);
-      });
-  }, [userData?._id]);
+    if (userId) {
+      console.log(`${postServiceBaseUrl}/get-posts/${userId}`);
+      axios
+        .get(`${postServiceBaseUrl}/get-posts/${userId}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          setPosts(res.data.posts);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        })
+        .finally(() => {
+          console.log(posts.length);
+        });
+    }
+  }, [userId]);
 
   const handlePost = (id: string) => {
     navigate(`/post/${id}`);
+  };
+
+  const handleSave = (postId: string) => {
+    try {
+      axios
+        .put(`${userServiceBaseUrl}/save-post/${postId}`)
+        .then((res) => console.log(res));
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -44,33 +63,61 @@ const PostList = () => {
           <p>No posts to show</p>
         </div>
       ) : (
-        posts.slice().reverse().map((post: PostData, i: number) => (
-          <div key={i} className="w-[700px] border p-10 text-center m-[20px] relative text-gray-600">
-            <div className="flex space-x-3 -ms-8 -mt-8">
-              <div className="w-12 border rounded-full overflow-hidden">
-                <img src={userData?.profilePicture} alt="profilePicture" />
+        posts
+          .slice()
+          .reverse()
+          .map((post: PostData, i: number) => (
+            <div
+              key={i}
+              className="w-[700px] border p-10 text-center m-[20px] relative text-gray-600"
+            >
+              <div className="flex space-x-3 -ms-8 -mt-8">
+                <div className="w-12 border rounded-full overflow-hidden">
+                  <img
+                    src={post?.createdBy?.profilePicture}
+                    alt="profilePicture"
+                  />
+                </div>
+                <div className="flex flex-col text-start">
+                  <p>{post.createdBy?.name}</p>
+                  <p className="font-mono">@{post?.createdBy?.userName}</p>
+                </div>
               </div>
-              <div className="flex flex-col text-start">
-                <p>{userData?.name}</p>
-                <p className="font-mono">@{userData?.userName}</p>
+              <div
+                className="flex justify-between cursor-pointer"
+                onClick={() => handlePost(post._id)}
+              >
+                <div className="text-black font-medium  text-xl w-3/4 flex ">
+                  <div className="w-3/4 p-8">
+                    <p className="mt-2">{post.title}</p>
+                  </div>
+                </div>
+                {post.image.length > 0 && (
+                  <div className="w-1/4 border overflow-hidden">
+                    <img src={post?.image[0]} alt="image" className="w-full" />
+                  </div>
+                )}
+              </div>
+              <div className="absolute bottom-0 left-0 mb-2 ml-2 flex space-x-3 cursor-default">
+                <p>
+                  {dateParser(post.createdOn)} - {timeParser(post.createdOn)}
+                </p>
+                <BookOpenText size={23} />
+                <p>{calculateReadTime(post.content)} min read</p>
+                <Heart size={23} />
+                <p>{post?.like?.length} Likes</p>
+                <MessageCircle size={23} />
+                <p>{post?.comment?.length} Comments</p>
+              </div>
+              <div className="absolute bottom-0 right-0 mr-2 mb-2">
+                <Bookmark
+                  onClick={() => {
+                    handleSave(post._id);
+                  }}
+                />
               </div>
             </div>
-            <div className="text-black font-medium cursor-pointer text-xl" onClick={() => handlePost(post?._id)}>
-              <p className="mt-2 p-8">{post.title}</p>
-            </div>
-            <div className="absolute bottom-0 left-0 mb-2 ml-2 flex space-x-3">
-              <p>
-                {dateParser(post.createdOn)}-{timeParser(post.createdOn)}
-              </p>
-              <p> </p>
-              <BookOpenText size={23} />
-              <p>{calculateReadTime(post.content)} min read</p>
-            </div>
-            <div className="absolute bottom-0 right-0 mr-2 mb-2">
-              <Save />
-            </div>
-          </div>
-        ))
+          ))
       )}
     </div>
   );

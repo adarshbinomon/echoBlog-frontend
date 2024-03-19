@@ -9,7 +9,6 @@ import { Link, Route, Routes } from "react-router-dom";
 import PostList from "../../components/profile/PostList";
 import CommunityList from "../../components/profile/CommunityList";
 
-
 const Profile = () => {
   const navigate = useNavigate();
   const userData = useSelector(
@@ -102,7 +101,7 @@ const Profile = () => {
           </div>
           <div className="">
             <Routes>
-              <Route path="/" element={<PostList />}></Route>
+              <Route path="/" element={<PostList userId={userData?._id} />} />
               <Route path="/community" element={<CommunityList />}></Route>
             </Routes>
           </div>

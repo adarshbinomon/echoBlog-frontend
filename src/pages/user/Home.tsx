@@ -52,7 +52,7 @@ const Home = () => {
       <div className="flex justify-center min-h-screen pt-[100px]">
         {/* left div for posts */}
         <div className="ms-10 w-2/3 h-auto flex flex-col border-right-4">
-          <div className="flex justify-between font-semibold">
+          <div className="flex justify-between font-semibold px-10">
             <Link to="/">
               <span
                 className={
@@ -84,7 +84,7 @@ const Home = () => {
               Explore Topics
             </span>
           </div>
-          <hr />
+          {/* <hr /> */}
           <div className="h-full">
             <Routes>
               <Route path="/" element={<ForYou />} />

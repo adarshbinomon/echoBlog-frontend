@@ -17,7 +17,7 @@ const WritePost: React.FC = () => {
             </h2>
             <p className="text-xl pt-3"> Let your imaginations go wild.</p>
           </div>
-          <div className="w-full   mt-5">
+          <div className="w-full h-auto  mt-5">
           <QuillEditor/>
           </div>
         </div>

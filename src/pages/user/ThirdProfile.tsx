@@ -7,6 +7,7 @@ import Footer from "../../components/common/Footer";
 import { dateParser } from "../../helper/dateParser";
 import { Link, Route, Routes } from "react-router-dom";
 import { FileText, CalendarDays } from "lucide-react";
+import PostList from "../../components/profile/PostList";
 
 const ThirdProfile = () => {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ const ThirdProfile = () => {
                 </p>
               </div>
               <div className="flex flex-row  ">
-                <Link to={"/profile/"}>
+                <Link to={`user/${user?._id}`}>
                   <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer pe-10 hover:pe-9 ">
                     Blogs
                   </span>
@@ -89,10 +90,10 @@ const ThirdProfile = () => {
             </div>
           </div>
           <div className="">
-            {/* <Routes>
-              <Route path="/" element={<PostList />}></Route>
-              <Route path="/community" element={<CommunityList />}></Route>
-            </Routes> */}
+            <Routes>
+              <Route path="/" element={<PostList userId={user?._id} />}></Route>
+              {/* <Route path="/community" element={<CommunityList />}></Route> */}
+            </Routes>
           </div>
         </div>
       </div>

@@ -60,4 +60,12 @@ export interface PostData {
   createdOn: Date;
   like: any[];
   comment: any[];
+  image: any[];
+}
+
+export interface CommentData {
+  comment: string;
+  name: string;
+  userId: string;
+  userName: string;
 }

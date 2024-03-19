@@ -26,7 +26,8 @@ const PostPage = () => {
   const [like, setLike] = useState(0);
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState<CommentData[]>([]);
-  const [loadingComments, setLoadingComments] = useState(false); 
+  const [loadingComments, setLoadingComments] = useState(false);
+  const [newComments, setNewComments] = useState<CommentData[]>([]); 
 
   const userData = useSelector(
     (state: { persisted: { user: { userData: UserData } } }) =>
@@ -38,17 +39,20 @@ const PostPage = () => {
   const baseUrl: string = "http://localhost:4002/api/post";
 
   useEffect(() => {
-    axios.get(`${baseUrl}/${id}`, { withCredentials: true }).then((res) => {
-      setPost(res.data.post);
-      setUser(res.data.user);
-      if (res.data.post.like.includes(userData._id)) {
-        setLiked(true);
-      }
-      setLike(res.data.post.like.length);
-      setComments(res.data.post.comment);
-      setLoadingComments(false); 
-    });
-  }, [id, userData._id,comments]);
+    axios
+      .get(`${baseUrl}/${id}`, { withCredentials: true })
+      .then((res: any) => {
+        setPost(res.data.post);
+        setUser(res.data.user);
+        setLiked(res.data.post.like.includes(userData._id));
+        setLike(res.data.post.like.length);
+        setComments(res.data.post.comment);
+        setLoadingComments(false);
+      })
+      .catch((error: any) => {
+        console.error("Error fetching post data:", error);
+      });
+  }, [id, userData._id, newComments]);
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> | undefined = post
     ? () => {
@@ -86,13 +90,8 @@ const PostPage = () => {
 
     axios.post(`${baseUrl}/like-Post/${post?._id}`, id).then((res: any) => {
       if (res.status) {
-        if (liked) {
-          setLiked(false);
-          setLike(res.data.likes);
-        } else {
-          setLiked(true);
-          setLike(res.data.likes);
-        }
+        setLiked((prevLiked) => !prevLiked);
+        setLike(res.data.likes);
       }
     });
   };
@@ -102,8 +101,8 @@ const PostPage = () => {
     if (commentInput.trim() === "") {
       return;
     }
-  
-    setLoadingComments(true); 
+
+    setLoadingComments(true);
     axios
       .post(`${baseUrl}/comment-post/${post?._id}`, {
         userId: userData._id,
@@ -114,23 +113,26 @@ const PostPage = () => {
       .then((res: any) => {
         if (res.data.status) {
           const newComment = res.data.comment[0];
-          setComments([...comments, newComment]);
-          // toast.success("Comment added successfully!");
+          setNewComments((prevNewComments) => [...prevNewComments, newComment]); 
           setCommentInput("");
-          setLoadingComments(false);
         } else {
           console.error("Failed to add comment. Please try again.");
           toast.error("Failed to add comment. Please try again.");
-          setLoadingComments(false);
         }
       })
       .catch((error: any) => {
         console.log("error adding comment:", error);
         toast.error("Failed to add comment. Please try again.");
-        setLoadingComments(false);
-      });
+      })
+      .finally(() => setLoadingComments(false));
   };
-  
+
+  useEffect(() => {
+    if (newComments.length > 0) {
+      setComments((prevComments) => [...prevComments, ...newComments]);
+      setNewComments([]);
+    }
+  }, [newComments]);
 
   return (
     <>
@@ -166,10 +168,13 @@ const PostPage = () => {
               <Heart
                 fill={liked ? "" : "none"}
                 onClick={handleLike}
-                className="cursor-pointer mr-2"
+                className="cursor-pointer mr-2 "
               />
-              <p> {like} </p>
-              <span className="ms-2"> likes</span>
+              <p style={{ userSelect: "none" }}>{like}</p>
+              <span className="ms-2" style={{ userSelect: "none" }}>
+                {" "}
+                likes
+              </span>
 
               <div>
                 <form onSubmit={handleComment}>
@@ -231,7 +236,7 @@ const PostPage = () => {
                 >
                   <div>
                     <p className="font-semibold">{comment.name}</p>
-                    <p className="text-sm text-gray-500">{comment.userName}</p>
+                    <p className="text-sm text-gray-500">@{comment.userName}</p>
                     <p>{comment.comment}</p>
                   </div>
                 </div>

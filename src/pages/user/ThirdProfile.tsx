@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { UserData } from "../../utils/interfaces/inteface";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
@@ -8,24 +8,46 @@ import { dateParser } from "../../helper/dateParser";
 import { Link, Route, Routes } from "react-router-dom";
 import { FileText, CalendarDays } from "lucide-react";
 import PostList from "../../components/profile/PostList";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../redux/slices/userSlices";
+import toast from "react-hot-toast";
 
 const ThirdProfile = () => {
-  const navigate = useNavigate();
   const { userId } = useParams();
   const [user, setUser] = useState<UserData>();
-  
-  
+
   const userServiceBaseUrl: string = "http://localhost:4001/api/user";
-  
+
+  const userData = useSelector(
+    (state: UserData) => state.persisted.user.userData
+  );
+  const dispatch = useDispatch();
+
   useEffect(() => {
-      axios
+    axios
       .get(`${userServiceBaseUrl}/user-profile/${userId}`)
       .then((res: any) => {
-          setUser(res.data.user);
-        });
-    }, []);
+        setUser(res.data.user);
+      });
+  }, [userData]);
 
-    const createdOn = dateParser(user?.createdOn as unknown as Date);
+  const createdOn = dateParser(user?.createdOn as unknown as Date);
+
+  const handleFollow = (userId: string) => {
+    const data = {
+      userId: userData._id,
+      userToBeFollowedId: userId,
+    };
+    axios
+      .post(`${userServiceBaseUrl}/follow-user`, data, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        dispatch(addUser(res.data.user));
+        toast.success(res.data.message);
+      });
+  };
 
   return (
     <>
@@ -42,6 +64,21 @@ const ThirdProfile = () => {
                 src={user?.profilePicture}
                 alt="profile-picture"
               />
+            </div>
+            <div className="flex justify-end mt-[-70px] me-[-30px]">
+              <button
+                type="button"
+                onClick={() => handleFollow(user?._id as string)}
+                className={`text-indigo-700 hover:text-white border border-indigo-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 ${
+                  userData?.following && userData.following.includes(user?._id)
+                    ? "bg-indigo-700 hover:bg-indigo text-white"
+                    : "hover:bg-indigo hover:text-white"
+                }`}
+              >
+                {userData?.following && userData.following.includes(user?._id)
+                  ? "Following"
+                  : "Follow"}
+              </button>
             </div>
 
             <div className="flex flex-col space-y-2 ms-[-20px]">

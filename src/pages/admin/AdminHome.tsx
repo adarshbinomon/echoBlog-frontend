@@ -1,7 +1,12 @@
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import  { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Sidebar from "../../components/admin/Sidebar";
+import Navbar from "../../components/admin/Navbar";
+import { Link, Route, Routes } from "react-router-dom";
+import UserManagement from "../../components/admin/UserManagement";
+import AdminHomeComponent from "../../components/admin/AdminHomeComponent";
 
 const AdminHome = () => {
   const navigate = useNavigate();
@@ -15,39 +20,29 @@ const AdminHome = () => {
     } else {
       navigate("/admin/login");
     }
-  }, [navigate]);
+  }, []);
 
-  const handleLogout = () => {
-    axios
-      .get(`${baseUrl}/logout`, { withCredentials: true })
-      .then((res) => {
-        if (res.data.status) {
-          localStorage.removeItem("adminAccessToken");
-          navigate("/admin/login");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Error in logout");
-      });
-  };
   return (
-    <div className="flex items-center justify-center h-screen">
+    <>
       <Toaster position="top-right" reverseOrder={false}></Toaster>
-
-      <div className="sm:mx-auto  sm:w-full sm:max-w-sm border px-7 py-4 rounded-2xl bg-gray-100">
-        <h6 className=" ml-10 ps-44 text-gray-500">admin</h6>
-        <h2 className="mb-4 text-center text-4xl font-bold text-red-600 hover:text-red-500 ">
-          {"<EchoBlog/>"}
-        </h2>
-        <button
-          onClick={handleLogout}
-          className="w-1/3 ms-24 mb-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-500"
-        >
-          Logout
-        </button>
+      <div className="flex h-screen">
+        <div className="w-1/5">
+          <Sidebar />
+        </div>
+        <div className="w-4/5 bg-gray-100">
+          <Navbar />
+          <div className="w-full h-fullbg-red-200">
+            <Routes>
+              <Route path="/" element={<UserManagement />} />
+              <Route
+                path="/admin/user-management"
+                element={<UserManagement />}
+              />
+            </Routes>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

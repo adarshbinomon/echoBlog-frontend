@@ -34,7 +34,6 @@ const Home = () => {
       axios
         .get(`${userServiceBaseUrl}/user-profile/${id}`)
         .then((res) => {
-          console.log(res.data.user);
           dispatch(addUser(res.data.user));
         })
         .catch((error) => {

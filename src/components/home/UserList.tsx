@@ -3,6 +3,9 @@ import axios from "axios";
 import { UserData } from "../../utils/interfaces/inteface";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../redux/slices/userSlices";
 
 const UserList = () => {
   const userServiceBaseUrl: string = "http://localhost:4001/api/user";
@@ -11,6 +14,7 @@ const UserList = () => {
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios
@@ -26,7 +30,18 @@ const UserList = () => {
   }, []);
 
   const handleFollow = (userId: string) => {
-    console.log("Followed user with ID:", userId);
+    const data = {
+      userId: userData._id,
+      userToBeFollowedId: userId,
+    };
+    axios
+      .post(`${userServiceBaseUrl}/follow-user`, data, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        dispatch(addUser(res.data.user));
+        toast.success(res.data.message);
+      });
   };
 
   return (
@@ -60,7 +75,9 @@ const UserList = () => {
                 className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg"
                 onClick={() => handleFollow(user._id)}
               >
-                Follow
+                {userData?.following && userData.following.includes(user._id)
+                  ? "Following"
+                  : "Follow"}
               </button>
             </div>
           ))}

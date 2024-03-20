@@ -60,7 +60,7 @@ const Login = () => {
       const googleAuth = signInWithPopup(auth, provider);
       return googleAuth;
     } catch (error) {
-      console.log("Error in the the gogle auth firebase", error);
+      console.log("Error in the the google auth firebase", error);
     }
   };
 

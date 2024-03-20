@@ -8,6 +8,9 @@ import { timeParser } from "../../helper/timeParser";
 import { Heart, MessageCircle, Bookmark, BookmarkCheck } from "lucide-react";
 import { calculateReadTime } from "../../helper/wordCountToReadTime";
 import { BookOpenText } from "lucide-react";
+import toast from "react-hot-toast";
+import { addUser } from "../../redux/slices/userSlices";
+import { useDispatch } from "react-redux";
 
 interface PostListProps {
   userId: string | undefined;
@@ -18,6 +21,7 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
   const [posts, setPosts] = useState<PostData[]>([]);
   const postServiceBaseUrl: string = "http://localhost:4002/api/post";
   const userServiceBaseUrl: string = "http://localhost:4001/api/user";
+  const dispatch = useDispatch();
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -25,7 +29,6 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
 
   useEffect(() => {
     if (userId) {
-      console.log(`${postServiceBaseUrl}/get-posts/${userId}`);
       axios
         .get(`${postServiceBaseUrl}/get-posts/${userId}`, {
           withCredentials: true,
@@ -47,10 +50,19 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
   };
 
   const handleSave = (postId: string) => {
+    const data = {
+      postId,
+      userId: userData._id,
+    };
+
     try {
       axios
-        .put(`${userServiceBaseUrl}/save-post/${postId}`)
-        .then((res) => console.log(res));
+        .put(`${userServiceBaseUrl}/save-post/`, data, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          dispatch(addUser(res.data.user));
+        });
     } catch (error) {
       console.log("error", error);
     }
@@ -109,12 +121,20 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
                 <MessageCircle size={23} />
                 <p>{post?.comment?.length} Comments</p>
               </div>
-              <div className="absolute bottom-0 right-0 mr-2 mb-2">
-                <Bookmark
-                  onClick={() => {
-                    handleSave(post._id);
-                  }}
-                />
+              <div className="absolute bottom-0 right-0 mr-2 mb-2 cursor-pointer">
+                {userData.savedPosts.includes(post._id) ? (
+                  <BookmarkCheck
+                    onClick={() => {
+                      handleSave(post._id);
+                    }}
+                  />
+                ) : (
+                  <Bookmark
+                    onClick={() => {
+                      handleSave(post._id);
+                    }}
+                  />
+                )}
               </div>
             </div>
           ))

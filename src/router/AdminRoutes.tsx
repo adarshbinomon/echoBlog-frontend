@@ -6,7 +6,7 @@ const AdminRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<AdminLogin />} />
-      <Route path="/" element={<AdminHome />} />
+      <Route path="/*" element={<AdminHome />} />
     </Routes>
   );
 };

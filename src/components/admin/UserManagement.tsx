@@ -85,8 +85,8 @@ const UserManagement: React.FC = () => {
 
 
   return (
-    <div className="flex">
-      <h1>User Management</h1>
+    <div className="flex flex-col items-center">
+      <h1 className="text-2xl font-bold">User Management</h1>
       <div className="w-4/5 mt-16 border justify-center">
         <DataTable columns={columns} data={data} pagination highlightOnHover />
       </div>

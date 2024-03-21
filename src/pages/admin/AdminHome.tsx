@@ -7,6 +7,7 @@ import Navbar from "../../components/admin/Navbar";
 import { Link, Route, Routes } from "react-router-dom";
 import UserManagement from "../../components/admin/UserManagement";
 import AdminHomeComponent from "../../components/admin/AdminHomeComponent";
+import PostManagement from "../../components/admin/PostManagement";
 
 const AdminHome = () => {
   const navigate = useNavigate();
@@ -33,10 +34,14 @@ const AdminHome = () => {
           <Navbar />
           <div className="w-full h-fullbg-red-200">
             <Routes>
-              <Route path="/" element={<UserManagement />} />
+              <Route path="/" element={<AdminHomeComponent />} />
               <Route
-                path="/admin/user-management"
+                path="/user-management"
                 element={<UserManagement />}
+              />
+              <Route
+                path="/post-management"
+                element={<PostManagement />}
               />
             </Routes>
           </div>

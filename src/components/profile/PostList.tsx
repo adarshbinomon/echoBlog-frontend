@@ -81,7 +81,7 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
           .map((post: PostData, i: number) => (
             <div
               key={i}
-              className="w-[700px] border p-10 text-center m-[20px] relative text-gray-600"
+              className="w-[700px] border p-10 text-center m-[20px] relative text-gray-600 bg-white rounded-md"
             >
               <div className="flex space-x-3 -ms-8 -mt-8">
                 <div className="w-12 border rounded-full overflow-hidden">

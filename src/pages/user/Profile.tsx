@@ -27,7 +27,7 @@ const Profile = () => {
     <>
       <div className="w-screen   relative ">
         <Navbar />
-        <div className="p-16 flex items-center flex-col  ">
+        <div className="p-16 flex items-center flex-col">
           <div className=" border border-gray-200 w-[700px] h-[200px] mt-8 overflow-hidden ">
             <img src={userData.coverPicture} alt="coverPicture" />
           </div>

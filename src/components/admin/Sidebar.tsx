@@ -1,8 +1,15 @@
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
-  const activeTab = location.pathname.split('/')[2]; 
+  const [activeTab, setActiveTab] = useState<string>('admin');
+
+  // Set the active tab based on the location pathname
+  const setActive = (tab: string) => {
+    setActiveTab(tab);
+  };
+
   return (
     <div className="bg-gray-800 h-full w-[341px] fixed top-0 left-0 flex flex-col justify-between">
       <div className="mt-4 mb-8 px-4">
@@ -14,26 +21,29 @@ const Sidebar: React.FC = () => {
               className={`hover:text-red-500 transition duration-300 p-2 rounded-lg w-full ${
                 location.pathname === '/admin' ? 'font-semibold bg-white text-black' : 'text-white'
               }`}
-            >User Management
+              onClick={() => setActive('admin')}
+            >
+              Admin Home
             </Link>
           </li>
           <li>
             <Link
               to="/admin/user-management"
-              
-              className={`text-white hover:text-red-500 transition duration-300 ${
-                activeTab === 'user' ? 'font-semibold' : ''
+              className={`hover:text-red-500 transition duration-300 p-2 rounded-lg w-full ${
+                activeTab === 'user' ?  'font-semibold bg-white text-black' : 'text-white'
               }`}
+              onClick={() => setActive('user')}
             >
-              Post Management
+              User Management
             </Link>
           </li>
           <li>
             <Link
               to="/admin/post-management"
-              className={`text-white hover:text-red-500 transition duration-300 ${
-                activeTab === 'post' ? 'font-semibold' : ''
+              className={`hover:text-red-500 transition duration-300 p-2 rounded-lg w-full ${
+                activeTab === 'post' ? 'font-semibold bg-white text-black' : 'text-white'
               }`}
+              onClick={() => setActive('post')}
             >
               Post Management
             </Link>
@@ -41,9 +51,10 @@ const Sidebar: React.FC = () => {
           <li>
             <Link
               to="/admin/reports-management"
-              className={`text-white hover:text-red-500 transition duration-300 ${
-                activeTab === 'reports' ? 'font-semibold' : ''
+              className={`hover:text-red-500 transition duration-300 p-2 rounded-lg w-full ${
+                activeTab === 'reports' ?  'font-semibold bg-white text-black' : 'text-white'
               }`}
+              onClick={() => setActive('reports')}
             >
               Reports Management
             </Link>
@@ -51,9 +62,10 @@ const Sidebar: React.FC = () => {
           <li>
             <Link
               to="/admin/premium-management"
-              className={`text-white hover:text-red-500 transition duration-300 ${
-                activeTab === 'premium' ? 'font-semibold' : ''
+              className={`hover:text-red-500 transition duration-300 p-2 rounded-lg w-full ${
+                activeTab === 'premium' ? 'font-semibold bg-white text-black' : 'text-white'
               }`}
+              onClick={() => setActive('premium')}
             >
               Premium Management
             </Link>

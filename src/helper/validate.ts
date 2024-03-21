@@ -70,6 +70,18 @@ export const editProfileValidation = async (values: Values) => {
   console.log(error);
   return error;
 };
+export const communityValidation = async (values: Values) => {
+  console.log('values',values);
+  
+  let error: Errors = {};
+
+  await Promise.all([
+    nameVerify(error, values),
+    aboutVerify(error, values),
+  ]);
+  console.log(error);
+  return error;
+};
 
 export const profilePictureValidation = async (values: Values) => {
   let error: Errors = {};
@@ -209,6 +221,13 @@ const userNameVerify = (error: Errors = {}, values: Values) => {
 const bioVerify = (error: Errors = {}, values: Values) => {
   if (!values.bio) {
     error.bio = toast.error("Bio cannot be empty!");
+  }
+
+  return error;
+};
+const aboutVerify = (error: Errors = {}, values: Values) => {
+  if (!values.about) {
+    error.about = toast.error("About cannot be empty!");
   }
 
   return error;

@@ -1,4 +1,5 @@
 export interface Errors {
+  about?: string;
   password?: string;
   name?: string;
   email?: string;
@@ -27,6 +28,8 @@ export interface Values {
   _id?: string;
   coverPicture?: string;
   profilePicture?: string;
+  about?: string;
+  createdBy?: string
 }
 
 export interface UserData {
@@ -53,6 +56,7 @@ export interface UserData {
 }
 
 export interface PostData {
+  visibility: string;
   createdBy: any;
   content: string;
   _id: string;

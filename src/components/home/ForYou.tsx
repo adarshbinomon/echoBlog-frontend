@@ -59,7 +59,7 @@ const ForYou = () => {
   };
 
   return (
-    <div>
+    <div >
       {posts.length > 0 &&
         posts
           .slice()
@@ -67,7 +67,7 @@ const ForYou = () => {
           .map((post: PostData, i: number) => (
             <div
               key={post._id}
-              className="border p-10 text-center m-4 relative rounded-lg shadow-md  text-gray-600"
+              className="border p-10 text-center m-4 relative rounded-lg shadow-md  text-gray-600 bg-white"
             >
               <Link to={`/user/${post?.createdBy?._id}`}>
                 <div className="flex space-x-3 -ms-8 -mt-8">

@@ -11,6 +11,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import Following from "../../components/home/Following";
 import ForYou from "../../components/home/ForYou";
 import UserList from "../../components/home/UserList";
+import Community from "../../components/home/Community";
 
 const Home = () => {
   const location = useLocation();
@@ -48,7 +49,7 @@ const Home = () => {
     <>
       <Navbar />
       {/* main div */}
-      <div className="flex justify-center min-h-screen pt-[100px]">
+      <div className="flex justify-center min-h-screen space-x-1 pt-[100px] ">
         {/* left div for posts */}
         <div className="ms-10 w-2/3 h-auto flex flex-col border-right-4">
           <div className="flex justify-between font-semibold px-10">
@@ -75,7 +76,18 @@ const Home = () => {
                 Following
               </span>
             </Link>
-            <span className="hover:text-indigo-600 hover:font-bold ">Q&A</span>
+            <Link to="/community">
+              <span
+                className={
+                  location.pathname === "/community"
+                    ? "text-indigo-600 font-bold"
+                    : "hover:text-indigo-600 hover:font-bold"
+                }
+              >
+                Community
+              </span>
+            </Link>
+
             <span className="hover:text-indigo-600 hover:font-bold ">
               Topics You Follow
             </span>
@@ -84,16 +96,17 @@ const Home = () => {
             </span>
           </div>
           {/* <hr /> */}
-          <div className="h-full">
+          <div className="h-full ">
             <Routes>
               <Route path="/" element={<ForYou />} />
               <Route path="/following" element={<Following />} />
+              <Route path="/community" element={<Community />} />
             </Routes>
           </div>
         </div>
         {/* right sidebar */}
         <div className="w-1/4">
-          <UserList/>
+          <UserList />
         </div>
       </div>
       <Footer />

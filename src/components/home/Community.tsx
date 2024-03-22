@@ -5,9 +5,13 @@ import toast, { Toaster } from "react-hot-toast";
 import { communityValidation } from "../../helper/validate";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
+import { useNavigate } from "react-router-dom";
+
 
 const Community = () => {
   const baseUrl: string = "http://localhost:4003/api/group";
+  const navigate = useNavigate();
+
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -20,7 +24,7 @@ const Community = () => {
     },
     validate: communityValidation,
     validateOnBlur: true,
-    validateOnChange: true,
+    validateOnChange: false,
     onSubmit: (values) => {
       console.log("form values submitted", values);
       if (formik.isValid) {
@@ -32,10 +36,7 @@ const Community = () => {
           .then((res) => {
             console.log(res);
             if (res.status) {
-              //   console.log({ status: true, message: "User login successful" });
-              //   localStorage.setItem("accessToken", res.data?.accessToken);
-              //   dispatch(addUser(res.data.user));
-              //   navigate("/");
+                navigate(`/community-profile/${res.data.community._id}`);
             }
           })
           .catch((error) => {

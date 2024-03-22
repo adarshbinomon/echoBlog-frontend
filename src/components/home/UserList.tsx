@@ -45,11 +45,11 @@ const UserList = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div>
       <div className="max-w-3xl mx-auto">
         <h1 className="text-21xl font-semibold mb-6">People you may know </h1>
         <div className="space-y-6">
-          {users.map((user) => (
+          {users.slice(0, 4).map((user) => (
             <div
               key={user._id}
               className="bg-white rounded-lg shadow-md p-4 flex items-center justify-between"

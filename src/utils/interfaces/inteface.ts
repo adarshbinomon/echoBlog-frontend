@@ -29,7 +29,7 @@ export interface Values {
   coverPicture?: string;
   profilePicture?: string;
   about?: string;
-  createdBy?: string
+  createdBy?: string;
 }
 
 export interface UserData {
@@ -72,4 +72,16 @@ export interface CommentData {
   name: string;
   userId: string;
   userName: string;
+}
+
+export interface CommunityData {
+  name: string;
+  about: string;
+  createdBy: string;
+  post: any[];
+  members: any[];
+  profilePicture: string;
+  coverPicture: string;
+  createdOn: Date;
+  _id: string;
 }

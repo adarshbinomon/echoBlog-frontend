@@ -12,6 +12,7 @@ import Following from "../../components/home/Following";
 import ForYou from "../../components/home/ForYou";
 import UserList from "../../components/home/UserList";
 import Community from "../../components/home/Community";
+import CommunityList from "../../components/home/CommunityList";
 
 const Home = () => {
   const location = useLocation();
@@ -107,6 +108,7 @@ const Home = () => {
         {/* right sidebar */}
         <div className="w-1/4">
           <UserList />
+          <CommunityList/>
         </div>
       </div>
       <Footer />

@@ -2,12 +2,12 @@ import Footer from "../../components/common/Footer";
 import Navbar from "../../components/common/Navbar";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
-import { FileText, CalendarDays } from "lucide-react";
+import { FileText, CalendarDays, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { dateParser } from "../../helper/dateParser";
 import { Link, Route, Routes } from "react-router-dom";
 import PostList from "../../components/profile/PostList";
-import CommunityList from "../../components/profile/CommunityList";
+import CommunityList from "../../components/home/CommunityList";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -43,13 +43,14 @@ const Profile = () => {
               <button
                 type="button"
                 onClick={handleEditProfile}
-                className=" text-indigo-700 hover:text-white border border-indigo-700 hover:bg-indigo font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 "
+                className={`flex space-x-1 items-center text-indigo-700 hover:text-white border border-indigo-700 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 transition duration-300 ease-in-out bg-white  dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 hover:bg-indigo-700`}
               >
-                Edit Profile
+                <Settings className="w-5 h-5 mx-1" />
+                <span className="font-semibold">Settings</span>
               </button>
               <button
                 type="button"
-                className=" text-indigo-700 hover:text-white border border-indigo-700 hover:bg-indigo font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 "
+                className={`flex space-x-1 items-center text-indigo-700 hover:text-white border border-indigo-700 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 transition duration-300 ease-in-out bg-white  dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 hover:bg-indigo-700`}
               >
                 ...
               </button>

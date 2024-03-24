@@ -65,6 +65,8 @@ export interface PostData {
   like: any[];
   comment: any[];
   image: any[];
+  length?: any
+  slice?: any
 }
 
 export interface CommentData {
@@ -84,4 +86,13 @@ export interface CommunityData {
   coverPicture: string;
   createdOn: Date;
   _id: string;
+  slice: any;
+  map: any
+}
+
+export interface WritePostData {
+  content: string;
+  createdBy: any;
+  title: string;
+  communityId?: string;
 }

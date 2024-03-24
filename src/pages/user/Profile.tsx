@@ -7,14 +7,18 @@ import { useNavigate } from "react-router-dom";
 import { dateParser } from "../../helper/dateParser";
 import { Link, Route, Routes } from "react-router-dom";
 import PostList from "../../components/profile/PostList";
-import CommunityList from "../../components/home/CommunityList";
-
+import Community from "../../components/profile/Community";
+import { useEffect } from "react";
 const Profile = () => {
-  const navigate = useNavigate();
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
-
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userData.name) {
+      navigate("/login");
+    }
+  }, []);
   const createdOn = dateParser(userData.createdOn);
 
   //edit profile on click
@@ -91,7 +95,7 @@ const Profile = () => {
                     Blogs
                   </span>
                 </Link>
-                <Link to={"profile/community"}>
+                <Link to={"/profile/community"}>
                   <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer px-10 hover:pe-9">
                     Communities{" "}
                   </span>
@@ -103,7 +107,7 @@ const Profile = () => {
           <div className="">
             <Routes>
               <Route path="/" element={<PostList userId={userData?._id} />} />
-              <Route path="/community" element={<CommunityList />}></Route>
+              <Route path="/community" element={<Community/>}></Route>
             </Routes>
           </div>
         </div>

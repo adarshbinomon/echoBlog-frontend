@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserData } from "../../utils/interfaces/inteface";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
@@ -22,6 +22,12 @@ const ThirdProfile = () => {
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userData.name) {
+      navigate("/login");
+    }
+  }, []);
   const dispatch = useDispatch();
 
   useEffect(() => {

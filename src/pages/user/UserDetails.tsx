@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
@@ -10,12 +10,18 @@ import { UserData } from "../../utils/interfaces/inteface";
 
 const UserDetails: React.FC = () => {
   const baseUrl: string = "http://localhost:4001/api/user";
-  const userData = useSelector((state: UserData) => state.persisted.user.userData);
 
   const { userId } = useParams();
 
+  const userData = useSelector(
+    (state: UserData) => state.persisted.user.userData
+  );
   const navigate = useNavigate();
-
+  useEffect(() => {
+    if (!userData.name) {
+      navigate("/login");
+    }
+  }, []);
   const formik = useFormik({
     initialValues: {
       userName: "", 

@@ -3,24 +3,29 @@ import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { UserData } from "../../utils/interfaces/inteface";
+import { UserData, WritePostData } from "../../utils/interfaces/inteface";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-const QuillEditor: React.FC = () => {
+interface QuillEditorProps {
+  communityId?: string;
+}
+
+const QuillEditor: React.FC<QuillEditorProps> = ({ communityId }) => {
   const quillRef = useRef<Quill | null>(null);
 
   const baseUrl: string = "http://localhost:4002/api/post";
+  const navigate = useNavigate();
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
 
-  const [title, setTitle] = useState<string>('');
+  const [title, setTitle] = useState<string>("");
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
     console.log(title);
-    
   };
 
   useEffect(() => {
@@ -31,7 +36,7 @@ const QuillEditor: React.FC = () => {
 
     quillRef.current = new Quill("#editor", {
       theme: "snow",
-      placeholder: 'Write your content here.',
+      placeholder: "Write your content here.",
       modules: {
         toolbar: [
           ["bold", "italic", "underline", "strike"],
@@ -46,7 +51,7 @@ const QuillEditor: React.FC = () => {
       },
     });
 
-    quillRef.current.on("text-change", (delta, oldDelta, source) => {});
+    // quillRef.current.on("text-change", (delta, oldDelta, source) => {});
 
     return () => {
       if (quillRef.current && quillRef.current.root.parentNode) {
@@ -59,11 +64,17 @@ const QuillEditor: React.FC = () => {
   const handleSaveContent = () => {
     if (quillRef.current) {
       const content = quillRef.current.root.innerHTML;
-      const data = {
+      const data: WritePostData = {
         content: content,
         createdBy: userData._id,
-        title: title
+        title: title,
       };
+
+      if (communityId) {
+        data.communityId = communityId;
+      }
+      console.log(data);
+
       axios
         .post(`${baseUrl}/create`, data, { withCredentials: true })
         .then((res) => {
@@ -76,6 +87,11 @@ const QuillEditor: React.FC = () => {
         .catch((error) => {
           console.log("error", error);
           toast.error("Post Failed!");
+        })
+        .finally(() => {
+          setTimeout(() => {
+            navigate("/");
+          }, 5000);
         });
     }
   };
@@ -84,8 +100,8 @@ const QuillEditor: React.FC = () => {
     <>
       <div className="mt-5 mb-5">
         <label
-          htmlFor="title" 
-          className="block text-sm font-medium leading-6 text-gray-900" 
+          htmlFor="title"
+          className="block text-sm font-medium leading-6 text-gray-900"
         >
           Title:
         </label>
@@ -96,19 +112,19 @@ const QuillEditor: React.FC = () => {
             type="title"
             autoComplete="title"
             required
-            onBlur={(e)=>handleTitleChange(e)}
+            onBlur={(e) => handleTitleChange(e)}
             className="px-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
         </div>
       </div>
-      <div className="">
+      <div className=" ">
         <label
           htmlFor="content"
           className="block text-sm font-medium leading-6 text-gray-900"
         >
           Content:
         </label>
-        <div id="editor" style={{ height: "400px" }} />
+        <div className="bg-white" id="editor" style={{ height: "400px" }} />
       </div>
       <button
         type="button"
@@ -117,7 +133,6 @@ const QuillEditor: React.FC = () => {
       >
         Save Content
       </button>
-      
     </>
   );
 };

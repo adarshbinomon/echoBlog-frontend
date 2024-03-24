@@ -1,33 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
 import { dateParser } from "../../helper/dateParser";
-import { Link } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
+
 import {
   FileText,
   CalendarDays,
   Settings,
   UsersRound,
   SquareUser,
-  PencilLine ,
+  PencilLine,
   SquareCheckBig,
 } from "lucide-react";
 import { CommunityData, UserData } from "../../utils/interfaces/inteface";
 import toast from "react-hot-toast";
-import { reload } from "firebase/auth";
+import CommunityPostList from "../../components/community/CommunityPostList";
+import Members from "../../components/community/Members";
 
 const CommunityProfile = () => {
   const groupServiceBaseUrl = "http://localhost:4003/api/group";
   const { communityId } = useParams<{ communityId: string }>();
   const [community, setCommunity] = useState<CommunityData | null>(null);
   const [reload, setReload] = useState(false);
-
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userData.name) {
+      navigate("/login");
+    }
+  }, []);
 
   useEffect(() => {
     axios
@@ -64,6 +71,14 @@ const CommunityProfile = () => {
     }
   };
 
+  const handleWritePost = () => {
+    navigate(`/community/write-post/${community?._id}`);
+  };
+
+  const handleSettings = () => {
+    navigate(`/community/settings/${community?._id}`);
+  };
+
   return (
     <>
       <div className="w-screen relative">
@@ -84,10 +99,10 @@ const CommunityProfile = () => {
               {community?.members.includes(userData?._id) && (
                 <button
                   type="button"
+                  onClick={handleWritePost}
                   className={`flex space-x-1 items-center text-indigo-700 hover:text-white border border-indigo-700 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 transition duration-300 ease-in-out bg-white dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 hover:bg-indigo-700`}
                 >
-                  <PencilLine  className="w-5 h-5 mx-1" />{" "}
-                  {/* Assuming 'Write' is an icon from lucide-react */}
+                  <PencilLine className="w-5 h-5 mx-1" />{" "}
                   <span className="font-semibold">Write</span>
                 </button>
               )}
@@ -112,13 +127,13 @@ const CommunityProfile = () => {
               {community?.createdBy === userData._id ? (
                 <button
                   type="button"
+                  onClick={handleSettings}
                   className={`flex space-x-1 items-center text-indigo-700 hover:text-white border border-indigo-700 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 transition duration-300 ease-in-out bg-white dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 hover:bg-indigo-700`}
                 >
                   <Settings className="w-5 h-5 mx-1" />
                   <span className="font-semibold">Settings</span>
                 </button>
-              ) : // Placeholder for else condition, you can add code or leave it empty
-              null}
+              ) : null}
             </div>
             {/* Community Details */}
             <div className="flex flex-col space-y-2 ms-[-20px]">
@@ -148,16 +163,31 @@ const CommunityProfile = () => {
               </div>
               {/* Navigation Links */}
               <div className="flex flex-row">
-                <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer pe-10 hover:pe-9">
-                  Blogs
-                </span>
-                <Link to={"profile/community"}>
+                <Link to={`/community-profile/${community?._id}/`}>
+                  <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer pe-10 hover:pe-9">
+                    Blogs
+                  </span>
+                </Link>
+
+                <Link to={`/community-profile/${community?._id}/members`}>
                   <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer px-10 hover:pe-9">
                     Members
                   </span>
                 </Link>
               </div>
               <hr className="w-[700px] "></hr>
+              <div className="-m-5">
+                <Routes>
+                  <Route
+                    path="/"
+                    element={<CommunityPostList communityId={community?._id} />}
+                  />
+                  <Route
+                    path="/members"
+                    element={<Members communityId={community?._id} />}
+                  />
+                </Routes>
+              </div>
             </div>
           </div>
         </div>

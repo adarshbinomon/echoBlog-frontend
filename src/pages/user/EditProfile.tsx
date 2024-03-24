@@ -1,11 +1,21 @@
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
 import EditProfileAccountTab from "../../components/profile/EditProfileAccountTab";
 import EditProfileProfileTab from "../../components/profile/EditProfileProfileTab";
+import { useEffect } from "react";
 
 const EditProfile = () => {
   const location = useLocation();
+  const navigate = useNavigate()
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      navigate("/edit-profile");
+    } else {
+      navigate("/login");
+    }
+  }, []);
 
   return (
     <>

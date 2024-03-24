@@ -30,11 +30,15 @@ const PostPage = () => {
   const [newComments, setNewComments] = useState<CommentData[]>([]); 
 
   const userData = useSelector(
-    (state: { persisted: { user: { userData: UserData } } }) =>
-      state.persisted.user.userData
+    (state: UserData) => state.persisted.user.userData
   );
-
   const navigate = useNavigate();
+  useEffect(() => {
+    if (!userData.name) {
+      navigate("/login");
+    }
+  }, []);
+
 
   const baseUrl: string = "http://localhost:4002/api/post";
 

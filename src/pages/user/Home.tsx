@@ -22,7 +22,6 @@ const Home = () => {
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
-  console.log(userData);
   const id = userData._id;
 
   const authServiceBaseUrl: string = "http://localhost:4000/api/auth/user";

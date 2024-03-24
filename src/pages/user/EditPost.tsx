@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
 import QuillEdit from "../../components/post/QuillEdit";
-import { useLocation } from "react-router-dom";
-import { PostData } from "../../utils/interfaces/inteface";
+import { useLocation, useNavigate } from "react-router-dom";
+import { PostData, UserData } from "../../utils/interfaces/inteface";
+import { useSelector } from "react-redux";
 
 const EditPost: React.FC = () => {
+  const userData = useSelector(
+    (state: UserData) => state.persisted.user.userData
+  );
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userData.name) {
+      navigate("/login");
+    }
+  }, []);
+
   const location = useLocation();
   const post: PostData | undefined = location.state as PostData | undefined;
 

@@ -59,14 +59,14 @@ const CommunityList = () => {
                   </div>
                 </Link>
               </div>
-              <button
+              {/* <button
                 className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg"
                 onClick={() => handleJoin(community._id)}
               >
                 {community?.members && community.members.includes(community._id)
                   ? "Joined"
                   : "Join"}
-              </button>
+              </button> */}
             </div>
           ))}
         </div>

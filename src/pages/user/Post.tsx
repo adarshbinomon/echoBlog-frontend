@@ -143,7 +143,7 @@ const PostPage = () => {
       <Navbar />
       <div className="flex justify-center">
         <div className="w-2/3 m-5 mt-20">
-          <div className="border p-5">
+          <div className="border p-5 bg-white rounded-md">
             <div className="flex items-center mb-5">
               {user && (
                 <img
@@ -161,11 +161,11 @@ const PostPage = () => {
             <div className="text-gray-600 mb-3">
               {dateParser(post?.createdOn)} - {timeParser(post?.createdOn)}
             </div>
-            <div className="flex items-center mb-3">
+            <div className="flex items-center mb-3 ">
               <BookOpenText size={20} className="mr-2" />
               <span>{calculateReadTime(post?.content)} min read</span>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 ">
               {post && <QuillViewer content={post?.content} />}
             </div>
             <div className="flex items-center">

@@ -29,7 +29,7 @@ const QuillViewer: React.FC<QuillViewerProps> = ({ content }) => {
     };
   }, [content, quill]);
 
-  return <div id="quill-viewer" />;
+  return <div  id="quill-viewer" />;
 };
 
 export default QuillViewer;

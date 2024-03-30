@@ -112,7 +112,7 @@ const ForYou = () => {
 
               </div>
               <div className="absolute bottom-0 right-0 mr-2 mb-2 cursor-pointer">
-              {userData.savedPosts.includes(post._id) ? (
+              {userData.savedPosts?.includes(post._id) ? (
                   <BookmarkCheck
                     onClick={() => {
                       handleSave(post._id);

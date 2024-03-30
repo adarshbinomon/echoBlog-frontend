@@ -11,7 +11,7 @@ import Post from "../pages/user/Post";
 import EditPost from "../pages/user/EditPost";
 import ThirdProfile from "../pages/user/ThirdProfile";
 import CommunityProfile from "../pages/community/CommunityProfile";
-import Settings from "../components/community/Settings";
+import Settings from "../pages/community/Settings";
 
 const UserRoutes = () => {
   return (

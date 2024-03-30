@@ -85,8 +85,8 @@ const Profile = () => {
 
               <div className=" flex space-x-2 text-gray-500">
                 <p>
-                  {userData?.followers.length} Followers{" "}
-                  {userData?.following.length} Following
+                  {userData?.followers?.length} Followers{" "}
+                  {userData?.following?.length} Following
                 </p>
               </div>
               <div className="flex flex-row  ">

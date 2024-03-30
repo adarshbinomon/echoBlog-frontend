@@ -76,7 +76,9 @@ const CommunityProfile = () => {
   };
 
   const handleSettings = () => {
-    navigate(`/community/settings/${community?._id}`);
+    if (community) {
+      navigate(`/community/settings/${community._id}`, { state: community });
+    }
   };
 
   return (

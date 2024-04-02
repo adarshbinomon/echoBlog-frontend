@@ -27,7 +27,9 @@ const PostPage = () => {
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState<CommentData[]>([]);
   const [loadingComments, setLoadingComments] = useState(false);
-  const [newComments, setNewComments] = useState<CommentData[]>([]); 
+  const [newComments, setNewComments] = useState<CommentData[]>([]);
+  const [replyVisibility, setReplyVisibility] = useState<string>("hidden");
+  const [replyValue, setReplyValue] = useState<string>("");
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -38,7 +40,6 @@ const PostPage = () => {
       navigate("/login");
     }
   }, []);
-
 
   const baseUrl: string = "http://localhost:4002/api/post";
 
@@ -117,7 +118,7 @@ const PostPage = () => {
       .then((res: any) => {
         if (res.data.status) {
           const newComment = res.data.comment[0];
-          setNewComments((prevNewComments) => [...prevNewComments, newComment]); 
+          setNewComments((prevNewComments) => [...prevNewComments, newComment]);
           setCommentInput("");
         } else {
           console.error("Failed to add comment. Please try again.");
@@ -137,6 +138,29 @@ const PostPage = () => {
       setNewComments([]);
     }
   }, [newComments]);
+
+  const handleReply = (commentId: string) => {
+    try {
+      const commentData = {
+        commentId: commentId,
+        reply: replyValue,
+        name: userData.name,
+        userId: userData._id,
+        userName: userData.userName,
+      };
+      console.log(commentData);
+
+      axios
+        .post(`${baseUrl}/reply-to-comment/${post?._id}`, commentData, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res);
+          console.log("reply", replyValue);
+          setReplyVisibility("hidden");
+        });
+    } catch (error) {}
+  };
 
   return (
     <>
@@ -180,36 +204,6 @@ const PostPage = () => {
                 likes
               </span>
 
-              <div>
-                <form onSubmit={handleComment}>
-                  <div className="flex items-center space-x-2 ms-5">
-                    <label
-                      htmlFor="comment"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Comment :
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        id="comment"
-                        name="comment"
-                        type="text"
-                        autoComplete="comment"
-                        value={commentInput}
-                        onChange={(e) => setCommentInput(e.target.value)}
-                        required
-                        className="px-1 block w-full rounded-full border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="ml-2 px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-500"
-                    >
-                      Post
-                    </button>
-                  </div>
-                </form>
-              </div>
               {userData?._id === user?._id && (
                 <>
                   <button
@@ -228,6 +222,37 @@ const PostPage = () => {
               )}
             </div>
           </div>
+          <div>
+            <form onSubmit={handleComment}>
+              <div className="flex items-center space-x-2 ms-5 ">
+                <label
+                  htmlFor="comment"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Comment :
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="comment"
+                    name="comment"
+                    type="text"
+                    autoComplete="comment"
+                    value={commentInput}
+                    onChange={(e) => setCommentInput(e.target.value)}
+                    required
+                    className="px-1 block w-full rounded-full border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="ml-2 px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-500"
+                >
+                  Post
+                </button>
+              </div>
+            </form>
+          </div>
+
           <div className="mt-5">
             <h3 className="text-xl font-semibold">Comments:</h3>
             {loadingComments ? (
@@ -236,12 +261,61 @@ const PostPage = () => {
               comments.map((comment: CommentData, index: number) => (
                 <div
                   key={index}
-                  className="flex items-start space-x-3 mb-2 border-rounded"
+                  className="flex items-start space-x-3 mb-2 p-2 bg-white rounded-lg"
                 >
                   <div>
                     <p className="font-semibold">{comment.name}</p>
                     <p className="text-sm text-gray-500">@{comment.userName}</p>
                     <p>{comment.comment}</p>
+                    <div className="flex space-x-4 text-gray-400">
+                      <p className="cursor-pointer hover:text-black">Likes</p>
+                      <p
+                        className="cursor-pointer hover:text-black"
+                        onClick={() => setReplyVisibility("")}
+                      >
+                        Reply
+                      </p>
+                      {userData?.userName === comment?.userName && (
+                        <div className=" flex space-x-4">
+                          <p className="cursor-pointer hover:text-black">
+                            Edit
+                          </p>{" "}
+                          <p className="cursor-pointer hover:text-black">
+                            Delete
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    <div className={replyVisibility}>
+                      {/* <form onSubmit={handleReply}> */}
+                      <div className="flex items-center space-x-2 ">
+                        <label
+                          htmlFor="reply"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Reply to this Comment :
+                        </label>
+                        <div className="mt-2 ">
+                          <input
+                            id="reply"
+                            name="reply"
+                            type="text"
+                            autoComplete="reply"
+                            required
+                            onChange={(e) => setReplyValue(e.target.value)}
+                            className="px-1 block w-full rounded-full border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          />
+                        </div>
+                        <button
+                          // type="submit"
+                          onClick={() => handleReply(comment._id)}
+                          className="ml-2 px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-500"
+                        >
+                          Post
+                        </button>
+                      </div>
+                      {/* </form> */}
+                    </div>
                   </div>
                 </div>
               ))

@@ -1,3 +1,5 @@
+import { FormEvent } from "react";
+
 export interface Errors {
   about?: string;
   password?: string;
@@ -33,6 +35,8 @@ export interface Values {
 }
 
 export interface UserData {
+  selector: any
+  isActive: boolean;
   persisted: any;
   email: string;
   isGoogle: boolean;
@@ -56,6 +60,7 @@ export interface UserData {
 }
 
 export interface PostData {
+  name: string;
   visibility: string;
   createdBy: any;
   content: string;
@@ -70,6 +75,7 @@ export interface PostData {
 }
 
 export interface CommentData {
+  _id: string;
   comment: string;
   name: string;
   userId: string;

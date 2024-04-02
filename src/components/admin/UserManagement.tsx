@@ -1,29 +1,31 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
+import DataTable, { TableColumn } from "react-data-table-component";
 import toast from "react-hot-toast";
+import { UserData } from "../../utils/interfaces/inteface";
+import { confirmAlert } from "react-confirm-alert";
 
 const UserManagement: React.FC = () => {
   const userServiceBaseUrl: string = "http://localhost:4001/api/user";
-  const [users, setUsers] = useState<any[]>([]);
-  const [data, setData] = useState<any[]>([]);
-  const [reload,setReload] = useState('false')
-  const columns = [
+  const [data, setData] = useState<UserData[]>([]);
+  const [reload, setReload] = useState<boolean>(false);
+
+  const columns: TableColumn<UserData>[] = [
     {
-      name: "ID",
-      selector: (row: any) => row._id,
+      name: "No",
+      selector: (_row: UserData, index: number) => index + 1,
     },
     {
       name: "Name",
-      selector: (row: any) => row.name,
+      selector: (row: UserData) => row.name,
     },
     {
       name: "Email",
-      selector: (row: any) => row.email,
+      selector: (row: UserData) => row.email,
     },
     {
       name: "Actions",
-      cell: (row: any) => (
+      cell: (row: UserData) => (
         <div>
           {row.isActive ? (
             <button
@@ -49,15 +51,8 @@ const UserManagement: React.FC = () => {
     axios
       .get(`${userServiceBaseUrl}/find-all-users`, { withCredentials: true })
       .then((res) => {
-        setUsers(res.data.users);
-        const mappedData = res.data.users.map((user: any) => ({
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          isActive: user.isActive,
-        }));
-        setData(mappedData);
-        setReload('false')
+        setData(res.data.users);
+        setReload(false);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
@@ -65,24 +60,35 @@ const UserManagement: React.FC = () => {
   }, [reload]);
 
   const handleStatusChange = (userId: string) => {
-    try {
-      axios
-        .put(`${userServiceBaseUrl}/change-user-status/${userId}`, {
-          withCredentials: true,
-        })
-        .then((res) => {
-            setReload('true')
-          if (res.data.user.isActive) {
-            toast.success(`${res.data.user.name} unblocked`);
-          } else {
-            toast.success(`${res.data.user.name} blocked`);
-          }
-        });
-    } catch (error) {
-      console.log("error in status change:", error);
-    }
+    confirmAlert({
+      title: "Confirm to change Status",
+      message: "Are you sure to Change the Status of this User?",
+      buttons: [
+        {
+          label: "Change",
+          onClick: () => {
+            axios
+              .put(
+                `${userServiceBaseUrl}/change-user-status/${userId}`,
+                {},
+                { withCredentials: true }
+              )
+              .then((res) => {
+                setReload(true);
+                if (res.data.user.isActive) {
+                  toast.success(`${res.data.user.name} unblocked`);
+                } else {
+                  toast.success(`${res.data.user.name} blocked`);
+                }
+              });
+          },
+        },
+        {
+          label: "Cancel",
+        },
+      ],
+    });
   };
-
 
   return (
     <div className="flex flex-col items-center">

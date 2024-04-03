@@ -75,6 +75,8 @@ export interface PostData {
 }
 
 export interface CommentData {
+  reply: string;
+  replies: any[];
   _id: string;
   comment: string;
   name: string;

@@ -12,6 +12,7 @@ import EditPost from "../pages/user/EditPost";
 import ThirdProfile from "../pages/user/ThirdProfile";
 import CommunityProfile from "../pages/community/CommunityProfile";
 import Settings from "../pages/community/Settings";
+import Message from "../pages/user/Messages";
 
 const UserRoutes = () => {
   return (
@@ -30,6 +31,7 @@ const UserRoutes = () => {
       <Route path="/community-profile/:communityId/*" element={<CommunityProfile />} />
       <Route path='/community/write-post/:communityId' element={<WritePost/>}/>
       <Route path='/community/settings/:communityId*' element={<Settings/>}/>
+      <Route path='/messages' element={<Message/>}/>
     </Routes>
   );
 };

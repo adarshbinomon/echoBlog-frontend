@@ -57,7 +57,7 @@ const PostPage = () => {
       .catch((error: any) => {
         console.error("Error fetching post data:", error);
       });
-  }, [id, userData._id, newComments]);
+  }, [id, userData._id, newComments, replyVisibility]);
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> | undefined = post
     ? () => {
@@ -148,18 +148,20 @@ const PostPage = () => {
         userId: userData._id,
         userName: userData.userName,
       };
-      console.log(commentData);
-
       axios
         .post(`${baseUrl}/reply-to-comment/${post?._id}`, commentData, {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res);
-          console.log("reply", replyValue);
-          setReplyVisibility("hidden");
+          if (res.status) {
+            setReplyVisibility("hidden");
+            setReplyValue("");
+            toast.success("Reply Successfull✅");
+          }
         });
-    } catch (error) {}
+    } catch (error) {
+      console.log("error in reply to comment:", error);
+    }
   };
 
   return (
@@ -268,10 +270,9 @@ const PostPage = () => {
                     <p className="text-sm text-gray-500">@{comment.userName}</p>
                     <p>{comment.comment}</p>
                     <div className="flex space-x-4 text-gray-400">
-                      <p className="cursor-pointer hover:text-black">Likes</p>
                       <p
                         className="cursor-pointer hover:text-black"
-                        onClick={() => setReplyVisibility("")}
+                        onClick={() => setReplyVisibility(comment._id)}
                       >
                         Reply
                       </p>
@@ -286,36 +287,52 @@ const PostPage = () => {
                         </div>
                       )}
                     </div>
-                    <div className={replyVisibility}>
-                      {/* <form onSubmit={handleReply}> */}
-                      <div className="flex items-center space-x-2 ">
-                        <label
-                          htmlFor="reply"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Reply to this Comment :
-                        </label>
-                        <div className="mt-2 ">
-                          <input
-                            id="reply"
-                            name="reply"
-                            type="text"
-                            autoComplete="reply"
-                            required
-                            onChange={(e) => setReplyValue(e.target.value)}
-                            className="px-1 block w-full rounded-full border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                        </div>
-                        <button
-                          // type="submit"
-                          onClick={() => handleReply(comment._id)}
-                          className="ml-2 px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-500"
-                        >
-                          Post
-                        </button>
+                    {comment.replies.length > 0 && (
+                      <div className="ms-10 mt-2">
+                        <p className="font-semibold pt-2 pb-2">Replies:</p>
+                        {comment.replies.map(
+                          (reply: CommentData, index: number) => (
+                            <div key={index}>
+                              <p className="font-semibold">{reply.name}</p>
+                              <p className="text-sm text-gray-500">
+                                @{reply.userName}
+                              </p>
+                              <p>{reply.reply}</p>
+                            </div>
+                          )
+                        )}
                       </div>
-                      {/* </form> */}
-                    </div>
+                    )}
+                    {replyVisibility === comment._id && (
+                      <div>
+                        <div className="flex items-center space-x-2 ">
+                          <label
+                            htmlFor="reply"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Reply to this Comment :
+                          </label>
+                          <div className="mt-2 ">
+                            <input
+                              id="reply"
+                              name="reply"
+                              type="text"
+                              autoComplete="reply"
+                              required
+                              value={replyValue}
+                              onChange={(e) => setReplyValue(e.target.value)}
+                              className="px-1 block w-full rounded-full border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                          <button
+                            onClick={() => handleReply(comment._id)}
+                            className="ml-2 px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-500"
+                          >
+                            Post
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))

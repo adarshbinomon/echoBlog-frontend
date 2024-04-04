@@ -82,9 +82,12 @@ export interface CommentData {
   name: string;
   userId: string;
   userName: string;
+  likes: any[]
+  createdAt: Date
 }
 
 export interface CommunityData {
+  admins: any;
   name: string;
   about: string;
   createdBy: string;

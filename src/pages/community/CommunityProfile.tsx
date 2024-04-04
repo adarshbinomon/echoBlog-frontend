@@ -44,6 +44,7 @@ const CommunityProfile = () => {
       .then((res) => {
         setCommunity(res.data.community);
         setReload(false);
+        console.log(res.data.community);
       })
       .catch((error) => {
         console.error("Error fetching community data:", error);
@@ -126,7 +127,8 @@ const CommunityProfile = () => {
                   </>
                 )}
               </button>
-              {community?.createdBy === userData._id ? (
+              {(community?.admins.includes(userData?._id) ||
+                community?.createdBy === userData?._id) && (
                 <button
                   type="button"
                   onClick={handleSettings}
@@ -135,7 +137,7 @@ const CommunityProfile = () => {
                   <Settings className="w-5 h-5 mx-1" />
                   <span className="font-semibold">Settings</span>
                 </button>
-              ) : null}
+              )}
             </div>
             {/* Community Details */}
             <div className="flex flex-col space-y-2 ms-[-20px]">

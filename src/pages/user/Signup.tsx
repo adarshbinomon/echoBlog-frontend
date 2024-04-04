@@ -7,7 +7,7 @@ import { signupValidation } from "../../helper/validate";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../../firebase/firebaseConfig";
 import { useEffect } from "react";
-
+import GoogleButton from "react-google-button";
 
 const Signup: React.FC = () => {
   const baseUrl: string = "http://localhost:4000/api/auth/user";
@@ -229,12 +229,13 @@ const Signup: React.FC = () => {
             <h6>Signup using:</h6>
           </div>
           <div className="mt-2 flex items-center space-x-2 justify-center">
-            <button
+            <GoogleButton onClick={handleGoogle} />
+            {/* <button
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
               onClick={handleGoogle}
             >
               Google
-            </button>
+            </button> */}
             {/* <button
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
               onClick={handleGoogle}

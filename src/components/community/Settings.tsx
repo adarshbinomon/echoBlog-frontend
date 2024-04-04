@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/common/Navbar";
-import Footer from "../../components/common/Footer";
+import Navbar from "../common/Navbar";
+import Footer from "../common/Footer";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { CommunityData } from "../../utils/interfaces/inteface";
@@ -28,8 +28,8 @@ const Settings = () => {
         setReload(false);
         setProfilePicture(res.data.community.profilePicture);
         setCoverPicture(res.data.community.coverPicture);
-        setCommunityName(res.data.community.name)
-        setCommunityAbout(res.data.community.about)
+        setCommunityName(res.data.community.name);
+        setCommunityAbout(res.data.community.about);
       })
       .catch((error) => {
         console.error("Error fetching community data:", error);
@@ -53,7 +53,7 @@ const Settings = () => {
           toast.success("Community edited successfully!");
           setTimeout(() => {
             navigate(`/community-profile/${community?._id}`);
-          }, 3000); // 3 seconds delay
+          }, 1000);
         }
       })
       .catch((error) => {
@@ -64,10 +64,8 @@ const Settings = () => {
 
   return (
     <div>
-      <Navbar />
-      <div className="min-h-screen ">
-        <div className="max-w-lg mx-auto pt-24 p-8">
-          <h1 className="text-3xl font-semibold mb-6">Community Settings</h1>
+      <div>
+        <div className="max-w-lg mx-auto px-8">
           <div className="mb-4">
             <label
               htmlFor="communityName"
@@ -174,7 +172,6 @@ const Settings = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

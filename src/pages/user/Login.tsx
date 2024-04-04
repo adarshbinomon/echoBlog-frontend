@@ -3,11 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import { loginValidation } from "../../helper/validate";
 import axios from "axios";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from "../../../firebase/firebaseConfig";
+import { auth ,provider} from "../../../firebase/firebaseConfig";
 import toast, { Toaster } from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
+import GoogleButton from "react-google-button";
 
 
 const Login = () => {
@@ -54,29 +55,39 @@ const Login = () => {
    }
   },[navigate])
 
-  const GoogleAuth = async () => {
+  const handleGoogle = async () => {
     try {
-      const provider = await new GoogleAuthProvider();
-      const googleAuth = signInWithPopup(auth, provider);
-      return googleAuth;
+      const data = await signInWithPopup(auth, provider);
+      const userData = {
+        profilePicture: data.user.photoURL,
+        email: data.user.email,
+        name: data.user.displayName,
+        uid: data.user.uid,
+        isGoogle: true,
+        isFacebook: false,
+      };
+
+      axios
+        .post(`${baseUrl}/google-login`, userData, { withCredentials: true })
+        .then((res) => {
+          console.log("res");
+          console.log(res);
+          if (res.data.status) {
+            navigate("/");
+            localStorage.setItem("accessToken", res.data?.accessToken);
+            dispatch(addUser(res.data.user));
+
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Sign in with Google failed!");
+        });
     } catch (error) {
-      console.log("Error in the the google auth firebase", error);
+      console.log(error);
+      toast.error("Sign in with Google failed!");
     }
   };
-
-  // const handleGoogle = async (e: any) => {
-  //   e.preventDefault();
-  //   await GoogleAuth().then(async (data: any) => {
-  //     const userData = {
-  //       profile: data.user.photoURL,
-  //       email: data.user.email,
-  //       name: data.user.displayName,
-  //       isGoogle: true,
-  //       isFacebook: false,
-  //     };
-  //     console.log(userData);
-  //   });
-  // };
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -162,13 +173,11 @@ const Login = () => {
               </button>
             </div>
           </form>
+          <div className="mt-2 flex justify-center">
 
-          {/* <button
-            className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            onClick={handleGoogle}
-          >
-            signin with google
-          </button> */}
+          <GoogleButton onClick={handleGoogle} />
+          </div>
+
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?

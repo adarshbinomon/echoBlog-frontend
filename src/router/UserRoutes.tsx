@@ -11,8 +11,9 @@ import Post from "../pages/user/Post";
 import EditPost from "../pages/user/EditPost";
 import ThirdProfile from "../pages/user/ThirdProfile";
 import CommunityProfile from "../pages/community/CommunityProfile";
-import Settings from "../pages/community/Settings";
+import Settings from "../components/community/Settings";
 import Message from "../pages/user/Messages";
+import CommunitySettings from "../pages/community/CommunitySettings";
 
 const UserRoutes = () => {
   return (
@@ -30,7 +31,8 @@ const UserRoutes = () => {
       <Route path="/user/:userId" element={<ThirdProfile />} />
       <Route path="/community-profile/:communityId/*" element={<CommunityProfile />} />
       <Route path='/community/write-post/:communityId' element={<WritePost/>}/>
-      <Route path='/community/settings/:communityId*' element={<Settings/>}/>
+      <Route path='/community/settings/:communityId*' element={<CommunitySettings/>}/>
+      {/* <Route path='/community/settings/:communityId*' element={<Settings/>}/> */}
       <Route path='/messages' element={<Message/>}/>
     </Routes>
   );

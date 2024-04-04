@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import toast from "react-hot-toast";
+import Modal from "../../components/common/Modal";
 
 const PostPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,6 +31,10 @@ const PostPage = () => {
   const [newComments, setNewComments] = useState<CommentData[]>([]);
   const [replyVisibility, setReplyVisibility] = useState<string>("hidden");
   const [replyValue, setReplyValue] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [comment, setComment] = useState<string>("");
+  const [reload, setReload] = useState<boolean>(false);
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -53,11 +58,21 @@ const PostPage = () => {
         setLike(res.data.post.like.length);
         setComments(res.data.post.comment);
         setLoadingComments(false);
+        setReload(false);
       })
       .catch((error: any) => {
         console.error("Error fetching post data:", error);
       });
-  }, [id, userData._id, newComments, replyVisibility]);
+  }, [
+    id,
+    userData._id,
+    newComments,
+    replyVisibility,
+    editingCommentId,
+    comment,
+    isModalOpen,
+    reload,
+  ]);
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> | undefined = post
     ? () => {
@@ -164,6 +179,58 @@ const PostPage = () => {
     }
   };
 
+  const handleCommentEdit = (commentId: string, comment: string) => {
+    setEditingCommentId(commentId);
+    setComment(comment);
+    setIsModalOpen(true);
+  };
+
+  const handleCommentLike = (commentId: string, isLiked: boolean) => {
+    const data = {
+      isLiked,
+      userId: userData._id,
+      postId: post?._id,
+    };
+    axios
+      .post(`${baseUrl}/like-comment/${commentId}`, data, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        setReload(true);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleCommentDelete = (commentId: string) => {
+  const data = {
+    commentId: commentId
+  }
+    confirmAlert({
+      title: "Confirm to Delete comment",
+      message: "Are you sure to delete this comment?",
+      buttons: [
+        {
+          label: "Delete",
+          onClick: () => {
+            axios
+              .post(`${baseUrl}/delete-comment/${post?._id}`,data,{withCredentials:true})
+              .then(() => {
+                setReload(true);
+                toast.success('Comment Deleted!');
+              })
+              .catch((error: any) => {
+                console.log("error in comment deletion:", error);
+              });
+          },
+        },
+        {
+          label: "Cancel",
+        },
+      ],
+    });
+  };
+  
   return (
     <>
       <Navbar />
@@ -270,6 +337,21 @@ const PostPage = () => {
                     <p className="text-sm text-gray-500">@{comment.userName}</p>
                     <p>{comment.comment}</p>
                     <div className="flex space-x-4 text-gray-400">
+                      <Heart
+                        fill={
+                          comment.likes.includes(userData?._id)
+                            ? "black"
+                            : "none"
+                        }
+                        onClick={() =>
+                          handleCommentLike(
+                            comment._id,
+                            comment.likes.includes(userData?._id) ? true : false
+                          )
+                        }
+                        className="cursor-pointer mr-2"
+                      />{" "}
+                      <p>{comment.likes.length} Likes</p>
                       <p
                         className="cursor-pointer hover:text-black"
                         onClick={() => setReplyVisibility(comment._id)}
@@ -278,10 +360,18 @@ const PostPage = () => {
                       </p>
                       {userData?.userName === comment?.userName && (
                         <div className=" flex space-x-4">
-                          <p className="cursor-pointer hover:text-black">
+                          <p
+                            className="cursor-pointer hover:text-black"
+                            onClick={() =>
+                              handleCommentEdit(comment._id, comment.comment)
+                            }
+                          >
                             Edit
                           </p>{" "}
-                          <p className="cursor-pointer hover:text-black">
+                          <p
+                            onClick={() => handleCommentDelete(comment._id)}
+                            className="cursor-pointer hover:text-black"
+                          >
                             Delete
                           </p>
                         </div>
@@ -343,6 +433,17 @@ const PostPage = () => {
         </div>
       </div>
       <Footer />
+      <Modal
+        isOpen={isModalOpen}
+        commentId={editingCommentId}
+        commentValue={comment}
+        postId={post?._id}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingCommentId(null);
+          setComment("");
+        }}
+      />
     </>
   );
 };

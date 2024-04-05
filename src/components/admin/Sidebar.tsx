@@ -48,17 +48,7 @@ const Sidebar: React.FC = () => {
               Post Management
             </Link>
           </li>
-          <li>
-            <Link
-              to="/admin/reports-management"
-              className={`hover:text-red-500 transition duration-300 p-2 rounded-lg w-full ${
-                activeTab === 'reports' ?  'font-semibold bg-white text-black' : 'text-white'
-              }`}
-              onClick={() => setActive('reports')}
-            >
-              Reports Management
-            </Link>
-          </li>
+         
           <li>
             <Link
               to="/admin/premium-management"

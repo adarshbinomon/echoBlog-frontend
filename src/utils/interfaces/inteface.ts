@@ -60,6 +60,7 @@ export interface UserData {
 }
 
 export interface PostData {
+  reportedUsersList: any[];
   name: string;
   visibility: string;
   createdBy: any;

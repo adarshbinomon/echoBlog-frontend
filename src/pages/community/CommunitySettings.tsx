@@ -42,6 +42,7 @@ const CommunitySettings = () => {
       })
       .catch((error) => {
         console.error("Error fetching community data:", error);
+        navigate("/error");
       });
   }, [communityId, reload]);
 

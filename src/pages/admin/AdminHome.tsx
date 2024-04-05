@@ -1,10 +1,9 @@
 import { useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import  { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Sidebar from "../../components/admin/Sidebar";
 import Navbar from "../../components/admin/Navbar";
-import { Link, Route, Routes } from "react-router-dom";
+import {  Route, Routes } from "react-router-dom";
 import UserManagement from "../../components/admin/UserManagement";
 import AdminHomeComponent from "../../components/admin/AdminHomeComponent";
 import PostManagement from "../../components/admin/PostManagement";

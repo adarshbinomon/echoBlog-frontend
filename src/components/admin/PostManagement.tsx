@@ -24,6 +24,10 @@ const PostManagement = () => {
       selector: (row: PostData) => row.name,
     },
     {
+      name: "Reports",
+      selector: (row: PostData) => row.reportCount,
+    },
+    {
       name: "Actions",
       cell: (row: PostData) => (
         <div>
@@ -59,6 +63,7 @@ const PostManagement = () => {
           content: post.content,
           name: post.createdBy.name,
           visibility: post.visibility,
+          reportCount: post.reportedUsersList.length
         }));
         setPosts(mappedData);
       })

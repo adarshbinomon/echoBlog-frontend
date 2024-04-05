@@ -44,10 +44,11 @@ const CommunityProfile = () => {
       .then((res) => {
         setCommunity(res.data.community);
         setReload(false);
-        console.log(res.data.community);
       })
       .catch((error) => {
         console.error("Error fetching community data:", error);
+        navigate('/error')
+
       });
   }, [communityId, reload]);
 

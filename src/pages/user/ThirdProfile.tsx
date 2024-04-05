@@ -35,6 +35,10 @@ const ThirdProfile = () => {
       .get(`${userServiceBaseUrl}/user-profile/${userId}`)
       .then((res: any) => {
         setUser(res.data.user);
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate("*");
       });
   }, [userData]);
 
@@ -103,7 +107,7 @@ const ThirdProfile = () => {
 
               <div className=" flex space-x-2 text-gray-500">
                 <FileText size={20} color="gray" />
-                <p>0 Blogs</p>
+                <p>{user?.bio}</p>
               </div>
 
               <div className=" flex space-x-2 text-gray-500">

@@ -18,6 +18,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import toast from "react-hot-toast";
 import Modal from "../../components/common/Modal";
+import PostReportReasons from "../../utils/enums/report.reasons";
 
 const PostPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -35,6 +36,7 @@ const PostPage = () => {
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [comment, setComment] = useState<string>("");
   const [reload, setReload] = useState<boolean>(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -62,6 +64,7 @@ const PostPage = () => {
       })
       .catch((error: any) => {
         console.error("Error fetching post data:", error);
+        navigate('*')
       });
   }, [
     id,
@@ -203,9 +206,9 @@ const PostPage = () => {
   };
 
   const handleCommentDelete = (commentId: string) => {
-  const data = {
-    commentId: commentId
-  }
+    const data = {
+      commentId: commentId,
+    };
     confirmAlert({
       title: "Confirm to Delete comment",
       message: "Are you sure to delete this comment?",
@@ -214,10 +217,12 @@ const PostPage = () => {
           label: "Delete",
           onClick: () => {
             axios
-              .post(`${baseUrl}/delete-comment/${post?._id}`,data,{withCredentials:true})
+              .post(`${baseUrl}/delete-comment/${post?._id}`, data, {
+                withCredentials: true,
+              })
               .then(() => {
                 setReload(true);
-                toast.success('Comment Deleted!');
+                toast.success("Comment Deleted!");
               })
               .catch((error: any) => {
                 console.log("error in comment deletion:", error);
@@ -230,7 +235,23 @@ const PostPage = () => {
       ],
     });
   };
-  
+
+  const handlePostReport = (reason: string) => {
+    const data = {
+      userId: userData._id,
+      reason,
+    };
+
+    axios
+      .post(`${baseUrl}/report-post/${post?._id}`, data, {
+        withCredentials: true,
+      })
+      .then(() => {
+        setShowDropdown(!showDropdown);
+        toast.success('reported successfully')
+      });
+  };
+
   return (
     <>
       <Navbar />
@@ -272,6 +293,33 @@ const PostPage = () => {
                 {" "}
                 likes
               </span>
+
+              {userData?._id !== user?._id && (
+                <div className="ml-auto flex justify-between items-center">
+                  <button
+                    type="button"
+                    className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 relative"
+                    onClick={() => setShowDropdown(!showDropdown)}
+                  >
+                    Report
+                    <span className="ml-2">&#9662;</span> {/* Downward arrow */}
+                  </button>
+                  {showDropdown && (
+                    <div className="absolute z-10 bg-white mt-1 rounded-md shadow-lg">
+                      {/* Dropdown content */}
+                      {Object.values(PostReportReasons).map((reason, index) => (
+                        <button
+                          key={index}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                          onClick={() => handlePostReport(reason)}
+                        >
+                          {reason}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {userData?._id === user?._id && (
                 <>

@@ -51,7 +51,7 @@ const Home = () => {
       {/* main div */}
       <div className="flex justify-center min-h-screen space-x-1 pt-[100px] ">
         {/* left div for posts */}
-        <div className="ms-10 w-2/3 h-auto flex flex-col border-right-4">
+        <div className="ms-10 w-2/3 h-auto flex flex-col border-right-4 ">
           <div className="flex justify-between font-semibold px-10">
             <Link to="/">
               <span
@@ -65,7 +65,7 @@ const Home = () => {
               </span>
             </Link>
 
-            <Link to="/following">
+            {/* <Link to="/following">
               <span
                 className={
                   location.pathname === "/following"
@@ -75,7 +75,7 @@ const Home = () => {
               >
                 Following
               </span>
-            </Link>
+            </Link> */}
             <Link to="/community">
               <span
                 className={
@@ -88,12 +88,12 @@ const Home = () => {
               </span>
             </Link>
 
-            <span className="hover:text-indigo-600 hover:font-bold ">
+            {/* <span className="hover:text-indigo-600 hover:font-bold ">
               Topics You Follow
             </span>
             <span className="hover:text-indigo-600 hover:font-bold ">
               Explore Topics
-            </span>
+            </span> */}
           </div>
           {/* <hr /> */}
           <div className="h-full ">
@@ -105,7 +105,7 @@ const Home = () => {
           </div>
         </div>
         {/* right sidebar */}
-        <div className="w-1/4">
+        <div className="w-1/4 ">
           <UserList />
           <CommunityList/>
         </div>

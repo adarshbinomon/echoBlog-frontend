@@ -9,6 +9,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import PostList from "../../components/profile/PostList";
 import Community from "../../components/profile/Community";
 import { useEffect } from "react";
+// import SavedPosts from "../../components/profile/SavedPosts";
 const Profile = () => {
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -75,7 +76,7 @@ const Profile = () => {
 
               <div className=" flex space-x-2 text-gray-500">
                 <FileText size={20} color="gray" />
-                <p>0 Blogs</p>
+                <p>{userData.bio}</p>
               </div>
 
               <div className=" flex space-x-2 text-gray-500">
@@ -100,6 +101,11 @@ const Profile = () => {
                     Communities{" "}
                   </span>
                 </Link>
+                <Link to={"/profile/saved"}>
+                  <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer px-10 hover:pe-9">
+                    Saved{" "}
+                  </span>
+                </Link>
               </div>
               <hr className="w-[700px] "></hr>
             </div>
@@ -107,7 +113,8 @@ const Profile = () => {
           <div className="">
             <Routes>
               <Route path="/" element={<PostList userId={userData?._id} />} />
-              <Route path="/community" element={<Community/>}></Route>
+              <Route path="/community" element={<Community />}></Route>
+              {/* <Route path="/saved" element={<SavedPosts/>}></Route> */}
             </Routes>
           </div>
         </div>

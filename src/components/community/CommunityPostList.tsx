@@ -15,16 +15,16 @@ import {
 } from "lucide-react";
 import { calculateReadTime } from "../../helper/wordCountToReadTime";
 import { useNavigate } from "react-router-dom";
+const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
 interface PostListProps {
   communityId: string | undefined;
 }
 
 const CommunityPostList: React.FC<PostListProps> = ({ communityId }) => {
-  const postServiceBaseUrl: string = "http://localhost:4002/api/post";
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
   const dispatch = useDispatch();
-  const navigate= useNavigate()
+  const navigate = useNavigate();
 
   const [posts, setPosts] = useState<PostData>();
   const userData = useSelector(

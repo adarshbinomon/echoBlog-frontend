@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Quill, { QuillOptionsStatic } from "quill";
+import Quill from "quill";
 import "quill/dist/quill.bubble.css";
 
 interface QuillViewerProps {
@@ -23,13 +23,13 @@ const QuillViewer: React.FC<QuillViewerProps> = ({ content }) => {
 
     return () => {
       if (quill) {
-        (quill as Quill).disable(); 
+        (quill as Quill).disable();
         setQuill(null);
       }
     };
   }, [content, quill]);
 
-  return <div  id="quill-viewer" />;
+  return <div id="quill-viewer" />;
 };
 
 export default QuillViewer;

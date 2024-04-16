@@ -4,13 +4,17 @@ import { UserData, PostData } from "../../utils/interfaces/inteface";
 import { timeParser } from "../../helper/timeParser";
 import { dateParser } from "../../helper/dateParser";
 import { calculateReadTime } from "../../helper/wordCountToReadTime";
-import { BookOpenText, Heart, Bookmark, BookmarkCheck,MessageCircle  } from "lucide-react";
+import {
+  BookOpenText,
+  Heart,
+  Bookmark,
+  BookmarkCheck,
+  MessageCircle,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-
-
 
 const ForYou = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
@@ -26,7 +30,7 @@ const ForYou = () => {
 
   useEffect(() => {
     axios
-      .get(`${postServiceBaseUrl}/posts`)
+      .get(`${postServiceBaseUrl}/posts`, { withCredentials: true })
       .then((res) => {
         setPosts(res.data.posts);
       })
@@ -59,12 +63,12 @@ const ForYou = () => {
   };
 
   return (
-    <div >
+    <div>
       {posts.length > 0 &&
         posts
           .slice()
           .reverse()
-          .map((post: PostData, i: number) => (
+          .map((post: PostData) => (
             <div
               key={post._id}
               className="border p-10 text-center m-4 relative rounded-lg shadow-md  text-gray-600 bg-white"
@@ -105,14 +109,13 @@ const ForYou = () => {
                 </p>
                 <BookOpenText size={23} />
                 <p>{calculateReadTime(post.content)} min read</p>
-                <Heart size={23}/>
+                <Heart size={23} />
                 <p>{post?.like?.length} Likes</p>
-                <MessageCircle  size={23}/>
+                <MessageCircle size={23} />
                 <p>{post?.comment?.length} Comments</p>
-
               </div>
               <div className="absolute bottom-0 right-0 mr-2 mb-2 cursor-pointer">
-              {userData.savedPosts?.includes(post._id) ? (
+                {userData.savedPosts?.includes(post._id) ? (
                   <BookmarkCheck
                     onClick={() => {
                       handleSave(post._id);
@@ -124,7 +127,8 @@ const ForYou = () => {
                       handleSave(post._id);
                     }}
                   />
-                )}              </div>
+                )}{" "}
+              </div>
             </div>
           ))}
     </div>

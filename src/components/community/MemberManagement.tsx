@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import { CommunityData, UserData } from "../../utils/interfaces/inteface";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { confirmAlert } from "react-confirm-alert"; // Import the confirmAlert function
 import "react-confirm-alert/src/react-confirm-alert.css";
 import React from "react";
+const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
 
 const MemberManagement = () => {
   const [community, setCommunity] = useState<CommunityData | null>(null);
   const [reload, setReload] = useState(false);
   const { communityId } = useParams();
-  const navigate = useNavigate();
-  const groupServiceBaseUrl = "http://localhost:4003/api/group";
   const [userData, setUserData] = useState<UserData | null>(null); // Assuming you have a UserData interface
 
   useEffect(() => {

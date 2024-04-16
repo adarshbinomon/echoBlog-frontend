@@ -4,9 +4,11 @@ import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
+const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
+
+
 
 const OtpVerify: React.FC = () => {
-  const baseUrl: string = "http://localhost:4000/api/auth/user";
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -39,7 +41,7 @@ const OtpVerify: React.FC = () => {
   }, [countdown]);
 
   const handleResendOtp = () => {
-    axios.get(`${baseUrl}/resend-otp`, {withCredentials: true}).then((res) => {
+    axios.get(`${authServiceBaseUrl}/resend-otp`, {withCredentials: true}).then((res) => {
       if (res.status) {
         toast.success("OTP Resent Successfully!");
         setCountdown(30); 
@@ -55,7 +57,7 @@ const OtpVerify: React.FC = () => {
       toast.error("Please enter OTP");
     } else {
       axios
-        .post(`${baseUrl}/verify-otp`, enteredOtp, { withCredentials: true })
+        .post(`${authServiceBaseUrl}/verify-otp`, enteredOtp, { withCredentials: true })
         .then((res) => {
           if (res.data?.status) {
             const userId = res.data.user._id;

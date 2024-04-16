@@ -10,13 +10,13 @@ import {
   PostData,
   UserData,
 } from "../../utils/interfaces/inteface";
+const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
+
+const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
+const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
 
 const Navbar = () => {
-  const authServiceBaseUrl: string = "http://localhost:4000/api/auth/user";
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
-  const postServiceBaseUrl: string = "http://localhost:4002/api/post";
-  const groupServiceBaseUrl = "http://localhost:4003/api/group";
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -91,12 +91,10 @@ const Navbar = () => {
 
   const handlePostClick = (postId: string) => {
     navigate(`/post/${postId}`);
-
   };
 
   const handleCommunityClick = (communityId: string) => {
     navigate(`/community-profile/${communityId}`);
-
   };
 
   return (

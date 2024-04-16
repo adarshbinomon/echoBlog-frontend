@@ -8,28 +8,19 @@ import {
 } from "react-router-dom";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
-import EditProfileProfileTab from "../../components/profile/EditProfileProfileTab";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { CommunityData } from "../../utils/interfaces/inteface";
 import Settings from "../../components/community/Settings";
 import MemberManagement from "../../components/community/MemberManagement";
+const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
 
 const CommunitySettings = () => {
-  const groupServiceBaseUrl = "http://localhost:4003/api/group";
-
   const location = useLocation();
   const navigate = useNavigate();
   const { communityId } = useParams();
-  const [community, setCommunity] = useState<CommunityData | null>(null);
+  const [, setCommunity] = useState<CommunityData | null>(null);
   const [reload, setReload] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      navigate("/login");
-    }
-  }, [navigate]);
 
   useEffect(() => {
     axios

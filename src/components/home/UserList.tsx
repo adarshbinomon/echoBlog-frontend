@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { UserData } from "../../utils/interfaces/inteface";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/userSlices";
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
+
 
 const UserList = () => {
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
   const [users, setUsers] = useState<UserData[]>([]);
 
   const userData = useSelector(

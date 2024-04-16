@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../common/Navbar";
-import Footer from "../common/Footer";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { CommunityData } from "../../utils/interfaces/inteface";
 import toast from "react-hot-toast";
+const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
 
 const Settings = () => {
   const [community, setCommunity] = useState<CommunityData | null>(null);
   const [reload, setReload] = useState(false);
-  const groupServiceBaseUrl = "http://localhost:4003/api/group";
   const { communityId } = useParams();
   const navigate = useNavigate();
 
   const [communityName, setCommunityName] = useState("");
   const [communityAbout, setCommunityAbout] = useState("");
-  const [profilePicture, setProfilePicture] = useState("");
-  const [coverPicture, setCoverPicture] = useState("");
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [coverPicture, setCoverPicture] = useState<File | null>(null);
 
   useEffect(() => {
     axios
@@ -26,8 +24,6 @@ const Settings = () => {
       .then((res) => {
         setCommunity(res.data.community);
         setReload(false);
-        setProfilePicture(res.data.community.profilePicture);
-        setCoverPicture(res.data.community.coverPicture);
         setCommunityName(res.data.community.name);
         setCommunityAbout(res.data.community.about);
       })
@@ -36,17 +32,23 @@ const Settings = () => {
       });
   }, [communityId, reload]);
 
-  const handleSaveSettings: React.MouseEventHandler<HTMLButtonElement> = () => {
-    const data = {
-      name: communityName,
-      about: communityAbout,
-      profilePicture: profilePicture,
-      coverPicture: coverPicture,
-    };
-    console.log("Settings saved:", data);
+  const handleSaveSettings = () => {
+    const formData = new FormData();
+    formData.append("name", communityName);
+    formData.append("about", communityAbout);
+    if (profilePicture) {
+      formData.append("profilePicture", profilePicture);
+    }
+    if (coverPicture) {
+      formData.append("coverPicture", coverPicture);
+    }
+
     axios
-      .put(`${groupServiceBaseUrl}/community-edit/${community?._id}`, data, {
+      .put(`${groupServiceBaseUrl}/community-edit/${community?._id}`, formData, {
         withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((res) => {
         if (res.data.status) {
@@ -97,30 +99,6 @@ const Settings = () => {
           </div>
           <div className="mb-4">
             <label
-              htmlFor="profilePicture"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Profile Picture
-            </label>
-            {profilePicture && (
-              <img
-                src={profilePicture}
-                alt="Profile Preview"
-                className="mt-2 rounded-md"
-                style={{ maxWidth: "150px" }}
-              />
-            )}
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="coverPicture"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Cover Picture
-            </label>
-          </div>
-          <div className="mb-4">
-            <label
               htmlFor="profilePictureUpload"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
@@ -130,20 +108,10 @@ const Settings = () => {
               type="file"
               id="profilePictureUpload"
               accept="image/*"
-              onChange={(e) =>
-                setProfilePicture(URL.createObjectURL(e.target.files[0]))
-              }
+              onChange={(e) => setProfilePicture(e.target.files?.[0] || null)}
               className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
-          {coverPicture && (
-            <img
-              src={coverPicture}
-              alt="Cover Preview"
-              className="mt-2 rounded-md"
-              style={{ maxWidth: "400px" }}
-            />
-          )}
           <div className="mb-4">
             <label
               htmlFor="coverPictureUpload"
@@ -155,9 +123,7 @@ const Settings = () => {
               type="file"
               id="coverPictureUpload"
               accept="image/*"
-              onChange={(e) =>
-                setCoverPicture(URL.createObjectURL(e.target.files[0]))
-              }
+              onChange={(e) => setCoverPicture(e.target.files?.[0] || null)}
               className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>

@@ -17,14 +17,9 @@ const UserDetails: React.FC = () => {
     (state: UserData) => state.persisted.user.userData
   );
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!userData.name) {
-      navigate("/login");
-    }
-  }, []);
   const formik = useFormik({
     initialValues: {
-      userName: "", 
+      userName: "",
       phone: userData.phone,
       bio: "",
       gender: "",

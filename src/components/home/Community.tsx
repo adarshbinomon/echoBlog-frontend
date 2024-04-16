@@ -1,17 +1,15 @@
 import { Users } from "lucide-react";
 import { useFormik } from "formik";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { communityValidation } from "../../helper/validate";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
 import { useNavigate } from "react-router-dom";
-
+const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
 
 const Community = () => {
-  const baseUrl: string = "http://localhost:4003/api/group";
   const navigate = useNavigate();
-
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -30,13 +28,13 @@ const Community = () => {
       if (formik.isValid) {
         values = { ...values, createdBy: userData._id };
         axios
-          .post(`${baseUrl}/create-community`, values, {
+          .post(`${groupServiceBaseUrl}/create-community`, values, {
             withCredentials: true,
           })
           .then((res) => {
             console.log(res);
             if (res.status) {
-                navigate(`/community-profile/${res.data.community._id}`);
+              navigate(`/community-profile/${res.data.community._id}`);
             }
           })
           .catch((error) => {

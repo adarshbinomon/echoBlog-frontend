@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import axios, {  AxiosResponse } from "axios";
 import { useSelector } from "react-redux";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
 import { dateParser } from "../../helper/dateParser";
 import { Link, Route, Routes } from "react-router-dom";
+const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
 
 import {
   FileText,
@@ -22,7 +23,6 @@ import CommunityPostList from "../../components/community/CommunityPostList";
 import Members from "../../components/community/Members";
 
 const CommunityProfile = () => {
-  const groupServiceBaseUrl = "http://localhost:4003/api/group";
   const { communityId } = useParams<{ communityId: string }>();
   const [community, setCommunity] = useState<CommunityData | null>(null);
   const [reload, setReload] = useState(false);
@@ -30,25 +30,19 @@ const CommunityProfile = () => {
     (state: UserData) => state.persisted.user.userData
   );
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!userData.name) {
-      navigate("/login");
-    }
-  }, []);
 
   useEffect(() => {
     axios
       .get(`${groupServiceBaseUrl}/get-community/${communityId}`, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then((res: AxiosResponse) => {
         setCommunity(res.data.community);
         setReload(false);
       })
       .catch((error) => {
         console.error("Error fetching community data:", error);
-        navigate('/error')
-
+        navigate("/error");
       });
   }, [communityId, reload]);
 

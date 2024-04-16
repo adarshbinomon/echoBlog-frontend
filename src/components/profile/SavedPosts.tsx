@@ -3,9 +3,10 @@
 // import { PostData, UserData } from "../../utils/interfaces/inteface";
 // import axios from "axios";
 // import { Link } from "react-router-dom";
+// const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
+
 
 // const SavedPosts = () => {
-//   const postServiceBaseUrl: string = "http://localhost:4002/api/post";
 //   const [posts,setPosts] = useState<PostData[]>()
 
 //   const userData = useSelector(

@@ -8,18 +8,13 @@ import { dateParser } from "../../helper/dateParser";
 import { Link, Route, Routes } from "react-router-dom";
 import PostList from "../../components/profile/PostList";
 import Community from "../../components/profile/Community";
-import { useEffect } from "react";
 // import SavedPosts from "../../components/profile/SavedPosts";
 const Profile = () => {
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!userData.name) {
-      navigate("/login");
-    }
-  }, []);
+
   const createdOn = dateParser(userData.createdOn);
 
   //edit profile on click
@@ -34,15 +29,19 @@ const Profile = () => {
         <Navbar />
         <div className="p-16 flex items-center flex-col">
           <div className=" border border-gray-200 w-[700px] h-[200px] mt-8 overflow-hidden ">
-            <img src={userData.coverPicture} alt="coverPicture" />
+            <Link to={userData.coverPicture}>
+              <img src={userData.coverPicture} alt="coverPicture" />
+            </Link>
           </div>
           <div className="justify-start px-5  w-[700px] mt-[-75px]">
             <div className="border border-gray-200 w-[150px] h-[150px] rounded-full justify-center flex items-center overflow-hidden">
-              <img
-                className=""
-                src={userData.profilePicture}
-                alt="profile-picture"
-              />
+              <Link to={userData.profilePicture}>
+                <img
+                  className=""
+                  src={userData.profilePicture}
+                  alt="profile-picture"
+                />
+              </Link>
             </div>
             <div className="flex justify-end mt-[-70px] me-[-30px]">
               <button

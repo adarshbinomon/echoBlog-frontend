@@ -5,9 +5,11 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
+const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
+
+
 
 const AdminLogin = () => {
-  const baseUrl: string = "http://localhost:4000/api/auth/admin";
 
   const navigate = useNavigate();
 
@@ -32,7 +34,7 @@ const AdminLogin = () => {
       console.log("form values submitted", values);
       if (formik.isValid) {
         axios
-          .post(`${baseUrl}/login`, values, { withCredentials: true })
+          .post(`${authServiceBaseUrl}/admin/login`, values, { withCredentials: true })
           .then((res) => {
             console.log(res.data);
             if (res.data.status) {

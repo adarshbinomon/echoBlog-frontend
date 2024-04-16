@@ -11,7 +11,6 @@ import PostManagement from "../../components/admin/PostManagement";
 const AdminHome = () => {
   const navigate = useNavigate();
 
-  const baseUrl: string = "http://localhost:4000/api/auth/admin";
 
   useEffect(() => {
     const adminToken = localStorage.getItem("adminAccessToken");

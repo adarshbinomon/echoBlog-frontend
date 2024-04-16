@@ -6,13 +6,13 @@ import Footer from "../../components/common/Footer";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
 import { useDispatch } from "react-redux";
-import { addUser } from "../../redux/slices/userSlices";
+import { addUser, clearUser } from "../../redux/slices/userSlices";
 import { Link, Route, Routes } from "react-router-dom";
 import Following from "../../components/home/Following";
 import ForYou from "../../components/home/ForYou";
 import UserList from "../../components/home/UserList";
-import Community from "../../components/home/Community";
 import CommunityList from "../../components/home/CommunityList";
+import Community from "../../components/home/Community";
 
 const Home = () => {
   const location = useLocation();
@@ -24,26 +24,35 @@ const Home = () => {
   );
   const id = userData._id;
 
-  const authServiceBaseUrl: string = "http://localhost:4000/api/auth/user";
   const userServiceBaseUrl: string = "http://localhost:4001/api/user";
-  const postServiceBaseUrl: string = "http://localhost:4002/api/post";
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      navigate("/");
-      axios
-        .get(`${userServiceBaseUrl}/user-profile/${id}`)
-        .then((res) => {
+    axios
+      .get(`${userServiceBaseUrl}/user-profile/${id}`, {
+        withCredentials: true,
+      })
+      .then((res: any) => {
+        if (res.status) {
           dispatch(addUser(res.data.user));
-        })
-        .catch((error) => {
+        } else if (
+          !res.status &&
+          res.message === "Unauthorized - No token Provided"
+        ) {
+          dispatch(clearUser());
+          navigate("/login");
+        }
+      })
+      .catch((error) => {
+        console.log(error.response.status);
+
+        if (error.response.status == 401) {
+          dispatch(clearUser());
+          navigate("/login");
+        } else {
           console.log(error.response.data.message);
-        });
-    } else {
-      navigate("/login");
-    }
-  }, []);
+        }
+      });
+  }, [navigate]);
 
   return (
     <>
@@ -65,7 +74,7 @@ const Home = () => {
               </span>
             </Link>
 
-            {/* <Link to="/following">
+            <Link to="/following">
               <span
                 className={
                   location.pathname === "/following"
@@ -75,7 +84,7 @@ const Home = () => {
               >
                 Following
               </span>
-            </Link> */}
+            </Link>
             <Link to="/community">
               <span
                 className={
@@ -107,7 +116,7 @@ const Home = () => {
         {/* right sidebar */}
         <div className="w-1/4 ">
           <UserList />
-          <CommunityList/>
+          <CommunityList />
         </div>
       </div>
       <Footer />

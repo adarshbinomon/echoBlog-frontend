@@ -2,17 +2,19 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
+
+
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const baseUrl: string = "http://localhost:4000/api/auth/admin";
 
   const handleLogout = () => {
     setLoading(true);
     axios
-      .get(`${baseUrl}/logout`, { withCredentials: true })
+      .get(`${authServiceBaseUrl}/logout`, { withCredentials: true })
       .then((res) => {
         if (res.data.status) {
           localStorage.removeItem("adminAccessToken");

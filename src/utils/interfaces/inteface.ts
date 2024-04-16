@@ -1,4 +1,3 @@
-import { FormEvent } from "react";
 
 export interface Errors {
   about?: string;
@@ -60,6 +59,7 @@ export interface UserData {
 }
 
 export interface PostData {
+  reportCount: any;
   reportedUsersList: any[];
   name: string;
   visibility: string;

@@ -1,10 +1,11 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import axios, { Axios } from "axios";
-import { PostData, UserData } from "../../utils/interfaces/inteface";
+import axios from "axios";
+import { PostData } from "../../utils/interfaces/inteface";
 import toast from "react-hot-toast";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 
 interface QuillEditProps {
   post: PostData;
@@ -14,7 +15,6 @@ const QuillEdit: React.FC<QuillEditProps> = ({ post }) => {
   const quillRef = useRef<Quill | null>(null);
   const [title, setTitle] = useState<string>(post.title);
   const { postId } = useParams();
-  const baseUrl: string = "http://localhost:4002/api/post";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const QuillEdit: React.FC<QuillEditProps> = ({ post }) => {
         quillRef.current.root.innerHTML = post.content;
       }
 
-      quillRef.current.on("text-change", (delta, oldDelta, source) => {});
+      // quillRef.current.on("text-change", (delta, oldDelta, source) => {});
     }
   }, [post.content]);
 
@@ -56,8 +56,10 @@ const QuillEdit: React.FC<QuillEditProps> = ({ post }) => {
         title: title,
       };
       axios
-        .put(`${baseUrl}/edit-post/${postId}`, data, { withCredentials: true })
-        .then((res) => {
+        .put(`${postServiceBaseUrl}/edit-post/${postId}`, data, {
+          withCredentials: true,
+        })
+        .then(() => {
           toast.success("Post successfully edited!");
           navigate(`/post/${postId}`);
         })

@@ -8,9 +8,11 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../../firebase/firebaseConfig";
 import { useEffect } from "react";
 import GoogleButton from "react-google-button";
+const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
+
+
 
 const Signup: React.FC = () => {
-  const baseUrl: string = "http://localhost:4000/api/auth/user";
 
   const navigate = useNavigate();
 
@@ -36,7 +38,7 @@ const Signup: React.FC = () => {
       console.log("Form values submitted:", values);
       if (formik.isValid) {
         axios
-          .post(`${baseUrl}/signup`, values, { withCredentials: true })
+          .post(`${authServiceBaseUrl }/signup`, values, { withCredentials: true })
           .then((res) => {
             console.log(res.data);
             if (res.data.status) {
@@ -70,7 +72,7 @@ const Signup: React.FC = () => {
       };
 
       axios
-        .post(`${baseUrl}/google-login`, userData, { withCredentials: true })
+        .post(`${authServiceBaseUrl }/google-login`, userData, { withCredentials: true })
         .then((res) => {
           console.log("res");
           console.log(res);

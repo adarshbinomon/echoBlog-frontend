@@ -12,27 +12,23 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/userSlices";
 import toast from "react-hot-toast";
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
 const ThirdProfile = () => {
   const { userId } = useParams();
   const [user, setUser] = useState<UserData>();
 
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
-
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!userData.name) {
-      navigate("/login");
-    }
-  }, []);
   const dispatch = useDispatch();
 
   useEffect(() => {
     axios
-      .get(`${userServiceBaseUrl}/user-profile/${userId}`)
+      .get(`${userServiceBaseUrl}/user-profile/${userId}`, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         setUser(res.data.user);
       })
@@ -65,15 +61,19 @@ const ThirdProfile = () => {
         <Navbar />
         <div className="p-16 flex items-center flex-col  ">
           <div className=" border border-gray-200 w-[700px] h-[200px] mt-8 overflow-hidden ">
-            <img src={user?.coverPicture} alt="coverPicture" />
+            <Link to={user?.coverPicture || ""}>
+              <img src={user?.coverPicture} alt="coverPicture" />
+            </Link>
           </div>
           <div className="justify-start px-5  w-[700px] mt-[-75px]">
             <div className="border border-gray-200 w-[150px] h-[150px] rounded-full justify-center flex items-center overflow-hidden">
-              <img
-                className=""
-                src={user?.profilePicture}
-                alt="profile-picture"
-              />
+              <Link to={user?.profilePicture || ""}>
+                <img
+                  className=""
+                  src={user?.profilePicture}
+                  alt="profile-picture"
+                />{" "}
+              </Link>
             </div>
             <div className="flex justify-end mt-[-70px] me-[-30px]">
               <button

@@ -1,11 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { CommunityData, UserData } from "../../utils/interfaces/inteface";
 import { Link } from "react-router-dom";
+const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
+
 
 const CommunityList = () => {
-  const groupServiceBaseUrl = "http://localhost:4003/api/group";
   const [communities, setCommuinities] = useState<CommunityData>();
 
   const userData = useSelector(
@@ -19,19 +20,20 @@ const CommunityList = () => {
       })
       .then((res: any) => {
         setCommuinities(res.data.communities);
+        
       })
       .catch((err: any) => {
         console.log(err);
       });
   }, []);
 
-  const handleJoin = (userId: string) => {
-    try {
-      axios.post(`${groupServiceBaseUrl}/join-group/${userId}`);
-    } catch (error) {
+  // const handleJoin = (userId: string) => {
+  //   try {
+  //     axios.post(`${groupServiceBaseUrl}/join-group/${userId}`);
+  //   } catch (error) {
       
-    }
-  };
+  //   }
+  // };
 
   return (
     <div>

@@ -4,16 +4,16 @@ import DataTable, { TableColumn } from "react-data-table-component";
 import toast from "react-hot-toast";
 import { PostData } from "../../utils/interfaces/inteface";
 import { confirmAlert } from "react-confirm-alert";
+const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 
 const PostManagement = () => {
-  const postServiceBaseUrl: string = "http://localhost:4002/api/post";
   const [posts, setPosts] = useState<PostData[]>([]);
   const [reload, setReload] = useState(false);
 
   const columns: TableColumn<PostData>[] = [
     {
       name: "ID",
-      selector: (row: PostData, index: number) => index + 1,
+      cell: (_row: PostData, index: number) => index + 1,
     },
     {
       name: "Title",
@@ -63,7 +63,7 @@ const PostManagement = () => {
           content: post.content,
           name: post.createdBy.name,
           visibility: post.visibility,
-          reportCount: post.reportedUsersList.length
+          reportCount: post.reportedUsersList.length,
         }));
         setPosts(mappedData);
       })

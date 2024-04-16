@@ -7,10 +7,9 @@ import axios from "axios";
 import { editAccountValidation } from "../../helper/validate";
 import toast from "react-hot-toast";
 import { addUser } from "../../redux/slices/userSlices";
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
 const EditProfileAccountTab = () => {
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
-
   const dispatch = useDispatch();
 
   const userData = useSelector(

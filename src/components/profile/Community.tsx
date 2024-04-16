@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   CommunityData,
@@ -20,14 +20,15 @@ import {
   BookOpenText,
 } from "lucide-react";
 import { calculateReadTime } from "../../helper/wordCountToReadTime";
+const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
+const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
 
 const Community = () => {
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
-  const groupServiceBaseUrl = "http://localhost:4003/api/group";
-  const postServiceBaseUrl: string = "http://localhost:4002/api/post";
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
+
   const dispatch = useDispatch();
 
   const [communities, setCommunities] = useState<CommunityData>();
@@ -100,7 +101,9 @@ const Community = () => {
           </Link>
         ))}
       </div>
-      <div className="ps-6"><p>Your Posts:</p></div>
+      <div className="ps-6">
+        <p>Your Posts:</p>
+      </div>
       <div>
         {posts?.length === 0 ? (
           <div className=" flex items-center">

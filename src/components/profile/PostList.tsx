@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { MouseEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { UserData, PostData } from "../../utils/interfaces/inteface";
 import { useSelector } from "react-redux";
 import { dateParser } from "../../helper/dateParser";
@@ -8,9 +8,10 @@ import { timeParser } from "../../helper/timeParser";
 import { Heart, MessageCircle, Bookmark, BookmarkCheck } from "lucide-react";
 import { calculateReadTime } from "../../helper/wordCountToReadTime";
 import { BookOpenText } from "lucide-react";
-import toast from "react-hot-toast";
 import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
+const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
 interface PostListProps {
   userId: string | undefined;
@@ -19,8 +20,7 @@ interface PostListProps {
 const PostList: React.FC<PostListProps> = ({ userId }) => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<PostData[]>([]);
-  const postServiceBaseUrl: string = "http://localhost:4002/api/post";
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
+
   const dispatch = useDispatch();
 
   const userData = useSelector(
@@ -29,6 +29,7 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
 
   useEffect(() => {
     if (userId) {
+      console.log(userServiceBaseUrl, postServiceBaseUrl);
       axios
         .get(`${postServiceBaseUrl}/get-posts/${userId}`, {
           withCredentials: true,

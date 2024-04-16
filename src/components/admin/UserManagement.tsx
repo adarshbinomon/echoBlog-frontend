@@ -4,16 +4,18 @@ import DataTable, { TableColumn } from "react-data-table-component";
 import toast from "react-hot-toast";
 import { UserData } from "../../utils/interfaces/inteface";
 import { confirmAlert } from "react-confirm-alert";
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
+
+
 
 const UserManagement: React.FC = () => {
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
   const [data, setData] = useState<UserData[]>([]);
   const [reload, setReload] = useState<boolean>(false);
 
   const columns: TableColumn<UserData>[] = [
     {
       name: "No",
-      selector: (_row: UserData, index: number) => index + 1,
+      cell: (_row: UserData, index: number) => index + 1,
     },
     {
       name: "Name",

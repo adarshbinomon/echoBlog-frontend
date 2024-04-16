@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { UserData, WritePostData } from "../../utils/interfaces/inteface";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
+
 
 interface QuillEditorProps {
   communityId?: string;
@@ -14,7 +16,6 @@ interface QuillEditorProps {
 const QuillEditor: React.FC<QuillEditorProps> = ({ communityId }) => {
   const quillRef = useRef<Quill | null>(null);
 
-  const baseUrl: string = "http://localhost:4002/api/post";
   const navigate = useNavigate();
 
   const userData = useSelector(
@@ -76,7 +77,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ communityId }) => {
       console.log(data);
 
       axios
-        .post(`${baseUrl}/create`, data, { withCredentials: true })
+        .post(`${postServiceBaseUrl}/create`, data, { withCredentials: true })
         .then((res) => {
           if (res.data.status) {
             toast.success("Posted Successfully");

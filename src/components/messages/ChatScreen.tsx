@@ -66,7 +66,7 @@ const ChatScreen: React.FC<MessageComponentProps> = ({ userName }) => {
           Send
         </button>
       </form>
-    </div>
+    </div> 
   );
 };
 

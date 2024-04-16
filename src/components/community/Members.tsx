@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Import the Link component
+import { Link } from "react-router-dom";
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
 interface PostListProps {
   communityId: string | undefined;
 }
 
 const Members: React.FC<PostListProps> = ({ communityId }) => {
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
   const [users, setUsers] = useState<any[]>([]); // Define users as an array of any type
 
   useEffect(() => {

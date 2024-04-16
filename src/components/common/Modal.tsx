@@ -1,5 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 
 interface ModalProps {
   isOpen: boolean;
@@ -16,8 +17,6 @@ const Modal: React.FC<ModalProps> = ({
   postId,
   onClose,
 }) => {
-  const baseUrl: string = "http://localhost:4002/api/post";
-
   const [editedComment, setEditedComment] = useState<string>(commentValue);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -41,7 +40,7 @@ const Modal: React.FC<ModalProps> = ({
     setIsLoading(true);
 
     axios
-      .put(`${baseUrl}/edit-comment/${postId}`, commentData, {
+      .put(`${postServiceBaseUrl}/edit-comment/${postId}`, commentData, {
         withCredentials: true,
       })
       .then((res) => {

@@ -1,15 +1,16 @@
-export const timeParser=(timestamp: Date | undefined ): string | undefined => {
-    const date = new Date(timestamp);
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const amPM = hours >= 12 ? 'PM' : 'AM';
-  
-    hours = hours % 12 || 12;
-  
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-  
-    return `${hours}:${formattedMinutes} ${amPM}`;
+export const timeParser = (timestamp: Date | undefined): string | undefined => {
+  if (!timestamp) {
+    return undefined; // or any other default value you prefer
   }
-  
 
-  
+  const date = new Date(timestamp);
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  const amPM = hours >= 12 ? 'PM' : 'AM';
+
+  hours = hours % 12 || 12;
+
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  return `${hours}:${formattedMinutes} ${amPM}`;
+};

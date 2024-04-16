@@ -2,17 +2,18 @@ import { useFormik } from "formik";
 import { useNavigate, Link } from "react-router-dom";
 import { loginValidation } from "../../helper/validate";
 import axios from "axios";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 import { auth ,provider} from "../../../firebase/firebaseConfig";
 import toast, { Toaster } from "react-hot-toast";
-import { useEffect } from "react";
 import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
 import GoogleButton from "react-google-button";
+const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
+
+
 
 
 const Login = () => {
-  const baseUrl: string = "http://localhost:4000/api/auth/user";
 
   const navigate = useNavigate();
   const dispatch = useDispatch()
@@ -30,7 +31,7 @@ const Login = () => {
       console.log("form values submitted", values);
       if (formik.isValid) {
         axios
-          .post(`${baseUrl}/login`, values, { withCredentials: true })
+          .post(`${authServiceBaseUrl}/login`, values, { withCredentials: true })
           .then((res) => {
             if(res.status){
               console.log({status: true, message: "User login successful"});
@@ -48,12 +49,7 @@ const Login = () => {
     },
   });
 
-  useEffect(()=>{
-   const token = localStorage.getItem('accessToken')
-   if(token){
-    navigate('/')
-   }
-  },[navigate])
+
 
   const handleGoogle = async () => {
     try {
@@ -68,7 +64,7 @@ const Login = () => {
       };
 
       axios
-        .post(`${baseUrl}/google-login`, userData, { withCredentials: true })
+        .post(`${authServiceBaseUrl}/google-login`, userData, { withCredentials: true })
         .then((res) => {
           console.log("res");
           console.log(res);

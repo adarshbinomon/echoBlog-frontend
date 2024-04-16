@@ -37,22 +37,19 @@ const PostPage = () => {
   const [comment, setComment] = useState<string>("");
   const [reload, setReload] = useState<boolean>(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
+
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!userData.name) {
-      navigate("/login");
-    }
-  }, []);
 
-  const baseUrl: string = "http://localhost:4002/api/post";
+
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}/${id}`, { withCredentials: true })
+      .get(`${postServiceBaseUrl }/${id}`, { withCredentials: true })
       .then((res: any) => {
         setPost(res.data.post);
         setUser(res.data.user);
@@ -92,7 +89,7 @@ const PostPage = () => {
           label: "Delete",
           onClick: () => {
             axios
-              .get(`${baseUrl}/delete-post/${post?._id}`)
+              .get(`${postServiceBaseUrl }/delete-post/${post?._id}`)
               .then(() => {
                 navigate("/profile");
               })
@@ -111,7 +108,7 @@ const PostPage = () => {
   const handleLike = () => {
     const id = { userId: userData._id, liked };
 
-    axios.post(`${baseUrl}/like-Post/${post?._id}`, id).then((res: any) => {
+    axios.post(`${postServiceBaseUrl }/like-Post/${post?._id}`, id).then((res: any) => {
       if (res.status) {
         setLiked((prevLiked) => !prevLiked);
         setLike(res.data.likes);
@@ -127,7 +124,7 @@ const PostPage = () => {
 
     setLoadingComments(true);
     axios
-      .post(`${baseUrl}/comment-post/${post?._id}`, {
+      .post(`${postServiceBaseUrl }/comment-post/${post?._id}`, {
         userId: userData._id,
         name: userData.name,
         userName: userData.userName,
@@ -167,7 +164,7 @@ const PostPage = () => {
         userName: userData.userName,
       };
       axios
-        .post(`${baseUrl}/reply-to-comment/${post?._id}`, commentData, {
+        .post(`${postServiceBaseUrl }/reply-to-comment/${post?._id}`, commentData, {
           withCredentials: true,
         })
         .then((res) => {
@@ -195,7 +192,7 @@ const PostPage = () => {
       postId: post?._id,
     };
     axios
-      .post(`${baseUrl}/like-comment/${commentId}`, data, {
+      .post(`${postServiceBaseUrl }/like-comment/${commentId}`, data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -217,7 +214,7 @@ const PostPage = () => {
           label: "Delete",
           onClick: () => {
             axios
-              .post(`${baseUrl}/delete-comment/${post?._id}`, data, {
+              .post(`${postServiceBaseUrl }/delete-comment/${post?._id}`, data, {
                 withCredentials: true,
               })
               .then(() => {
@@ -243,7 +240,7 @@ const PostPage = () => {
     };
 
     axios
-      .post(`${baseUrl}/report-post/${post?._id}`, data, {
+      .post(`${postServiceBaseUrl }/report-post/${post?._id}`, data, {
         withCredentials: true,
       })
       .then(() => {

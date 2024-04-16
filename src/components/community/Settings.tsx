@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { CommunityData } from "../../utils/interfaces/inteface";
@@ -44,12 +44,16 @@ const Settings = () => {
     }
 
     axios
-      .put(`${groupServiceBaseUrl}/community-edit/${community?._id}`, formData, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .put(
+        `${groupServiceBaseUrl}/community-edit/${community?._id}`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((res) => {
         if (res.data.status) {
           toast.success("Community edited successfully!");

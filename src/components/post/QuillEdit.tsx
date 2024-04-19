@@ -63,7 +63,7 @@ const QuillEdit: React.FC<QuillEditProps> = ({ post }) => {
           toast.success("Post successfully edited!");
           navigate(`/post/${postId}`);
         })
-        .catch((error: any) => {
+        .catch((error) => {
           toast.error(error.message);
         });
     }

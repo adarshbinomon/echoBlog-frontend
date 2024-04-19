@@ -52,7 +52,7 @@ const Community = () => {
   useEffect(() => {
     axios
       .get(`${postServiceBaseUrl}/get-user-community-post/${userData?._id}`)
-      .then((res: any) => {
+      .then((res) => {
         setPosts(res.data.posts);
       })
       .catch(() => {

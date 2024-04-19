@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
+const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_ADMIN_BASEURL;
 
 
 

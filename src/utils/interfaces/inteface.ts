@@ -1,4 +1,3 @@
-
 export interface Errors {
   about?: string;
   password?: string;
@@ -34,7 +33,7 @@ export interface Values {
 }
 
 export interface UserData {
-  selector: any
+  selector: any;
   isActive: boolean;
   persisted: any;
   email: string;
@@ -46,65 +45,85 @@ export interface UserData {
   uid: string;
   userName: string;
   gender: string;
-  interestedTags: any[];
+  interestedTags: [string];
   accountType: string;
   bio: string;
   coverPicture: string;
   createdOn: string;
-  followRequests: any[];
-  followers: any[];
-  following: any[];
+  followRequests: [string];
+  followers: [string];
+  following: [string];
   _id: string;
   __v: number;
 }
 
 export interface PostData {
-  reportCount: any;
-  reportedUsersList: any[];
+  reportCount: number;
+  reportedUsersList: [string];
   name: string;
   visibility: string;
-  createdBy: any;
+  createdBy: UserData;
   content: string;
   _id: string;
   title: string;
   createdOn: Date;
-  like: any[];
-  comment: any[];
-  image: any[];
-  length?: any
-  slice?: any
+  like: [string];
+  comment: [CommentData];
+  image: [string];
+  length?: number;
+  slice?: any;
 }
 
 export interface CommentData {
   reply: string;
-  replies: any[];
+  replies?: [CommentData];
   _id: string;
   comment: string;
   name: string;
   userId: string;
   userName: string;
-  likes: any[]
-  createdAt: Date
+  likes: [string];
+  createdAt: Date;
 }
 
 export interface CommunityData {
-  admins: any;
+  admins: [string];
   name: string;
   about: string;
   createdBy: string;
-  post: any[];
-  members: any[];
+  post: [string];
+  members: [UserData];
   profilePicture: string;
   coverPicture: string;
   createdOn: Date;
   _id: string;
   slice: any;
-  map: any
+  map: any;
 }
 
 export interface WritePostData {
   content: string;
-  createdBy: any;
+  createdBy: string;
   title: string;
   communityId?: string;
+}
+
+export interface Message {
+  shouldShake: boolean;
+  _id: string;
+  senderId: string;
+  recieverId: string;
+  message: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Conversation {
+  profilePicture: any;
+  conversations: any;
+  _id: string;
+  participants: [UserData];
+  messages: [Message];
+  createdAt: Date;
+  updatedAt: Date;
 }

@@ -3,21 +3,16 @@ import { useNavigate, Link } from "react-router-dom";
 import { loginValidation } from "../../helper/validate";
 import axios from "axios";
 import { signInWithPopup } from "firebase/auth";
-import { auth ,provider} from "../../../firebase/firebaseConfig";
+import { auth, provider } from "../../../firebase/firebaseConfig";
 import toast, { Toaster } from "react-hot-toast";
 import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
 import GoogleButton from "react-google-button";
 const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
 
-
-
-
 const Login = () => {
-
   const navigate = useNavigate();
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -31,25 +26,28 @@ const Login = () => {
       console.log("form values submitted", values);
       if (formik.isValid) {
         axios
-          .post(`${authServiceBaseUrl}/login`, values, { withCredentials: true })
+          .post(`${authServiceBaseUrl}/login`, values, {
+            withCredentials: true,
+          })
           .then((res) => {
-            if(res.status){
-              console.log({status: true, message: "User login successful"});
-              localStorage.setItem('accessToken',res.data?.accessToken)
+            console.log(res);
+            
+            if (res.status) {
+              console.log({ status: true, message: "User login successful" });
+              localStorage.setItem("accessToken", res.data?.accessToken);
               dispatch(addUser(res.data.user));
-              navigate('/')
+              navigate("/");
+            } else {
+              toast.error(res.data.message);
             }
           })
-          .catch((error)=>{
+          .catch((error) => {
             console.log("error", error);
-            toast.error(error.message)
-            
-          })
+            toast.error(error.response.data.message);
+          });
       }
     },
   });
-
-
 
   const handleGoogle = async () => {
     try {
@@ -64,7 +62,9 @@ const Login = () => {
       };
 
       axios
-        .post(`${authServiceBaseUrl}/google-login`, userData, { withCredentials: true })
+        .post(`${authServiceBaseUrl}/google-login`, userData, {
+          withCredentials: true,
+        })
         .then((res) => {
           console.log("res");
           console.log(res);
@@ -72,7 +72,7 @@ const Login = () => {
             navigate("/");
             localStorage.setItem("accessToken", res.data?.accessToken);
             dispatch(addUser(res.data.user));
-
+          } else {
           }
         })
         .catch((error) => {
@@ -138,12 +138,11 @@ const Login = () => {
                   Password
                 </label>
                 <div className="text-sm">
-                  <a
-                    href="#"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  >
-                    Forgot password?
-                  </a>
+                  <Link to={"/forgot-password"}>
+                    <p className="font-semibold text-indigo-600 hover:text-indigo-500">
+                      Forgot password?
+                    </p>
+                  </Link>
                 </div>
               </div>
               <div className="mt-2">
@@ -170,10 +169,8 @@ const Login = () => {
             </div>
           </form>
           <div className="mt-2 flex justify-center">
-
-          <GoogleButton onClick={handleGoogle} />
+            <GoogleButton onClick={handleGoogle} />
           </div>
-
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?

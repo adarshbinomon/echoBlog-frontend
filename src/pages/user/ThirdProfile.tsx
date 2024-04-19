@@ -29,7 +29,7 @@ const ThirdProfile = () => {
       .get(`${userServiceBaseUrl}/user-profile/${userId}`, {
         withCredentials: true,
       })
-      .then((res: any) => {
+      .then((res) => {
         setUser(res.data.user);
       })
       .catch((err) => {

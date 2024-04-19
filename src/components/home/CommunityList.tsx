@@ -18,11 +18,11 @@ const CommunityList = () => {
       .get(`${groupServiceBaseUrl}/get-all-communities/${userData._id}`, {
         withCredentials: true,
       })
-      .then((res: any) => {
+      .then((res) => {
         setCommuinities(res.data.communities);
         
       })
-      .catch((err: any) => {
+      .catch((err) => {
         console.log(err);
       });
   }, []);

@@ -169,6 +169,9 @@ const Navbar = () => {
             <Link to="/write-post" className="text-white hover:text-gray-300">
               Write
             </Link>
+            <Link to="/chat" className="text-white hover:text-gray-300">
+              Messages
+            </Link>
             <a href="#" className="text-white hover:text-gray-300">
               About
             </a>

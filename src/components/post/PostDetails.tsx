@@ -2,10 +2,11 @@ import { dateParser } from "../../helper/dateParser";
 import { timeParser } from "../../helper/timeParser";
 import { BookOpenText, Save } from "lucide-react";
 import { calculateReadTime } from "../../helper/wordCountToReadTime";
+import { PostData, UserData } from "../../utils/interfaces/inteface";
 
 interface PostDetailsProps {
-  user: any;
-  post: any;
+  user: UserData;
+  post: PostData;
 }
 
 const PostDetails: React.FC<PostDetailsProps> = ({ user, post }) => {

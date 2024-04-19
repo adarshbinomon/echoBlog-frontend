@@ -50,7 +50,7 @@ const PostPage = () => {
   useEffect(() => {
     axios
       .get(`${postServiceBaseUrl }/${id}`, { withCredentials: true })
-      .then((res: any) => {
+      .then((res) => {
         setPost(res.data.post);
         setUser(res.data.user);
         setLiked(res.data.post.like.includes(userData._id));
@@ -59,7 +59,7 @@ const PostPage = () => {
         setLoadingComments(false);
         setReload(false);
       })
-      .catch((error: any) => {
+      .catch((error) => {
         console.error("Error fetching post data:", error);
         navigate('*')
       });
@@ -93,7 +93,7 @@ const PostPage = () => {
               .then(() => {
                 navigate("/profile");
               })
-              .catch((error: any) => {
+              .catch((error) => {
                 console.log("error in post deletion:", error);
               });
           },
@@ -108,7 +108,7 @@ const PostPage = () => {
   const handleLike = () => {
     const id = { userId: userData._id, liked };
 
-    axios.post(`${postServiceBaseUrl }/like-Post/${post?._id}`, id).then((res: any) => {
+    axios.post(`${postServiceBaseUrl }/like-Post/${post?._id}`, id).then((res) => {
       if (res.status) {
         setLiked((prevLiked) => !prevLiked);
         setLike(res.data.likes);
@@ -130,7 +130,7 @@ const PostPage = () => {
         userName: userData.userName,
         comment: commentInput,
       })
-      .then((res: any) => {
+      .then((res) => {
         if (res.data.status) {
           const newComment = res.data.comment[0];
           setNewComments((prevNewComments) => [...prevNewComments, newComment]);
@@ -140,7 +140,7 @@ const PostPage = () => {
           toast.error("Failed to add comment. Please try again.");
         }
       })
-      .catch((error: any) => {
+      .catch((error) => {
         console.log("error adding comment:", error);
         toast.error("Failed to add comment. Please try again.");
       })
@@ -221,7 +221,7 @@ const PostPage = () => {
                 setReload(true);
                 toast.success("Comment Deleted!");
               })
-              .catch((error: any) => {
+              .catch((error) => {
                 console.log("error in comment deletion:", error);
               });
           },

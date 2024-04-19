@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { UserData } from "../../utils/interfaces/inteface";
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
 interface PostListProps {
@@ -8,7 +9,7 @@ interface PostListProps {
 }
 
 const Members: React.FC<PostListProps> = ({ communityId }) => {
-  const [users, setUsers] = useState<any[]>([]); // Define users as an array of any type
+  const [users, setUsers] = useState<[UserData]>();
 
   useEffect(() => {
     axios
@@ -25,7 +26,7 @@ const Members: React.FC<PostListProps> = ({ communityId }) => {
     <div className="max-w-lg mx-auto mt-8">
       <h2 className="text-lg font-semibold mb-4">Community Members</h2>
       <ul className="divide-y divide-gray-200">
-        {users.map((user) => (
+        {users?.map((user) => (
           <Link to={`/user/${user._id}`} key={user._id}>
             <li className="flex items-center py-4">
               <img

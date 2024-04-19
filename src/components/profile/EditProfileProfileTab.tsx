@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
 import { useFormik } from "formik";
 import { editProfileValidation } from "../../helper/validate";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { addUser } from "../../redux/slices/userSlices";
@@ -193,7 +193,7 @@ const EditProfileProfileTab = () => {
                 id="profilePicture"
                 name="profilePicture"
                 type="file"
-                onChange={(e: any) => setProfilePicture(e.target.files[0])}
+                onChange={(e:ChangeEvent<HTMLInputElement>) => setProfilePicture(e?.target?.files[0])}
                 className="px-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -224,7 +224,7 @@ const EditProfileProfileTab = () => {
                   id="coverPicture"
                   name="coverPicture"
                   type="file"
-                  onChange={(e: any) => setCoverPicture(e.target.files[0])}
+                  onChange={(e:ChangeEvent<HTMLInputElement>) => setCoverPicture(e?.target?.files[0])}
                   className="px-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>

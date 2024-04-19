@@ -11,10 +11,11 @@ import Post from "../pages/user/Post";
 import EditPost from "../pages/user/EditPost";
 import ThirdProfile from "../pages/user/ThirdProfile";
 import CommunityProfile from "../pages/community/CommunityProfile";
-import Message from "../pages/user/Messages";
 import CommunitySettings from "../pages/community/CommunitySettings";
 import Error from "../pages/common/Error";
 import ProtectedRoutes from "../components/common/ProtectedRoutes";
+import ChatScreen from "../pages/chat/ChatScreen";
+import ForgotPassword from "../pages/user/ForgotPassword";
 
 const UserRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const UserRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/otp-verify" element={<OtpVerify />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       
       <Route element={<ProtectedRoutes />}>
         <Route path="/*" element={<Home />} />
@@ -44,8 +46,8 @@ const UserRoutes = () => {
           path="/community/settings/:communityId/*"
           element={<CommunitySettings />}
         />
-        <Route path="/messages" element={<Message />} />
       </Route>
+      <Route path="chat" element={<ChatScreen />} />
 
       <Route path="*" element={<Error />} />
     </Routes>

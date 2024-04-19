@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 
-
 interface QuillEditorProps {
   communityId?: string;
 }
@@ -65,35 +64,40 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ communityId }) => {
   const handleSaveContent = () => {
     if (quillRef.current) {
       const content = quillRef.current.root.innerHTML;
-      const data: WritePostData = {
-        content: content,
-        createdBy: userData._id,
-        title: title,
-      };
+      if (title.length > 5 && content.length>11) {
+        const data: WritePostData = {
+          content: content,
+          createdBy: userData._id,
+          title: title,
+        };
 
-      if (communityId) {
-        data.communityId = communityId;
-      }
-      console.log(data);
+        if (communityId) {
+          data.communityId = communityId;
+        }
+        console.log(data);
 
-      axios
-        .post(`${postServiceBaseUrl}/create`, data, { withCredentials: true })
-        .then((res) => {
-          if (res.data.status) {
-            toast.success("Posted Successfully");
-          } else {
+        axios
+          .post(`${postServiceBaseUrl}/create`, data, { withCredentials: true })
+          .then((res) => {
+            if (res.data.status) {
+              toast.success("Posted Successfully");
+            } else {
+              toast.error("Post Failed!");
+            }
+          })
+          .catch((error) => {
+            console.log("error", error);
             toast.error("Post Failed!");
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-          toast.error("Post Failed!");
-        })
-        .finally(() => {
-          setTimeout(() => {
-            navigate("/");
-          }, 5000);
-        });
+          })
+          .finally(() => {
+            setTimeout(() => {
+              navigate("/");
+            }, 5000);
+          });
+      }else{
+        toast.error("give proper title")
+        toast.error("content cannot be empty")
+      }
     }
   };
 

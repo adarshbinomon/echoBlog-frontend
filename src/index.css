@@ -2,12 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
-    background-color: rgb(243, 243, 243);
-    /* background-image: url('/background.jpg'); */
-    color: rgb(0, 0, 0);
-    /* font-family: monospace */
-    
-    
+  background-color: rgb(243, 243, 243);
+  /* background-image: url('/background.jpg'); */
+  color: rgb(0, 0, 0);
+  /* font-family: monospace */
 }
+
+input {
+  background-color: #fff; /* White background color */
+}
+ 

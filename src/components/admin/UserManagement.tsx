@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { UserData } from "../../utils/interfaces/inteface";
 import { confirmAlert } from "react-confirm-alert";
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
+const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_ADMIN_BASEURL;
 
 
 
@@ -71,7 +72,7 @@ const UserManagement: React.FC = () => {
           onClick: () => {
             axios
               .put(
-                `${userServiceBaseUrl}/change-user-status/${userId}`,
+                `${authServiceBaseUrl}/change-user-status/${userId}`,
                 {},
                 { withCredentials: true }
               )

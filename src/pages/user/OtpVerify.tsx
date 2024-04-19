@@ -70,7 +70,7 @@ const OtpVerify: React.FC = () => {
             toast.error(res.data.message);
           }
         })
-        .catch((error: any) => {
+        .catch((error) => {
           console.error("error", error);
           toast.error("An error occurred!");
         });

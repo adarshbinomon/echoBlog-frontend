@@ -58,7 +58,7 @@ const CommunityProfile = () => {
         .put(`${groupServiceBaseUrl}/join-community`, data, {
           withCredentials: true,
         })
-        .then((res: any) => {
+        .then((res) => {
           setReload(true);
           toast.success(res.data.message);
         });

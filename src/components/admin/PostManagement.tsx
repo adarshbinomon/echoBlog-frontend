@@ -55,7 +55,7 @@ const PostManagement = () => {
     console.log(`${postServiceBaseUrl}/all-posts`);
 
     axios
-      .get(`${postServiceBaseUrl}/all-posts`)
+      .get(`${postServiceBaseUrl}/all-posts`,{withCredentials:true})
       .then((res) => {
         const mappedData = res.data.posts.map((post: PostData) => ({
           _id: post._id,
@@ -81,7 +81,7 @@ const PostManagement = () => {
           label: "Change",
           onClick: () => {
             axios
-              .put(`${postServiceBaseUrl}/update-post-status/${postId}`)
+              .put(`${postServiceBaseUrl}/update-post-status/${postId}`,{withCredentials:true})
               .then(() => {
                 setReload(!reload);
                 toast.success("Post status updated successfully");

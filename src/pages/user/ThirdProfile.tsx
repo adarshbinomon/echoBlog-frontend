@@ -34,7 +34,7 @@ const ThirdProfile = () => {
       })
       .catch((err) => {
         console.log(err);
-        navigate("*");
+        navigate("/404");
       });
   }, [userData]);
 

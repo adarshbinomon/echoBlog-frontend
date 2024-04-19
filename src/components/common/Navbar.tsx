@@ -46,43 +46,52 @@ const Navbar = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setSearchValue(value);
-    axios
-      .get(`${userServiceBaseUrl}/search-user/${value}`)
-      .then((res) => {
-        const users = res.data.users;
-        const suggestions = users.filter((user: { name: string }) =>
-          user.name.toLowerCase().includes(value.toLowerCase())
-        );
-        setUserSuggestions(suggestions);
-      })
-      .catch((error) => {
-        console.error("Error searching users:", error);
-      });
-    axios
-      .get(`${postServiceBaseUrl}/search-post/${value}`)
-      .then((res) => {
-        const posts = res.data.posts;
-        const suggestions = posts.filter((post: { title: string }) =>
-          post.title.toLowerCase().includes(value.toLowerCase())
-        );
-        setPostSuggestions(suggestions);
-      })
-      .catch((error) => {
-        console.error("Error searching posts:", error);
-      });
-    axios
-      .get(`${groupServiceBaseUrl}/search-community/${value}`)
-      .then((res) => {
-        const communities = res.data.communities;
-        const suggestions = communities.filter((community: { name: string }) =>
-          community.name.toLowerCase().includes(value.toLowerCase())
-        );
-        setCommunitySuggestions(suggestions);
-        console.log(suggestions);
-      })
-      .catch((error) => {
-        console.error("Error searching communities:", error);
-      });
+    setTimeout(() => {
+      axios
+        .get(`${userServiceBaseUrl}/search-user/${value}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          const users = res.data.users;
+          const suggestions = users.filter((user: { name: string }) =>
+            user.name.toLowerCase().includes(value.toLowerCase())
+          );
+          setUserSuggestions(suggestions);
+        })
+        .catch((error) => {
+          console.error("Error searching users:", error);
+        });
+      axios
+        .get(`${postServiceBaseUrl}/search-post/${value}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          const posts = res.data.posts;
+          const suggestions = posts.filter((post: { title: string }) =>
+            post.title.toLowerCase().includes(value.toLowerCase())
+          );
+          setPostSuggestions(suggestions);
+        })
+        .catch((error) => {
+          console.error("Error searching posts:", error);
+        });
+      axios
+        .get(`${groupServiceBaseUrl}/search-community/${value}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          const communities = res.data.communities;
+          const suggestions = communities.filter(
+            (community: { name: string }) =>
+              community.name.toLowerCase().includes(value.toLowerCase())
+          );
+          setCommunitySuggestions(suggestions);
+          console.log(suggestions);
+        })
+        .catch((error) => {
+          console.error("Error searching communities:", error);
+        });
+    }, 5000);
   };
 
   const handleUserClick = (userId: string) => {

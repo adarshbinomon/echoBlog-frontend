@@ -13,7 +13,7 @@ const Members: React.FC<PostListProps> = ({ communityId }) => {
 
   useEffect(() => {
     axios
-      .get(`${userServiceBaseUrl}/get-community-members/${communityId}`)
+      .get(`${userServiceBaseUrl}/get-community-members/${communityId}`,{withCredentials:true})
       .then((res) => {
         setUsers(res.data.users);
       })

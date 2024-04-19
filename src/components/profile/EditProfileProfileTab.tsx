@@ -30,7 +30,7 @@ const EditProfileProfileTab = () => {
     console.log(Array.from(formData.entries()));
 
     axios
-      .post(`${userServiceBaseUrl}/upload-profile-picture`, formData)
+      .post(`${userServiceBaseUrl}/upload-profile-picture`, formData,{withCredentials:true})
       .then((res) => {
         toast.success("Profile Picture Updated!");
         dispatch(addUser(res.data.user));
@@ -46,7 +46,7 @@ const EditProfileProfileTab = () => {
     console.log(Array.from(formData.entries()));
 
     axios
-      .post(`${userServiceBaseUrl}/upload-cover-picture`, formData)
+      .post(`${userServiceBaseUrl}/upload-cover-picture`, formData,{withCredentials:true})
       .then((res) => {
         toast.success("Cover Picture Updated!");
         dispatch(addUser(res.data.user));

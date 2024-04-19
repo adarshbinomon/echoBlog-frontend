@@ -36,7 +36,7 @@ const Home = () => {
           dispatch(addUser(res.data.user));
         } else if (
           !res.status &&
-          res.message === "Unauthorized - No token Provided"
+          res?.message === "Unauthorized - No token Provided"
         ) {
           dispatch(clearUser());
           navigate("/login");

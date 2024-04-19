@@ -8,6 +8,7 @@ import { dateParser } from "../../helper/dateParser";
 import { Link, Route, Routes } from "react-router-dom";
 import PostList from "../../components/profile/PostList";
 import Community from "../../components/profile/Community";
+import SavedPosts from "../../components/profile/SavedPosts";
 // import SavedPosts from "../../components/profile/SavedPosts";
 const Profile = () => {
   const userData = useSelector(
@@ -113,7 +114,7 @@ const Profile = () => {
             <Routes>
               <Route path="/" element={<PostList userId={userData?._id} />} />
               <Route path="/community" element={<Community />}></Route>
-              {/* <Route path="/saved" element={<SavedPosts/>}></Route> */}
+              <Route path="/saved" element={<SavedPosts />}></Route>
             </Routes>
           </div>
         </div>

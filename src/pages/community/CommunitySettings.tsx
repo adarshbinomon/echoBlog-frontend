@@ -33,7 +33,7 @@ const CommunitySettings = () => {
       })
       .catch((error) => {
         console.error("Error fetching community data:", error);
-        navigate("/error");
+        navigate("/404");
       });
   }, [communityId, reload]);
 

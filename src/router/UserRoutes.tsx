@@ -24,7 +24,7 @@ const UserRoutes = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/otp-verify" element={<OtpVerify />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      
+
       <Route element={<ProtectedRoutes />}>
         <Route path="/*" element={<Home />} />
         <Route path="/profile/*" element={<Profile />} />
@@ -34,6 +34,7 @@ const UserRoutes = () => {
         <Route path="/post/:id" element={<Post />} />
         <Route path="/edit-post/:postId" element={<EditPost />} />
         <Route path="/user/:userId" element={<ThirdProfile />} />
+        <Route path="chat" element={<ChatScreen />} />
         <Route
           path="/community-profile/:communityId/*"
           element={<CommunityProfile />}
@@ -47,8 +48,7 @@ const UserRoutes = () => {
           element={<CommunitySettings />}
         />
       </Route>
-      <Route path="chat" element={<ChatScreen />} />
-
+      <Route path="/404" element={<Error />} />
       <Route path="*" element={<Error />} />
     </Routes>
   );

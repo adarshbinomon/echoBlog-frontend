@@ -37,6 +37,9 @@ const UserDetails: React.FC = () => {
             if (res.data.status) {
               navigate("/");
             }
+          })
+          .catch(() => {
+            navigate("/404");
           });
       }
     },

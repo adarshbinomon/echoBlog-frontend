@@ -34,7 +34,7 @@ const CommunityPostList: React.FC<PostListProps> = ({ communityId }) => {
   useEffect(() => {
     if (communityId) {
       axios
-        .get(`${postServiceBaseUrl}/get-community-posts/${communityId}`)
+        .get(`${postServiceBaseUrl}/get-community-posts/${communityId}`,{withCredentials:true})
         .then((res) => {
           setPosts(res.data.posts);
         })

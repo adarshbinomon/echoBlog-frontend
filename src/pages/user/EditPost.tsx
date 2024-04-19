@@ -7,8 +7,7 @@ import { PostData } from "../../utils/interfaces/inteface";
 
 const EditPost: React.FC = () => {
   const location = useLocation();
-  const post: PostData = location.state as PostData; // Assuming location.state is always defined as PostData
-
+  const post: PostData = location.state as PostData; 
   return (
     <>
       <Navbar />

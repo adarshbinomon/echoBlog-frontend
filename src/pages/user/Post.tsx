@@ -39,29 +39,30 @@ const PostPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 
-
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
   const navigate = useNavigate();
 
-
-
   useEffect(() => {
     axios
-      .get(`${postServiceBaseUrl }/${id}`, { withCredentials: true })
+      .get(`${postServiceBaseUrl}/${id}`, { withCredentials: true })
       .then((res) => {
-        setPost(res.data.post);
-        setUser(res.data.user);
-        setLiked(res.data.post.like.includes(userData._id));
-        setLike(res.data.post.like.length);
-        setComments(res.data.post.comment);
-        setLoadingComments(false);
-        setReload(false);
+        if (res.data.status) {
+          setPost(res.data.post);
+          setUser(res.data.user);
+          setLiked(res.data.post.like.includes(userData._id));
+          setLike(res.data.post.like.length);
+          setComments(res.data.post.comment);
+          setLoadingComments(false);
+          setReload(false);
+        }else{
+          navigate('/404')
+        }
       })
       .catch((error) => {
         console.error("Error fetching post data:", error);
-        navigate('*')
+        navigate("/404");
       });
   }, [
     id,
@@ -89,7 +90,7 @@ const PostPage = () => {
           label: "Delete",
           onClick: () => {
             axios
-              .get(`${postServiceBaseUrl }/delete-post/${post?._id}`)
+              .get(`${postServiceBaseUrl}/delete-post/${post?._id}`,{withCredentials:true})
               .then(() => {
                 navigate("/profile");
               })
@@ -108,12 +109,14 @@ const PostPage = () => {
   const handleLike = () => {
     const id = { userId: userData._id, liked };
 
-    axios.post(`${postServiceBaseUrl }/like-Post/${post?._id}`, id).then((res) => {
-      if (res.status) {
-        setLiked((prevLiked) => !prevLiked);
-        setLike(res.data.likes);
-      }
-    });
+    axios
+      .post(`${postServiceBaseUrl}/like-Post/${post?._id}`, id,{withCredentials:true})
+      .then((res) => {
+        if (res.status) {
+          setLiked((prevLiked) => !prevLiked);
+          setLike(res.data.likes);
+        }
+      });
   };
 
   const handleComment = (e: React.FormEvent) => {
@@ -124,12 +127,12 @@ const PostPage = () => {
 
     setLoadingComments(true);
     axios
-      .post(`${postServiceBaseUrl }/comment-post/${post?._id}`, {
+      .post(`${postServiceBaseUrl}/comment-post/${post?._id}`, {
         userId: userData._id,
         name: userData.name,
         userName: userData.userName,
         comment: commentInput,
-      })
+      },{withCredentials:true})
       .then((res) => {
         if (res.data.status) {
           const newComment = res.data.comment[0];
@@ -164,9 +167,13 @@ const PostPage = () => {
         userName: userData.userName,
       };
       axios
-        .post(`${postServiceBaseUrl }/reply-to-comment/${post?._id}`, commentData, {
-          withCredentials: true,
-        })
+        .post(
+          `${postServiceBaseUrl}/reply-to-comment/${post?._id}`,
+          commentData,
+          {
+            withCredentials: true,
+          }
+        )
         .then((res) => {
           if (res.status) {
             setReplyVisibility("hidden");
@@ -192,7 +199,7 @@ const PostPage = () => {
       postId: post?._id,
     };
     axios
-      .post(`${postServiceBaseUrl }/like-comment/${commentId}`, data, {
+      .post(`${postServiceBaseUrl}/like-comment/${commentId}`, data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -214,7 +221,7 @@ const PostPage = () => {
           label: "Delete",
           onClick: () => {
             axios
-              .post(`${postServiceBaseUrl }/delete-comment/${post?._id}`, data, {
+              .post(`${postServiceBaseUrl}/delete-comment/${post?._id}`, data, {
                 withCredentials: true,
               })
               .then(() => {
@@ -240,12 +247,12 @@ const PostPage = () => {
     };
 
     axios
-      .post(`${postServiceBaseUrl }/report-post/${post?._id}`, data, {
+      .post(`${postServiceBaseUrl}/report-post/${post?._id}`, data, {
         withCredentials: true,
       })
       .then(() => {
         setShowDropdown(!showDropdown);
-        toast.success('reported successfully')
+        toast.success("reported successfully");
       });
   };
 
@@ -422,10 +429,10 @@ const PostPage = () => {
                         </div>
                       )}
                     </div>
-                    {comment.replies.length > 0 && (
+                    {comment?.replies.length > 0 && (
                       <div className="ms-10 mt-2">
                         <p className="font-semibold pt-2 pb-2">Replies:</p>
-                        {comment.replies.map(
+                        {comment?.replies.map(
                           (reply: CommentData, index: number) => (
                             <div key={index}>
                               <p className="font-semibold">{reply.name}</p>

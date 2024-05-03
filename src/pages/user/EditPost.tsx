@@ -11,7 +11,7 @@ const EditPost: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="flex justify-center pt-20">
+      <div className="flex justify-center pt-20 max-w-screen">
         <div className="h-full w-3/4">
           <QuillEdit post={post} />
         </div>

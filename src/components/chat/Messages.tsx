@@ -6,7 +6,7 @@ import useListenMessages from "../../hooks/useListenMessages";
 
 const Messages: React.FC = () => {
   const { messages, loading } = useGetMessages();
-  useListenMessages();
+  // useListenMessages();
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Messages: React.FC = () => {
     <div className="px-4 flex-1 overflow-auto">
       {!loading &&
         messages.length > 0 &&
-        messages.map((message, ind) => {
+        messages.map((message: { senderId: string; createdAt: string; message: string; shouldShake: boolean; }, ind: React.Key | null | undefined) => {
           return (
             <div key={ind} ref={lastMessageRef}>
               <Message message={message} />

@@ -6,13 +6,24 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../../firebase/firebaseConfig";
 import toast, { Toaster } from "react-hot-toast";
 import { addUser } from "../../redux/slices/userSlices";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import GoogleButton from "react-google-button";
+import { UserData } from "../../utils/interfaces/inteface";
+import { useEffect } from "react";
 const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userData = useSelector(
+    (state: UserData) => state.persisted.user.userData
+  );
+
+  useEffect(() => {
+    if (userData._id) {
+      navigate("/");
+    }
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -31,7 +42,7 @@ const Login = () => {
           })
           .then((res) => {
             console.log(res);
-            
+
             if (res.status) {
               console.log({ status: true, message: "User login successful" });
               localStorage.setItem("accessToken", res.data?.accessToken);

@@ -23,28 +23,21 @@ const useListenMessages = () => {
     console.log("Entt");
 
     const handleNewMessage = (newMessage: Message) => {
-      console.log(newMessage, "newMessage");
-
+      console.log("New message received:", newMessage); // Logging the payload here
       newMessage.shouldShake = true;
       const sound = new Audio(notificationSound);
       sound.play();
       (async () => {
-        console.log("getMessages");
-
         try {
-          console.log(selectedConversation,"selectedConversation");
-          
-          const URL = `${chatServiceBaseUrl}/65fd28f38388a9ce4d8e5aee`;
-console.log(URL,"URL");
+          const URL = `${chatServiceBaseUrl}/get-messages/${selectedConversation?._id}`;
 
           const res = await axios.post(
             URL,
             { senderId: userData._id },
             { withCredentials: true }
           );
-          console.log("jiii");
 
-          setMessages(res.data.conversation.messages );
+          setMessages(res.data.conversation.messages);
         } catch (error) {
           console.log(error);
         }

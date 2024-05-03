@@ -5,8 +5,8 @@ import { UserData } from "../../utils/interfaces/inteface";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
 import { dateParser } from "../../helper/dateParser";
-import { Link, Route, Routes } from "react-router-dom";
-import { FileText, CalendarDays } from "lucide-react";
+import { Link } from "react-router-dom";
+import { PencilLine, CalendarDays } from "lucide-react";
 import PostList from "../../components/profile/PostList";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -57,9 +57,9 @@ const ThirdProfile = () => {
 
   return (
     <>
-      <div className="w-screen   relative ">
+      <div className=" max-w-screen   relative ">
         <Navbar />
-        <div className="p-16 flex items-center flex-col  ">
+        <div className="p-16 flex items-center flex-col min-h-screen ">
           <div className=" border border-gray-200 w-[700px] h-[200px] mt-8 overflow-hidden ">
             <Link to={user?.coverPicture || ""}>
               <img src={user?.coverPicture} alt="coverPicture" />
@@ -106,7 +106,7 @@ const ThirdProfile = () => {
               </div>
 
               <div className=" flex space-x-2 text-gray-500">
-                <FileText size={20} color="gray" />
+                <PencilLine size={20} color="gray" />
                 <p>{user?.bio}</p>
               </div>
 
@@ -122,25 +122,15 @@ const ThirdProfile = () => {
                 </p>
               </div>
               <div className="flex flex-row  ">
-                <Link to={`user/${user?._id}`}>
-                  <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer pe-10 hover:pe-9 ">
-                    Blogs
-                  </span>
-                </Link>
-                <Link to={"profile/community"}>
-                  <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer px-10 hover:pe-9">
-                    Communities{" "}
-                  </span>
-                </Link>
+                <span className=" transition-transform transform-origin-top hover:cursor-pointer pe-10 hover:pe-9 ">
+                  Blogs
+                </span>
               </div>
               <hr className="w-[700px] "></hr>
             </div>
           </div>
           <div className="">
-            <Routes>
-              <Route path="/" element={<PostList userId={user?._id} />}></Route>
-              {/* <Route path="/community" element={<CommunityList />}></Route> */}
-            </Routes>
+            <PostList userId={user?._id} />
           </div>
         </div>
       </div>

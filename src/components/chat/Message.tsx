@@ -17,7 +17,7 @@ const Message: React.FC<Props> = ({ message }) => {
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
-  const selectedConversation:Conversation = useConversation();
+  const {selectedConversation} = useConversation();
 
   let fromMe = message.senderId === userData?._id;
   if (!message.senderId) {

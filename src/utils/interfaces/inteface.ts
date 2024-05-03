@@ -119,7 +119,9 @@ export interface Message {
 }
 
 export interface Conversation {
-  profilePicture: any;
+  name: string;
+  error?: any;
+  profilePicture: string;
   conversations: any;
   _id: string;
   participants: [UserData];

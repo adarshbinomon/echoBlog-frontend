@@ -11,7 +11,7 @@ const ChatScreen = () => {
         <SideBar/>
         <MessageContainer/>
       </div>
-      <Footer/>
+      {/* <Footer/> */}
     </div>
   )
 }

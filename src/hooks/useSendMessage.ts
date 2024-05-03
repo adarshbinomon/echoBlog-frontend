@@ -6,9 +6,7 @@ import { useSelector } from "react-redux";
 import { UserData, Message as Imessage } from "../utils/interfaces/inteface";
 const chatServiceBaseUrl = import.meta.env.VITE_CHAT_SERVICE_BASEURL;
 
-interface Message {
-  // Define the properties of your Message object
-}
+
 
 const useSendMessage = () => {
   const [loading, setLoading] = useState(false);
@@ -25,8 +23,9 @@ const useSendMessage = () => {
         { message, senderId: userData._id },
         { withCredentials: true }
       );
-      const data: Message = res.data; 
-      console.log('dd');
+      console.log('res',res);
+      
+      const data: Imessage = res.data.sentMessage; 
       
       setMessages([...messages, data]);
     } catch (error) {

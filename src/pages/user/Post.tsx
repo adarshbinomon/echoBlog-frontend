@@ -259,7 +259,7 @@ const PostPage = () => {
   return (
     <>
       <Navbar />
-      <div className="flex justify-center">
+      <div className="flex justify-center max-w-screen">
         <div className="w-2/3 m-5 mt-20">
           <div className="border p-5 bg-white rounded-md">
             <div className="flex items-center mb-5">

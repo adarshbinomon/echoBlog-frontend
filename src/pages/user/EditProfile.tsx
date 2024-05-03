@@ -15,7 +15,7 @@ const EditProfile = () => {
   return (
     <>
       <Navbar />
-      <div className="h-auto pt-16 flex justify-center ">
+      <div className="h-auto pt-16 flex justify-center max-w-screen ">
         <div className="mt-10 flex-col text-center w-[700px]">
           <div className="flex justify-between text-gray-600">
             <Link to="/edit-profile/">
@@ -47,9 +47,9 @@ const EditProfile = () => {
             <span className="hover:text-indigo-600 hover:font-bold ">
               Membership and Payment
             </span>
-            <span className="hover:text-indigo-600 hover:font-bold ">
+            {/* <span className="hover:text-indigo-600 hover:font-bold ">
               Security and Login
-            </span>
+            </span> */}
           </div>
           <div className="mt-2">
             <hr />

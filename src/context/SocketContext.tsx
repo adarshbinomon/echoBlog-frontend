@@ -31,7 +31,7 @@ export const SocketContextProvider: React.FC<{ children: React.ReactNode }> = ({
           userId: userData._id,
         },
       });
-console.log("I am Socket");
+// console.log("I am Socket");
 
       setSocket(newSocket);
 

@@ -6,8 +6,6 @@ import { useSelector } from "react-redux";
 import { UserData } from "../utils/interfaces/inteface";
 const chatServiceBaseUrl = import.meta.env.VITE_CHAT_SERVICE_BASEURL;
 
-interface Message {}
-
 const useGetMessages = () => {
   const [loading, setLoading] = useState(false);
   const { messages, setMessages, selectedConversation } = useConversation();
@@ -19,15 +17,15 @@ const useGetMessages = () => {
     const getMessages = async () => {
       setLoading(true);
       try {
-        const URL = `${chatServiceBaseUrl}/65fd28f38388a9ce4d8e5aee`;
+        const URL = `${chatServiceBaseUrl}/get-messages/${selectedConversation?._id}`;
         const res = await axios.post(
           URL,
           { senderId: userData._id },
           { withCredentials: true }
         );
-        
+
         setMessages(res.data.conversation.messages);
-        
+        console.log(messages);
       } catch (error: any) {
         console.log(error);
         toast.error(error.message);
@@ -37,7 +35,7 @@ const useGetMessages = () => {
     };
 
     if (selectedConversation?._id) getMessages();
-  }, [selectedConversation?._id, setMessages]);
+  }, [selectedConversation?._id,setMessages]);
 
   return { messages, loading };
 };

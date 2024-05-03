@@ -11,7 +11,7 @@ const WritePost: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="w-screen  pt-[50px] flex justify-center">
+      <div className="w-screen  pt-[50px] flex justify-center max-w-screen">
         <div className="pt-[65px] w-2/3 flex items-center flex-col">
           <div>
             <h2 className="text-5xl font-extrabold text-gray-600 hover:text-gray-950">

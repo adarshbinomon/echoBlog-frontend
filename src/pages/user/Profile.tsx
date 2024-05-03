@@ -2,13 +2,14 @@ import Footer from "../../components/common/Footer";
 import Navbar from "../../components/common/Navbar";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
-import { FileText, CalendarDays, Settings } from "lucide-react";
+import { FileText, CalendarDays, Settings, PencilLine } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { dateParser } from "../../helper/dateParser";
 import { Link, Route, Routes } from "react-router-dom";
 import PostList from "../../components/profile/PostList";
 import Community from "../../components/profile/Community";
 import SavedPosts from "../../components/profile/SavedPosts";
+import { useState } from "react";
 // import SavedPosts from "../../components/profile/SavedPosts";
 const Profile = () => {
   const userData = useSelector(
@@ -17,6 +18,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const createdOn = dateParser(userData.createdOn);
+  const [activeTab, setActiveTab] = useState("blogs");
 
   //edit profile on click
 
@@ -26,7 +28,7 @@ const Profile = () => {
 
   return (
     <>
-      <div className="w-screen   relative ">
+      <div className=" max-w-screen   relative ">
         <Navbar />
         <div className="p-16 flex items-center flex-col">
           <div className=" border border-gray-200 w-[700px] h-[200px] mt-8 overflow-hidden ">
@@ -75,7 +77,9 @@ const Profile = () => {
               </div>
 
               <div className=" flex space-x-2 text-gray-500">
-                <FileText size={20} color="gray" />
+                {/* <FileText size={20} color="gray" /> */}
+                <PencilLine size={20} color="gray" />
+
                 <p>{userData.bio}</p>
               </div>
 
@@ -90,24 +94,40 @@ const Profile = () => {
                   {userData?.following?.length} Following
                 </p>
               </div>
-              <div className="flex flex-row  ">
-                <Link to={"/profile/"}>
-                  <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer pe-10 hover:pe-9 ">
+
+              <div role="tablist" className="tabs tabs-bordered ">
+                <Link
+                  to="/profile/"
+                  className={`tab ${activeTab === "blogs" ? "tab-active" : ""}`}
+                  onClick={() => setActiveTab("blogs")}
+                >
+                  <span className="text-gray-800" role="tab">
                     Blogs
                   </span>
                 </Link>
-                <Link to={"/profile/community"}>
-                  <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer px-10 hover:pe-9">
-                    Communities{" "}
+
+                <Link
+                  to="/profile/community"
+                  className={`tab ${
+                    activeTab === "communities" ? "tab-active" : ""
+                  }`}
+                  onClick={() => setActiveTab("communities")}
+                >
+                  <span className="text-gray-800" role="tab">
+                    Communities
                   </span>
                 </Link>
-                <Link to={"/profile/saved"}>
-                  <span className="hover:text-indigo-600 hover:text-lg transform hover:scale-105 transition-transform transform-origin-top hover:cursor-pointer px-10 hover:pe-9">
-                    Saved{" "}
+
+                <Link
+                  to="/profile/saved"
+                  className={`tab ${activeTab === "saved" ? "tab-active" : ""}`}
+                  onClick={() => setActiveTab("saved")}
+                >
+                  <span className="text-gray-800" role="tab">
+                    Saved
                   </span>
                 </Link>
               </div>
-              <hr className="w-[700px] "></hr>
             </div>
           </div>
           <div className="">

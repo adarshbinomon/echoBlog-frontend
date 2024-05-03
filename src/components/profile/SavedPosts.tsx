@@ -16,6 +16,7 @@ const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 const SavedPosts = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<PostData[]>([]);
+  const [reload, setReload] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
@@ -36,7 +37,7 @@ const SavedPosts = () => {
         )
         .then((res) => {
           console.log(res);
-
+          setReload(false);
           setPosts(res.data.posts);
         })
         .catch((error) => {
@@ -46,7 +47,7 @@ const SavedPosts = () => {
           console.log(posts.length);
         });
     }
-  }, []);
+  }, [reload]);
 
   const handlePost = (id: string) => {
     navigate(`/post/${id}`);
@@ -64,6 +65,7 @@ const SavedPosts = () => {
           withCredentials: true,
         })
         .then((res) => {
+          setReload(true);
           dispatch(addUser(res.data.user));
         });
     } catch (error) {

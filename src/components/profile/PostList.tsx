@@ -22,10 +22,11 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
   const [posts, setPosts] = useState<PostData[]>([]);
 
   const dispatch = useDispatch();
-
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
+
+
 
   useEffect(() => {
     if (userId) {

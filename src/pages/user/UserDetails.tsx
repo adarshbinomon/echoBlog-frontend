@@ -46,7 +46,7 @@ const UserDetails: React.FC = () => {
   });
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen max-w-screen">
       <Toaster position="top-right" reverseOrder={true}></Toaster>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm border px-7  rounded-2xl bg-white">
         <h2 className="mt-5 text-center text-4xl font-bold text-indigo-600 hover:text-indigo-500">

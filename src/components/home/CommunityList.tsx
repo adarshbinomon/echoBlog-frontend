@@ -38,7 +38,7 @@ const CommunityList = () => {
   return (
     <div>
       <div className="max-w-3xl mx-auto mt-10">
-        <h1 className="text-21xl font-semibold mb-6">Communities</h1>
+        <h1 className="text-21xl text-gray-500 font-semibold mb-6">Communities</h1>
         <div className="space-y-6">
           {communities?.slice(0, 4).map((community: CommunityData) => (
             <div

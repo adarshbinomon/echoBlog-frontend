@@ -48,7 +48,7 @@ const UserList = () => {
   return (
     <div>
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-21xl font-semibold mb-6">People you may know </h1>
+        <h1 className="text-21xl text-gray-500 font-semibold mb-6">People you may know </h1>
         <div className="space-y-6">
           {users.slice(0, 4).map((user) => (
             <div

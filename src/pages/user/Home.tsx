@@ -57,60 +57,45 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className=" w-screen rounded container">
-  <img
-    className="block w-full h-full object-cover rounded"
-    src="https://echoblog-images.s3.ap-south-1.amazonaws.com/1713437115921_coverPicture_Unleash%20your%20Creativity%20%282%29.png "
-    alt=""
-  />
-</div>
+      <div className="max-w-screen">
+        <img
+          className="block w-full h-full object-cover rounded"
+          src="https://echoblog-images.s3.ap-south-1.amazonaws.com/1713437115921_coverPicture_Unleash%20your%20Creativity%20%282%29.png "
+          alt=""
+        />
+      </div>
 
       {/* main div */}
       <div className="flex justify-center min-h-screen space-x-1 pt-5 ">
         {/* left div for posts */}
         <div className="ms-10 w-2/3 h-auto flex flex-col border-right-4 ">
-          <div className="flex justify-between font-semibold px-10">
-            <Link to="/">
-              <span
-                className={
-                  location.pathname === "/"
-                    ? "text-indigo-600 font-bold"
-                    : "hover:text-indigo-600 hover:font-bold"
-                }
-              >
-                For You
-              </span>
+          <div className="tabs tabs-bordered flex justify-between font-semibold px-10">
+            <Link
+              to="/"
+              className={`tab ${
+                location.pathname === "/" ? "tab-active font-bold text-indigo-600" : ""
+              }`}
+            >
+              <span>For You</span>
             </Link>
 
-            <Link to="/following">
-              <span
-                className={
-                  location.pathname === "/following"
-                    ? "text-indigo-600 font-bold"
-                    : "hover:text-indigo-600 hover:font-bold"
-                }
-              >
-                Following
-              </span>
-            </Link>
-            <Link to="/community">
-              <span
-                className={
-                  location.pathname === "/community"
-                    ? "text-indigo-600 font-bold"
-                    : "hover:text-indigo-600 hover:font-bold"
-                }
-              >
-                Community
-              </span>
+            <Link
+              to="/following"
+              className={`tab ${
+                location.pathname === "/following" ? "tab-active font-bold text-indigo-600" : ""
+              }`}
+            >
+              <span>Following</span>
             </Link>
 
-            {/* <span className="hover:text-indigo-600 hover:font-bold ">
-              Topics You Follow
-            </span>
-            <span className="hover:text-indigo-600 hover:font-bold ">
-              Explore Topics
-            </span> */}
+            <Link
+              to="/community"
+              className={`tab ${
+                location.pathname === "/community" ? "tab-active font-bold text-indigo-600" : ""
+              }`}
+            >
+              <span>Community</span>
+            </Link>
           </div>
           {/* <hr /> */}
           <div className="h-full ">

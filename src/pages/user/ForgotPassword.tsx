@@ -129,7 +129,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen max-w-screen">
       <Toaster position="top-right" reverseOrder={false}></Toaster>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-sm border px-7 py-4 rounded-2xl bg-white">

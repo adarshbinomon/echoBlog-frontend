@@ -11,7 +11,6 @@ import {
   UserData,
 } from "../../utils/interfaces/inteface";
 const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
-
 const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
@@ -91,7 +90,7 @@ const Navbar = () => {
         .catch((error) => {
           console.error("Error searching communities:", error);
         });
-    }, 5000);
+    }, 1500);
   };
 
   const handleUserClick = (userId: string) => {

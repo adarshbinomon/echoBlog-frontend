@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useSelector } from "react-redux";
 import { Conversation, UserData } from "../utils/interfaces/inteface";
 const chatServiceBaseUrl = import.meta.env.VITE_CHAT_SERVICE_BASEURL;
-
-
 
 interface GetConversationsResponse {
   conversations: Conversation;
@@ -15,7 +13,7 @@ interface GetConversationsResponse {
 
 const useGetConversations = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversations, setConversations] = useState<Conversation>();
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
@@ -24,16 +22,23 @@ const useGetConversations = () => {
     const getConversations = async () => {
       setLoading(true);
       try {
-        const res: AxiosResponse<GetConversationsResponse> = await axios.get(
-          `${chatServiceBaseUrl}/get-conversations/${userData._id}`,
+        const following = userData.following;
+
+        const res: AxiosResponse<GetConversationsResponse> = await axios.post(
+          `${chatServiceBaseUrl}/get-conversations`,
+          { following },
           { withCredentials: true }
         );
-        const data = res.data.conversations.conversations;
+        console.log(res);
+        
+        const data = res.data.conversations;
+        setConversations(data);
+        
 
         if (data.error) {
           throw new Error(data.error);
         }
-        setConversations(data);
+        
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);

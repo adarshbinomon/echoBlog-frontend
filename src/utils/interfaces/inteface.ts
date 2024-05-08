@@ -55,6 +55,7 @@ export interface UserData {
   following: [string];
   _id: string;
   __v: number;
+  isPremium: boolean;
 }
 
 export interface PostData {

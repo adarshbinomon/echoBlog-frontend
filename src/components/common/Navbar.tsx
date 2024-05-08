@@ -107,7 +107,6 @@ const Navbar = () => {
 
   return (
     <nav className="bg-indigo-600 p-4 fixed w-full z-50">
-      <Toaster position="top-right" reverseOrder={false}></Toaster>
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
           <div className="text-white font-bold text-2xl hover:text-gray-300">

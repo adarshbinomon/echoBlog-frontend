@@ -74,10 +74,11 @@ const SavedPosts = () => {
   };
 
   return (
+
     <div>
       {posts.length === 0 ? (
-        <div className=" flex items-center">
-          <p>No posts to show</p>
+    <div className="flex justify-center mt-10 font-semibold text-gray-500">
+    <p>No posts to show</p>
         </div>
       ) : (
         posts

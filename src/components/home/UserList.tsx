@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/userSlices";
+import { MdOutlineVerified } from "react-icons/md";
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
-
 
 const UserList = () => {
   const [users, setUsers] = useState<UserData[]>([]);
@@ -48,7 +48,9 @@ const UserList = () => {
   return (
     <div>
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-21xl text-gray-500 font-semibold mb-6">People you may know </h1>
+        <h1 className="text-21xl text-gray-500 font-semibold mb-6">
+          People you may know{" "}
+        </h1>
         <div className="space-y-6">
           {users.slice(0, 4).map((user) => (
             <div
@@ -66,7 +68,12 @@ const UserList = () => {
 
                 <Link to={`/user/${user._id}`}>
                   <div>
-                    <h2 className="text-lg font-semibold">{user.name}</h2>
+                    <h2 className="text-lg font-semibold flex">
+                      {user.name}{" "}
+                      {user.isPremium && (
+                        <MdOutlineVerified className="ms-1.5 mt-1.5" />
+                      )}
+                    </h2>
                     <p className="text-gray-600">@{user.userName}</p>
                     <p className="text-gray-700 mt-2">{user.bio}</p>
                   </div>

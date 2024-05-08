@@ -5,7 +5,11 @@ import { UserData } from "../../utils/interfaces/inteface";
 import { useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import useConversation from "../../zustand/useConversation";
+import toast from "react-hot-toast";
 const chatServiceBaseUrl = import.meta.env.VITE_CHAT_SERVICE_BASEURL;
+const appID = import.meta.env.VITE_ZEGO_CLOUD_APP_ID;
+const serverSecret = import.meta.env.VITE_ZEGO_CLOUD_SERVER;
+
 
 // import Navbar from "../common/Navbar";
 // import Footer from "../common/Footer";
@@ -29,6 +33,7 @@ const VideoCall = () => {
       )
       .then((res) => {
         console.log(res.data.message);
+        toast.success(res.data.message)
       })
       .catch((err: AxiosError) => {
         console.log("err", err);

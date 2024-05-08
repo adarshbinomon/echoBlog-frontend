@@ -39,6 +39,14 @@ const CommunityList = () => {
     <div>
       <div className="max-w-3xl mx-auto mt-10">
         <h1 className="text-21xl text-gray-500 font-semibold mb-6">Communities</h1>
+        <Link to={"/community"}>
+            <button
+              type="button"
+              className={`flex space-x-1 items-center text-indigo-700 hover:text-white border border-indigo-700 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 transition duration-300 ease-in-out bg-white  dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 hover:bg-indigo-700`}
+            >
+              <span className="font-semibold">Create New Community</span>
+            </button>
+          </Link>
         <div className="space-y-6">
           {communities?.slice(0, 4).map((community: CommunityData) => (
             <div

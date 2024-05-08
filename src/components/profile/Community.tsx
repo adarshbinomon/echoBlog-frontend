@@ -51,10 +51,12 @@ const Community = () => {
 
   useEffect(() => {
     axios
-      .get(`${postServiceBaseUrl}/get-user-community-post/${userData?._id}`,{withCredentials:true})
+      .get(`${postServiceBaseUrl}/get-user-community-post/${userData?._id}`, {
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res);
-        
+
         setPosts(res.data.posts);
       })
       .catch(() => {
@@ -103,13 +105,14 @@ const Community = () => {
           </Link>
         ))}
       </div>
-      <div className="ps-6">
+      <div className="ps-6 mt-5">
         <p>Your Posts:</p>
       </div>
+
       <div>
-        {posts?.length === 0 ? (
-          <div className=" flex items-center">
-            <p>No posts to show</p>
+        {!posts ? (
+          <div className="flex justify-center mt-10 font-semibold text-gray-500">
+            <h3>Seems like Post Service is Down 🤐☹️</h3>
           </div>
         ) : (
           posts

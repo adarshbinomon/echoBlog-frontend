@@ -7,6 +7,7 @@ import axios from "axios";
 import { editAccountValidation } from "../../helper/validate";
 import toast from "react-hot-toast";
 import { addUser } from "../../redux/slices/userSlices";
+import { Link } from "react-router-dom";
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
 const EditProfileAccountTab = () => {
@@ -50,7 +51,7 @@ const EditProfileAccountTab = () => {
   });
 
   return (
-    <>
+    <div className="h-screen">
       <div>
         <form
           onSubmit={formik.handleSubmit}
@@ -181,18 +182,26 @@ const EditProfileAccountTab = () => {
             Verified Badge:
           </label>
         </div>
-        <div className="w-2/3 ms-[50px]">
-          <p>
-            Non Active{" "}
-            <span className="text-indigo-600 font-bold hover:text-indigo-500 hover:cursor-pointer">
-              Become a Member
-            </span>{" "}
-            to receive a verified badge.
-          </p>
-        </div>
+        {userData.isPremium ? (
+          <div className="ms-10">
+            <p>Premium Subscription already Active!</p>
+          </div>
+        ) : (
+          <div className="w-2/3 ms-[50px]">
+            <p>
+              Non Active{" "}
+              <Link to={"/edit-profile/premium"}>
+                <span className="text-indigo-600 font-bold hover:text-indigo-500 hover:cursor-pointer">
+                  Become a Member
+                </span>{" "}
+              </Link>
+              to receive a verified badge.
+            </p>
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-row mt-10">
+      {/* <div className="flex flex-row mt-10">
         <div className="w-1/3 flex justify-start">
           <label
             htmlFor="interestedTopics"
@@ -218,7 +227,7 @@ const EditProfileAccountTab = () => {
         <div className="flex w-2/3 justify-end ms-[50px]">
           <p>0</p>
         </div>
-      </div>
+      </div> */}
 
       <div className="flex flex-row mt-10">
         <div className="w-1/3 flex justify-start">
@@ -233,7 +242,7 @@ const EditProfileAccountTab = () => {
           <p>{createdOn}</p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

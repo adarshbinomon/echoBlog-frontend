@@ -7,8 +7,6 @@ import { confirmAlert } from "react-confirm-alert";
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_ADMIN_BASEURL;
 
-
-
 const UserManagement: React.FC = () => {
   const [data, setData] = useState<UserData[]>([]);
   const [reload, setReload] = useState<boolean>(false);
@@ -55,6 +53,8 @@ const UserManagement: React.FC = () => {
       .get(`${userServiceBaseUrl}/find-all-users`, { withCredentials: true })
       .then((res) => {
         setData(res.data.users);
+        console.log(res.data.users);
+        
         setReload(false);
       })
       .catch((error) => {

@@ -20,7 +20,6 @@ const useListenMessages = () => {
     (state: UserData) => state.persisted.user.userData
   );
   useEffect(() => {
-    console.log("Entt");
 
     const handleNewMessage = (newMessage: Message) => {
       console.log("New message received:", newMessage); // Logging the payload here

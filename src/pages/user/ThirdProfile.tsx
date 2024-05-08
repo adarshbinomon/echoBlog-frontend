@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/userSlices";
 import toast from "react-hot-toast";
+import { MdOutlineVerified } from "react-icons/md";
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
 const ThirdProfile = () => {
@@ -97,6 +98,10 @@ const ThirdProfile = () => {
                 className="flex container justify-start text-xl font-bold text-gray-900 w-auto mt-5 font"
               >
                 <p>{user?.name}</p>
+                {user?.isPremium && 
+                <MdOutlineVerified className="ms-2.5 mt-1.5" />
+                }
+
               </div>
               <div
                 id="userName"

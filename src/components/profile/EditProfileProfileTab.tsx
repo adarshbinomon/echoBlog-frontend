@@ -17,6 +17,7 @@ const EditProfileProfileTab = () => {
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
+  
 
   const [profilePicture, setProfilePicture] = useState(userData.profilePicture);
   const [coverPicture, setCoverPicture] = useState(userData.CoverPicture);

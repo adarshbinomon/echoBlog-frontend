@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { UserData, PostData } from "../../utils/interfaces/inteface";
 import { useSelector } from "react-redux";
@@ -25,8 +25,6 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
-
-
 
   useEffect(() => {
     if (userId) {
@@ -73,8 +71,16 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
   return (
     <div>
       {posts.length === 0 ? (
-        <div className=" flex items-center">
+        <div className=" flex items-center flex-col gap-5 mt-5">
           <p>No posts to show</p>
+          <Link to={"/write-post"}>
+            <button
+              type="button"
+              className={`flex space-x-1 items-center text-indigo-700 hover:text-white border border-indigo-700 font-medium rounded-lg text-sm px-3 py-2 text-center me-2 mb-2 transition duration-300 ease-in-out bg-white  dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 hover:bg-indigo-700`}
+            >
+              <span className="font-semibold">Write New Post</span>
+            </button>
+          </Link>
         </div>
       ) : (
         posts

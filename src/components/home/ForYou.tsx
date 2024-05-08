@@ -15,6 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { MdOutlineVerified } from "react-icons/md";
 
 const ForYou = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
@@ -64,6 +65,11 @@ const ForYou = () => {
 
   return (
     <div>
+      {posts.length === 0 && (
+        <div className="flex justify-center mt-10 font-semibold text-gray-500">
+          <h3>Seems like Post Service is Down 🤐☹️</h3>
+        </div>
+      )}
       {posts.length > 0 &&
         posts
           .slice()
@@ -83,6 +89,11 @@ const ForYou = () => {
                   </div>
                   <div className="flex flex-col text-start">
                     <p>{post.createdBy?.name}</p>
+                    {post.createdBy?.isPremium ? (
+                      <MdOutlineVerified className="ms-2.5 mt-1.5" />
+                    ) : (
+                      ""
+                    )}
                     <p className="font-mono">@{post.createdBy?.userName}</p>
                   </div>
                 </div>

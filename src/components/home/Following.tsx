@@ -69,6 +69,11 @@ const Following = () => {
 
   return (
     <div>
+      {posts.length === 0 && (
+        <div className="flex justify-center mt-10 font-semibold text-gray-500">
+          <h3>Seems like Post Service is Down 🤐☹️</h3>
+        </div>
+      )}
       {posts.length > 0 &&
         posts
           .slice()

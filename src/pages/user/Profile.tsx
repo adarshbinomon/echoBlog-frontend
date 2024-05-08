@@ -10,6 +10,8 @@ import PostList from "../../components/profile/PostList";
 import Community from "../../components/profile/Community";
 import SavedPosts from "../../components/profile/SavedPosts";
 import { useState } from "react";
+import { MdOutlineVerified } from "react-icons/md";
+
 // import SavedPosts from "../../components/profile/SavedPosts";
 const Profile = () => {
   const userData = useSelector(
@@ -28,7 +30,7 @@ const Profile = () => {
 
   return (
     <>
-      <div className=" max-w-screen   relative ">
+      <div className=" max-w-screen min-h-screen  relative ">
         <Navbar />
         <div className="p-16 flex items-center flex-col">
           <div className=" border border-gray-200 w-[700px] h-[200px] mt-8 overflow-hidden ">
@@ -68,6 +70,10 @@ const Profile = () => {
                 className="flex container justify-start text-xl font-bold text-gray-900 w-auto mt-5 font"
               >
                 <p>{userData?.name}</p>
+                {userData.isPremium && 
+                <MdOutlineVerified className="ms-2.5 mt-1.5" />
+                }
+
               </div>
               <div
                 id="userName"

@@ -38,3 +38,12 @@ select {
 ::-webkit-scrollbar-thumb:hover {
   background: #000000;
 }
+
+.notification-badge {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 3px 6px;
+  font-size: 12px;
+  margin-left: 5px; /* Adjust as needed */
+}

@@ -47,7 +47,7 @@ const Community = () => {
     } catch (error) {
       console.log("error in finding communities:", error);
     }
-  }, []);
+  }, [userData?._id]);
 
   useEffect(() => {
     axios
@@ -62,7 +62,7 @@ const Community = () => {
       .catch(() => {
         toast.error("Error in finding Posts 😟");
       });
-  }, []);
+  }, [userData?._id]);
 
   const handlePost = (id: string) => {
     navigate(`/post/${id}`);
@@ -160,7 +160,7 @@ const Community = () => {
                   </p>
                   <BookOpenText size={23} />
                   <p>{calculateReadTime(post.content)} min read</p>
-                  <Heart size={23} />
+                  <Heart fill={post.like.includes(userData._id) ? '' : 'none'} size={23} />
                   <p>{post?.like?.length} Likes</p>
                   <MessageCircle size={23} />
                   <p>{post?.comment?.length} Comments</p>

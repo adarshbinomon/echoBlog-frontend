@@ -2,7 +2,7 @@ import Footer from "../../components/common/Footer";
 import Navbar from "../../components/common/Navbar";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
-import { FileText, CalendarDays, Settings, PencilLine } from "lucide-react";
+import { CalendarDays, Settings, PencilLine } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { dateParser } from "../../helper/dateParser";
 import { Link, Route, Routes } from "react-router-dom";
@@ -70,10 +70,9 @@ const Profile = () => {
                 className="flex container justify-start text-xl font-bold text-gray-900 w-auto mt-5 font"
               >
                 <p>{userData?.name}</p>
-                {userData.isPremium && 
-                <MdOutlineVerified className="ms-2.5 mt-1.5" />
-                }
-
+                {userData.isPremium && (
+                  <MdOutlineVerified className="ms-2.5 mt-1.5" />
+                )}
               </div>
               <div
                 id="userName"

@@ -13,6 +13,8 @@ import ForYou from "../../components/home/ForYou";
 import UserList from "../../components/home/UserList";
 import CommunityList from "../../components/home/CommunityList";
 import Community from "../../components/home/Community";
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
+
 
 const Home = () => {
   const location = useLocation();
@@ -24,7 +26,6 @@ const Home = () => {
   );
   const id = userData._id;
 
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
 
   useEffect(() => {
     axios
@@ -33,6 +34,8 @@ const Home = () => {
       })
       .then((res) => {
         if (res.status) {
+          console.log('if res.status');
+          
           dispatch(addUser(res.data.user));
         } else if (
           !res.status &&
@@ -52,7 +55,7 @@ const Home = () => {
           console.log(error.response.data.message);
         }
       });
-  }, [navigate]);
+  }, [navigate,dispatch,id]);
 
   return (
     <>

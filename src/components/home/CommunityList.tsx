@@ -25,7 +25,7 @@ const CommunityList = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [userData._id]);
 
   // const handleJoin = (userId: string) => {
   //   try {

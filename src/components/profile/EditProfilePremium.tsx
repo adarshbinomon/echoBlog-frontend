@@ -2,8 +2,8 @@ import { loadStripe, Stripe } from "@stripe/stripe-js";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { UserData } from "../../utils/interfaces/interface";
-import { addUser, clearUser } from "../../redux/slices/userSlices";
+import { UserData } from "../../utils/interfaces/inteface";
+import { addUser } from "../../redux/slices/userSlices";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -31,7 +31,7 @@ const EditProfilePremium = () => {
       .catch((error) => {
         console.log(error.response.status);
       });
-  }, [navigate]);
+  }, [navigate, dispatch, userData?._id]);
 
   useEffect(() => {
     const fetchStripe = async () => {

@@ -6,7 +6,7 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [message, setMessage] = useState<any>();
+  const [message, setMessage] = useState<string>();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {

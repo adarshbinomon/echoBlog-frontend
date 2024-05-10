@@ -6,6 +6,7 @@ import { communityValidation } from "../../helper/validate";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
 import { useNavigate } from "react-router-dom";
+import CommunityPosts from "./CommunityPosts";
 const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
 
 const Community = () => {
@@ -125,7 +126,7 @@ const Community = () => {
           </form>
         </div>
       </div>
-
+        <CommunityPosts/>
       <div></div>
     </div>
   );

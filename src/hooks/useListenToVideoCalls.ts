@@ -13,7 +13,7 @@ const useListenToVideoCalls = () => {
       console.log("New call received:", callDetails);
       const sound = new Audio(notificationSound);
       sound.play();
-      setCallDetails(callDetails); // Update call details state
+      setCallDetails(callDetails); 
     };
 
     socket?.on("videoCall", handleNewVideoCall);

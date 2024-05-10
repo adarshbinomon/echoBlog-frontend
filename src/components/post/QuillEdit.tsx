@@ -43,7 +43,7 @@ const QuillEdit: React.FC<QuillEditProps> = ({ post }) => {
 
       // quillRef.current.on("text-change", (delta, oldDelta, source) => {});
     }
-  }, [post.content]);
+  }, [post.content,post]);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);

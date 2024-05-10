@@ -37,7 +37,7 @@ const ThirdProfile = () => {
         console.log(err);
         navigate("/404");
       });
-  }, [userData]);
+  }, [userData,navigate,userId]);
 
   const createdOn = dateParser(user?.createdOn as unknown as Date);
 

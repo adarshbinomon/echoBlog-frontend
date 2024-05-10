@@ -1,6 +1,6 @@
 import MessageContainer from "../../components/chat/MessageContainer"
 import SideBar from "../../components/chat/SideBar"
-import Footer from "../../components/common/Footer"
+// import Footer from "../../components/common/Footer"
 import Navbar from "../../components/common/Navbar"
 
 const ChatScreen = () => {

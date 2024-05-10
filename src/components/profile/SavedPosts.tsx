@@ -47,7 +47,7 @@ const SavedPosts = () => {
           console.log(posts.length);
         });
     }
-  }, [reload]);
+  }, [reload, posts?.length, userData]);
 
   const handlePost = (id: string) => {
     navigate(`/post/${id}`);
@@ -74,11 +74,10 @@ const SavedPosts = () => {
   };
 
   return (
-
     <div>
       {posts.length === 0 ? (
-    <div className="flex justify-center mt-10 font-semibold text-gray-500">
-    <p>No posts to show</p>
+        <div className="flex justify-center mt-10 font-semibold text-gray-500">
+          <p>No posts to show</p>
         </div>
       ) : (
         posts
@@ -122,7 +121,10 @@ const SavedPosts = () => {
                 </p>
                 <BookOpenText size={23} />
                 <p>{calculateReadTime(post.content)} min read</p>
-                <Heart size={23} />
+                <Heart
+                  fill={post.like.includes(userData._id) ? "" : "none"}
+                  size={23}
+                />
                 <p>{post?.like?.length} Likes</p>
                 <MessageCircle size={23} />
                 <p>{post?.comment?.length} Comments</p>

@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { Errors, Values } from "../utils/interfaces/inteface";
 
 export const signupValidation = async (values: Values) => {
-  let error: Errors = {};
+  const error: Errors = {};
 
   await Promise.all([
     nameVerify(error, values),
@@ -17,7 +17,7 @@ export const signupValidation = async (values: Values) => {
 export const loginValidation = async (values: Values) => {
   console.log(values);
 
-  let error: Errors = {};
+  const error: Errors = {};
 
   await Promise.all([
     emailVerify(error, values),
@@ -31,7 +31,7 @@ export const loginValidation = async (values: Values) => {
 export const userDetailsValidation = async (values: Values) => {
   console.log(values);
 
-  let error: Errors = {};
+  const error: Errors = {};
 
   await Promise.all([
     userNameVerify(error, values),
@@ -46,7 +46,7 @@ export const userDetailsValidation = async (values: Values) => {
 };
 
 export const editAccountValidation = async (values: Values) => {
-  let error: Errors = {};
+  const error: Errors = {};
   console.log("validate");
 
   await Promise.all([
@@ -60,7 +60,7 @@ export const editAccountValidation = async (values: Values) => {
 };
 
 export const editProfileValidation = async (values: Values) => {
-  let error: Errors = {};
+  const error: Errors = {};
 
   await Promise.all([
     accountTypeVerify(error, values),
@@ -73,7 +73,7 @@ export const editProfileValidation = async (values: Values) => {
 export const communityValidation = async (values: Values) => {
   console.log('values',values);
   
-  let error: Errors = {};
+  const error: Errors = {};
 
   await Promise.all([
     nameVerify(error, values),
@@ -84,13 +84,13 @@ export const communityValidation = async (values: Values) => {
 };
 
 export const profilePictureValidation = async (values: Values) => {
-  let error: Errors = {};
+  const error: Errors = {};
   await Promise.resolve(profilePictureVerify(error, values));
   return error;
 };
 
 export const coverPictureValidation = async (values: Values) => {
-  let error: Errors = {};
+  const error: Errors = {};
   await Promise.resolve(coverPictureVerify(error, values)); 
   return error;
 };
@@ -112,7 +112,7 @@ const nameVerify = (error: Errors = {}, values: Values) => {
 };
 
 const passwordVerify = (error: Errors = {}, values: Values) => {
-  const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  const specialChars = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
 
   if (!values.password) {
     error.password = toast.error("Password required!");
@@ -211,7 +211,7 @@ const userNameVerify = (error: Errors = {}, values: Values) => {
     error.userName = toast.error("Username required!");
   } else if (!userNameRegex.test(values.userName)) {
     error.userName = toast.error(
-      "Invalid username. It can contain only letters, numbers, and underscores (_)."
+      "Invalid username. It can contain only constters, numbers, and underscores (_)."
     );
   }
 

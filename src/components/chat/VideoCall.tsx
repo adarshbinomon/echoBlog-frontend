@@ -7,9 +7,8 @@ import axios, { AxiosError } from "axios";
 import useConversation from "../../zustand/useConversation";
 import toast from "react-hot-toast";
 const chatServiceBaseUrl = import.meta.env.VITE_CHAT_SERVICE_BASEURL;
-const appID = import.meta.env.VITE_ZEGO_CLOUD_APP_ID;
-const serverSecret = import.meta.env.VITE_ZEGO_CLOUD_SERVER;
-
+// const appID = import.meta.env.VITE_ZEGO_CLOUD_APP_ID;
+// const serverSecret = import.meta.env.VITE_ZEGO_CLOUD_SERVER;
 
 // import Navbar from "../common/Navbar";
 // import Footer from "../common/Footer";
@@ -33,14 +32,16 @@ const VideoCall = () => {
       )
       .then((res) => {
         console.log(res.data.message);
-        toast.success(res.data.message)
+        toast.success(res.data.message);
       })
       .catch((err: AxiosError) => {
         console.log("err", err);
       });
-  }, []);
+  }, [roomId, selectedConversation?._id, userData._id]);
 
   const call = async (element: any) => {
+    console.log('element',element);
+    
     const appID = 455518352;
     const serverSecret = "ba9a1ea4cb0369745d27dd6868544471";
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(

@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export interface Errors {
   about?: string;
   password?: string;
@@ -33,9 +35,10 @@ export interface Values {
 }
 
 export interface UserData {
-  selector: any;
+  user: any;
+  selector: string | number; 
   isActive: boolean;
-  persisted: any;
+  persisted: UserData; 
   email: string;
   isGoogle: boolean;
   name: string;
@@ -72,7 +75,7 @@ export interface PostData {
   comment: [CommentData];
   image: [string];
   length?: number;
-  slice?: any;
+  slice?: [];
 }
 
 export interface CommentData {
@@ -98,8 +101,8 @@ export interface CommunityData {
   coverPicture: string;
   createdOn: Date;
   _id: string;
-  slice: any;
-  map: any;
+  slice: ArraySliceMethod<T>;
+  map: ArrayMapMethod<T, U>;
 }
 
 export interface WritePostData {
@@ -121,12 +124,22 @@ export interface Message {
 
 export interface Conversation {
   name: string;
-  error?: any;
+  error?: AxiosError;
   profilePicture: string;
-  conversations: any;
+  conversations: [Conversation];
   _id: string;
   participants: [UserData];
   messages: [Message];
   createdAt: Date;
   updatedAt: Date;
 }
+
+
+interface ArraySliceMethod<T> {
+  slice(start?: number, end?: number): T[];
+}
+
+interface ArrayMapMethod<T, U> {
+  map(callbackfn: (value: T, index: number, array: T[]) => U): U[];
+}
+

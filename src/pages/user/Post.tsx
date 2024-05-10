@@ -56,8 +56,8 @@ const PostPage = () => {
           setComments(res.data.post.comment);
           setLoadingComments(false);
           setReload(false);
-        }else{
-          navigate('/404')
+        } else {
+          navigate("/404");
         }
       })
       .catch((error) => {
@@ -73,6 +73,8 @@ const PostPage = () => {
     comment,
     isModalOpen,
     reload,
+    navigate,
+    postServiceBaseUrl,
   ]);
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> | undefined = post
@@ -90,7 +92,9 @@ const PostPage = () => {
           label: "Delete",
           onClick: () => {
             axios
-              .get(`${postServiceBaseUrl}/delete-post/${post?._id}`,{withCredentials:true})
+              .get(`${postServiceBaseUrl}/delete-post/${post?._id}`, {
+                withCredentials: true,
+              })
               .then(() => {
                 navigate("/profile");
               })
@@ -110,7 +114,9 @@ const PostPage = () => {
     const id = { userId: userData._id, liked };
 
     axios
-      .post(`${postServiceBaseUrl}/like-Post/${post?._id}`, id,{withCredentials:true})
+      .post(`${postServiceBaseUrl}/like-Post/${post?._id}`, id, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status) {
           setLiked((prevLiked) => !prevLiked);
@@ -127,12 +133,16 @@ const PostPage = () => {
 
     setLoadingComments(true);
     axios
-      .post(`${postServiceBaseUrl}/comment-post/${post?._id}`, {
-        userId: userData._id,
-        name: userData.name,
-        userName: userData.userName,
-        comment: commentInput,
-      },{withCredentials:true})
+      .post(
+        `${postServiceBaseUrl}/comment-post/${post?._id}`,
+        {
+          userId: userData._id,
+          name: userData.name,
+          userName: userData.userName,
+          comment: commentInput,
+        },
+        { withCredentials: true }
+      )
       .then((res) => {
         if (res.data.status) {
           const newComment = res.data.comment[0];

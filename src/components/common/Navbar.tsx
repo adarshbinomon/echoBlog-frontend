@@ -3,13 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { clearUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useState } from "react";
+import { BsCircleFill } from "react-icons/bs";
 import {
   CommunityData,
   PostData,
   UserData,
 } from "../../utils/interfaces/inteface";
+import useConversation from "../../zustand/useConversation";
 const authServiceBaseUrl = import.meta.env.VITE_AUTH_SERVICE_BASEURL;
 const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
@@ -18,6 +20,12 @@ const groupServiceBaseUrl = import.meta.env.VITE_GROUP_SERVICE_BASEURL;
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { unreadMessages } = useConversation();
+
+  console.log('ddd',unreadMessages?.length);
+  
+  const count = unreadMessages?.length
 
   const [searchValue, setSearchValue] = useState("");
   const [userSuggestions, setUserSuggestions] = useState<UserData[]>([]);
@@ -176,8 +184,12 @@ const Navbar = () => {
             <Link to="/write-post" className="text-white hover:text-gray-300">
               Write
             </Link>
-            <Link to="/chat" className="text-white hover:text-gray-300">
-              Messages
+            <Link to="/chat" className="text-white hover:text-gray-300 flex">
+            <p className="">Messages</p>
+            {unreadMessages && 
+            <BsCircleFill fill="red" className="ms-1.5 mt-1.5" />
+            }
+
             </Link>
             <a href="#" className="text-white hover:text-gray-300">
               About
@@ -196,3 +208,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

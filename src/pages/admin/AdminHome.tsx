@@ -19,7 +19,7 @@ const AdminHome = () => {
     } else {
       navigate("/admin/login");
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <>

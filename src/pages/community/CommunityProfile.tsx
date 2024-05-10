@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios, {  AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useSelector } from "react-redux";
 import Navbar from "../../components/common/Navbar";
 import Footer from "../../components/common/Footer";
@@ -43,8 +43,8 @@ const CommunityProfile = () => {
       .catch((error) => {
         console.error("Error fetching community data:", error);
         navigate("/404");
-      })
-  }, [communityId, reload]);
+      });
+  }, [communityId, reload, navigate]);
 
   const createdOn = dateParser(community?.createdOn);
 

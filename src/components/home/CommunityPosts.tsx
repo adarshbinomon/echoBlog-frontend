@@ -15,12 +15,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { MdOutlineVerified } from "react-icons/md";
+const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
-const Following = () => {
+const CommunityPosts = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
-  const postServiceBaseUrl: string = "http://localhost:4002/api/post";
-  const userServiceBaseUrl: string = "http://localhost:4001/api/user";
-
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
@@ -32,12 +32,12 @@ const Following = () => {
   );
 
   useEffect(() => {
-    const following = userData.following;
+    const community = userData.community;
     setLoading(true);
     axios
       .post(
-        `${postServiceBaseUrl}/posts-from-following`,
-        { following },
+        `${postServiceBaseUrl}/posts-from-community`,
+        { community },
         { withCredentials: true }
       )
       .then((res) => {
@@ -50,7 +50,7 @@ const Following = () => {
         setError(true);
         console.error("Error fetching posts:", error);
       });
-  }, [userData.following]);
+  }, [userData.community]);
 
   const handlePost = (id: string) => {
     navigate(`/post/${id}`);
@@ -107,6 +107,11 @@ const Following = () => {
                       </div>
                       <div className="flex flex-col text-start">
                         <p>{post.createdBy?.name}</p>
+                        {post.createdBy?.isPremium ? (
+                          <MdOutlineVerified className="ms-2.5 mt-1.5" />
+                        ) : (
+                          ""
+                        )}
                         <p className="font-mono">@{post.createdBy?.userName}</p>
                       </div>
                     </div>
@@ -169,4 +174,4 @@ const Following = () => {
   );
 };
 
-export default Following;
+export default CommunityPosts;

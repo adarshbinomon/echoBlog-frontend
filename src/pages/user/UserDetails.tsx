@@ -6,9 +6,10 @@ import { userDetailsValidation } from "../../helper/validate";
 import { GenderEnum, AccountTypeEnum } from "../../helper/enum";
 import { useSelector } from "react-redux";
 import { UserData } from "../../utils/interfaces/inteface";
+const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
+
 
 const UserDetails: React.FC = () => {
-  const baseUrl: string = "http://localhost:4001/api/user";
 
   const { userId } = useParams();
 
@@ -32,7 +33,7 @@ const UserDetails: React.FC = () => {
     onSubmit: (values) => {
       if (formik.isValid) {
         axios
-          .post(`${baseUrl}/user-details`, values, { withCredentials: true })
+          .post(`${userServiceBaseUrl}/user-details`, values, { withCredentials: true })
           .then((res) => {
             if (res.data.status) {
               navigate("/");

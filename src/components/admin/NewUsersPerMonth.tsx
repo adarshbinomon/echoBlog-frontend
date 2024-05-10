@@ -31,7 +31,7 @@ const UsersPerMonth = () => {
         localStorage.removeItem("adminAccessToken");
         navigate("/admin/login");
       });
-  }, []);
+  }, [navigate]);
 
   const options = {
     animationEnabled: true,

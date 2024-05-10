@@ -17,7 +17,7 @@ const PaymentSuccessPage = () => {
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [countdown,navigate]);
 
   return (
     <div className="flex flex-col items-center h-screen">

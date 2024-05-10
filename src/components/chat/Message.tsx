@@ -2,7 +2,7 @@ import React from "react";
 import { extractTime } from "../../utils/extractTime";
 import useConversation from "../../zustand/useConversation";
 import { useSelector } from "react-redux";
-import { Conversation, UserData } from "../../utils/interfaces/inteface";
+import {  UserData } from "../../utils/interfaces/inteface";
 
 interface Props {
   message: {

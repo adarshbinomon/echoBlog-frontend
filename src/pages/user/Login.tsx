@@ -23,7 +23,7 @@ const Login = () => {
     if (userData._id) {
       navigate("/");
     }
-  }, []);
+  }, [navigate,userData._id]);
 
   const formik = useFormik({
     initialValues: {
@@ -83,7 +83,6 @@ const Login = () => {
             navigate("/");
             localStorage.setItem("accessToken", res.data?.accessToken);
             dispatch(addUser(res.data.user));
-          } else {
           }
         })
         .catch((error) => {

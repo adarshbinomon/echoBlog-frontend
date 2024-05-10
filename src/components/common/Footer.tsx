@@ -1,4 +1,4 @@
-import LogoSmall from "./LogoSmall";
+// import LogoSmall from "./LogoSmall";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -50,7 +50,7 @@ const Footer = () => {
           </div>
         </nav>
         <aside>
-          <p>Copyright © 2024 - All right reserved by echoblog.live</p>
+          <p>Copyright © {currentYear} - All right reserved by echoblog.live</p>
         </aside>
       </footer>
     </>

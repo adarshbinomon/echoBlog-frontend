@@ -28,7 +28,7 @@ const UserList = () => {
       .catch((error) => {
         console.error("Error fetching users:", error);
       });
-  }, []);
+  }, [userData._id]);
 
   const handleFollow = (userId: string) => {
     const data = {

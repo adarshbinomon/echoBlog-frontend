@@ -10,8 +10,8 @@ const ForgotPassword = () => {
   const [otpVisibility, setOtpVisibility] = useState<boolean>(false);
   const [passwordFieldVisibility, setPasswordFieldVisibility] =
     useState<boolean>(false);
-  const [emailValidity, setEmailValidity] = useState<boolean>(true);
-  const [otp, setOtp] = useState<string[]>(["", "", "", ""]); // Initialize OTP state with an array of 4 empty strings
+  const [emailValidity] = useState<boolean>(true);
+  const [otp, setOtp] = useState<string[]>(["", "", "", ""]); 
   const [otpValidity, setOtpValidity] = useState<boolean[]>([
     false,
     false,

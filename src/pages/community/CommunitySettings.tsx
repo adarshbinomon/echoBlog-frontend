@@ -35,7 +35,7 @@ const CommunitySettings = () => {
         console.error("Error fetching community data:", error);
         navigate("/404");
       });
-  }, [communityId, reload]);
+  }, [communityId, reload, navigate]);
 
   return (
     <>

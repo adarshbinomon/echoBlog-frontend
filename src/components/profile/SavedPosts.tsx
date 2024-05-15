@@ -17,6 +17,7 @@ const SavedPosts = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<PostData[]>([]);
   const [reload, setReload] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
@@ -25,6 +26,7 @@ const SavedPosts = () => {
   );
 
   useEffect(() => {
+    setLoading(true);
     if (userData) {
       const savedPosts = userData.savedPosts;
       axios
@@ -39,6 +41,9 @@ const SavedPosts = () => {
           console.log(res);
           setReload(false);
           setPosts(res.data.posts);
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
         })
         .catch((error) => {
           console.log("error", error);
@@ -74,80 +79,93 @@ const SavedPosts = () => {
   };
 
   return (
-    <div>
-      {posts.length === 0 ? (
-        <div className="flex justify-center mt-10 font-semibold text-gray-500">
-          <p>No posts to show</p>
+    <>
+      {loading ? (
+        <div className="flex justify-center mt-10 ">
+          <span className="loading loading-bars loading-sm justify-center text-indigo-600"></span>
         </div>
       ) : (
-        posts
-          .slice()
-          .reverse()
-          .map((post: PostData, i: number) => (
-            <div
-              key={i}
-              className="w-[700px] border p-10 text-center m-[20px] relative text-gray-600 bg-white rounded-md"
-            >
-              <div className="flex space-x-3 -ms-8 -mt-8">
-                <div className="w-12 border rounded-full overflow-hidden">
-                  <img
-                    src={post?.createdBy?.profilePicture}
-                    alt="profilePicture"
-                  />
-                </div>
-                <div className="flex flex-col text-start">
-                  <p>{post.createdBy?.name}</p>
-                  <p className="font-mono">@{post?.createdBy?.userName}</p>
-                </div>
-              </div>
-              <div
-                className="flex justify-between cursor-pointer"
-                onClick={() => handlePost(post._id)}
-              >
-                <div className="text-black font-medium  text-xl w-3/4 flex ">
-                  <div className="w-3/4 p-8">
-                    <p className="mt-2">{post.title}</p>
-                  </div>
-                </div>
-                {post.image.length > 0 && (
-                  <div className="w-1/4 border overflow-hidden">
-                    <img src={post?.image[0]} alt="image" className="w-full" />
-                  </div>
-                )}
-              </div>
-              <div className="absolute bottom-0 left-0 mb-2 ml-2 flex space-x-3 cursor-default">
-                <p>
-                  {dateParser(post.createdOn)} - {timeParser(post.createdOn)}
-                </p>
-                <BookOpenText size={23} />
-                <p>{calculateReadTime(post.content)} min read</p>
-                <Heart
-                  fill={post.like.includes(userData._id) ? "" : "none"}
-                  size={23}
-                />
-                <p>{post?.like?.length} Likes</p>
-                <MessageCircle size={23} />
-                <p>{post?.comment?.length} Comments</p>
-              </div>
-              <div className="absolute bottom-0 right-0 mr-2 mb-2 cursor-pointer">
-                {userData.savedPosts.includes(post._id) ? (
-                  <BookmarkCheck
-                    onClick={() => {
-                      handleSave(post._id);
-                    }}
-                  />
-                ) : (
-                  <Bookmark
-                    onClick={() => {
-                      handleSave(post._id);
-                    }}
-                  />
-                )}
-              </div>
+        <div>
+          {posts.length === 0 ? (
+            <div className="flex justify-center mt-10 font-semibold text-gray-500">
+              <p>No posts to show</p>
             </div>
-          ))
+          ) : (
+            posts
+              .slice()
+              .reverse()
+              .map((post: PostData, i: number) => (
+                <div
+                  key={i}
+                  className="w-[700px] border p-10 text-center m-[20px] relative text-gray-600 bg-white rounded-md"
+                >
+                  <div className="flex space-x-3 -ms-8 -mt-8">
+                    <div className="w-12 border rounded-full overflow-hidden">
+                      <img
+                        src={post?.createdBy?.profilePicture}
+                        alt="profilePicture"
+                      />
+                    </div>
+                    <div className="flex flex-col text-start">
+                      <p>{post.createdBy?.name}</p>
+                      <p className="font-mono">@{post?.createdBy?.userName}</p>
+                    </div>
+                  </div>
+                  <div
+                    className="flex justify-between cursor-pointer"
+                    onClick={() => handlePost(post._id)}
+                  >
+                    <div className="text-black font-medium  text-xl w-3/4 flex ">
+                      <div className="w-3/4 p-8">
+                        <p className="mt-2">{post.title}</p>
+                      </div>
+                    </div>
+                    {post.image.length > 0 && (
+                      <div className="w-1/4 border overflow-hidden">
+                        <img
+                          src={post?.image[0]}
+                          alt="image"
+                          className="w-full"
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div className="absolute bottom-0 left-0 mb-2 ml-2 flex space-x-3 cursor-default">
+                    <p>
+                      {dateParser(post.createdOn)} -{" "}
+                      {timeParser(post.createdOn)}
+                    </p>
+                    <BookOpenText size={23} />
+                    <p>{calculateReadTime(post.content)} min read</p>
+                    <Heart
+                      fill={post.like.includes(userData._id) ? "" : "none"}
+                      size={23}
+                    />
+                    <p>{post?.like?.length} Likes</p>
+                    <MessageCircle size={23} />
+                    <p>{post?.comment?.length} Comments</p>
+                  </div>
+                  <div className="absolute bottom-0 right-0 mr-2 mb-2 cursor-pointer">
+                    {userData.savedPosts.includes(post._id) ? (
+                      <BookmarkCheck
+                        onClick={() => {
+                          handleSave(post._id);
+                        }}
+                      />
+                    ) : (
+                      <Bookmark
+                        onClick={() => {
+                          handleSave(post._id);
+                        }}
+                      />
+                    )}
+                  </div>
+                </div>
+              ))
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import useConversation from "../zustand/useConversation";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -35,7 +35,7 @@ const useGetMessages = () => {
     };
 
     if (selectedConversation?._id) getMessages();
-  }, [selectedConversation?._id,setMessages]);
+  }, [selectedConversation?._id, setMessages, userData?._id]);
 
   return { messages, loading };
 };

@@ -19,6 +19,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import toast from "react-hot-toast";
 import Modal from "../../components/common/Modal";
 import PostReportReasons from "../../utils/enums/report.reasons";
+const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 
 const PostPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,7 +38,6 @@ const PostPage = () => {
   const [comment, setComment] = useState<string>("");
   const [reload, setReload] = useState<boolean>(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -45,6 +45,7 @@ const PostPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLoadingComments(true);
     axios
       .get(`${postServiceBaseUrl}/${id}`, { withCredentials: true })
       .then((res) => {
@@ -294,7 +295,16 @@ const PostPage = () => {
               <span>{calculateReadTime(post?.content)} min read</span>
             </div>
             <div className="mb-3 ">
-              {post && <QuillViewer content={post?.content} />}
+              {post ? (
+                <QuillViewer content={post?.content} />
+              ) : (
+                <div className="flex flex-col gap-4 w-full h-[500px] ">
+                  <div className="skeleton  w-full bg-slate-200 h-3/6"></div>
+                  <div className="skeleton h-1/6 w-28 bg-slate-200"></div>
+                  <div className="skeleton h-1/6 w-full bg-slate-200"></div>
+                  <div className="skeleton h-1/6 w-full bg-slate-200"></div>
+                </div>
+              )}
             </div>
             <div className="flex items-center">
               <Heart

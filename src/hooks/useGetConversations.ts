@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import axios, { AxiosResponse } from "axios";
 import { useSelector } from "react-redux";
 import { Conversation, UserData } from "../utils/interfaces/inteface";
+import useConversation from "../zustand/useConversation";
 const chatServiceBaseUrl = import.meta.env.VITE_CHAT_SERVICE_BASEURL;
 
 interface GetConversationsResponse {
@@ -17,6 +18,7 @@ const useGetConversations = () => {
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
+  const { messages } = useConversation();
 
   useEffect(() => {
     const getConversations = async () => {
@@ -49,7 +51,7 @@ const useGetConversations = () => {
     };
 
     getConversations();
-  }, [userData.following,]);
+  }, [userData.following, messages]);
 
   return { loading, conversations };
 };

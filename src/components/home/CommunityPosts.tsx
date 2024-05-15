@@ -4,6 +4,7 @@ import { UserData, PostData } from "../../utils/interfaces/inteface";
 import { timeParser } from "../../helper/timeParser";
 import { dateParser } from "../../helper/dateParser";
 import { calculateReadTime } from "../../helper/wordCountToReadTime";
+import InfiniteScroll from "react-infinite-scroll-component";
 import {
   BookOpenText,
   Heart,
@@ -16,6 +17,7 @@ import { addUser } from "../../redux/slices/userSlices";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { MdOutlineVerified } from "react-icons/md";
+
 const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
@@ -23,6 +25,8 @@ const CommunityPosts = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [index, setIndex] = useState<number>(4);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -36,7 +40,7 @@ const CommunityPosts = () => {
     setLoading(true);
     axios
       .post(
-        `${postServiceBaseUrl}/posts-from-community`,
+        `${postServiceBaseUrl}/posts-from-community?offset=0`,
         { community },
         { withCredentials: true }
       )
@@ -44,13 +48,35 @@ const CommunityPosts = () => {
         setPosts(res.data.posts);
         setTimeout(() => {
           setLoading(false);
-        }, 1000);
+        }, 500);
       })
       .catch((error) => {
         setError(true);
         console.error("Error fetching posts:", error);
       });
   }, [userData.community]);
+
+  const fetchNextPage = () => {
+    const community = userData.community;
+    axios
+      .post(
+        `${postServiceBaseUrl}/posts-from-community?offset=${index}`,
+        { community },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        setPosts((prevItems) => [...prevItems, ...res.data.posts]);
+        setTimeout(() => {
+          setLoading(false);
+          res.data.posts.length > 0 ? setHasMore(true) : setHasMore(false);
+          setIndex((prevIndex) => prevIndex + 4);
+        }, 500);
+      })
+      .catch((error) => {
+        setError(true);
+        console.error("Error fetching posts:", error);
+      });
+  };
 
   const handlePost = (id: string) => {
     navigate(`/post/${id}`);
@@ -88,11 +114,26 @@ const CommunityPosts = () => {
               <h3>Seems like Post Service is Down 🤐☹️</h3>
             </div>
           )}
-          {posts.length > 0 &&
-            posts
-              .slice()
-              .reverse()
-              .map((post: PostData) => (
+          {posts.length > 0 && (
+            <InfiniteScroll
+              dataLength={posts.length}
+              next={fetchNextPage}
+              hasMore={hasMore}
+              loader={
+                <div className="flex justify-center" key="loader">
+                  <span className="loading loading-bars loading-sm justify-center text-indigo-600"></span>
+                </div>
+              }
+              endMessage={
+                <p
+                  className="font-semibold text-gray-500"
+                  style={{ textAlign: "center" }}
+                >
+                  You saw everything! 🫡
+                </p>
+              }
+            >
+              {posts.map((post: PostData) => (
                 <div
                   key={post._id}
                   className="border p-10 text-center m-4 relative rounded-lg shadow-md  text-gray-600 bg-white"
@@ -107,10 +148,8 @@ const CommunityPosts = () => {
                       </div>
                       <div className="flex flex-col text-start">
                         <p>{post.createdBy?.name}</p>
-                        {post.createdBy?.isPremium ? (
+                        {post.createdBy?.isPremium && (
                           <MdOutlineVerified className="ms-2.5 mt-1.5" />
-                        ) : (
-                          ""
                         )}
                         <p className="font-mono">@{post.createdBy?.userName}</p>
                       </div>
@@ -168,6 +207,8 @@ const CommunityPosts = () => {
                   </div>
                 </div>
               ))}
+            </InfiniteScroll>
+          )}
         </div>
       )}
     </div>

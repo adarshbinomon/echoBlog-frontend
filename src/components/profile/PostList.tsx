@@ -21,7 +21,7 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<PostData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [setError] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const userData = useSelector(

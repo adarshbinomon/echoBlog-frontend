@@ -28,11 +28,12 @@ const useListenMessages = () => {
       newMessage.shouldShake = true;
       const sound = new Audio(notificationSound);
       sound.play();
-      toast("New message recieved", {
-        icon: "📩",
-      });
-      setUnreadMessages(newMessage);
-      console.log('unreadMessages',unreadMessages);
+      if (selectedConversation?._id !== newMessage.senderId) {
+        toast("New message recieved", {
+          icon: "📩",
+        });
+        setUnreadMessages(newMessage);
+      }
 
       (async () => {
         try {
@@ -59,7 +60,15 @@ const useListenMessages = () => {
         socket.off("newMessage", handleNewMessage);
       }
     };
-  }, [socket, setMessages, messages, selectedConversation?._id, userData._id]);
+  }, [
+    socket,
+    setMessages,
+    messages,
+    selectedConversation?._id,
+    userData._id,
+    setUnreadMessages,
+    unreadMessages,
+  ]);
 };
 
 export default useListenMessages;

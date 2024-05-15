@@ -25,7 +25,7 @@ const useListenToVideoCalls = () => {
     };
   }, [socket]);
 
-  return callDetails; // Return the call details state
+  return callDetails; 
 };
 
 export default useListenToVideoCalls;

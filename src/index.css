@@ -12,6 +12,9 @@ body {
 input {
   background-color: #fff; /* White background color */
 }
+textarea {
+  background-color: #fff; /* White background color */
+}
 
 select {
   background-color: #fff;

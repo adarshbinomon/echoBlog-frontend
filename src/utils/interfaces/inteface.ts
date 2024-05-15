@@ -35,7 +35,9 @@ export interface Values {
 }
 
 export interface UserData {
-  user: any;
+  savedPosts: any;
+  userData: UserData;
+  user: UserData;
   selector: string | number; 
   isActive: boolean;
   persisted: UserData; 

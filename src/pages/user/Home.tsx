@@ -13,6 +13,7 @@ import ForYou from "../../components/home/ForYou";
 import UserList from "../../components/home/UserList";
 import CommunityList from "../../components/home/CommunityList";
 import Community from "../../components/home/Community";
+import useConversation from "../../zustand/useConversation";
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
 
@@ -20,6 +21,7 @@ const Home = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {setSelectedConversation} = useConversation()
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
@@ -28,6 +30,7 @@ const Home = () => {
 
 
   useEffect(() => {
+    setSelectedConversation(undefined)
     axios
       .get(`${userServiceBaseUrl}/user-profile/${id}`, {
         withCredentials: true,

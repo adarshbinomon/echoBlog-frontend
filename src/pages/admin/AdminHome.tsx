@@ -32,7 +32,7 @@ const AdminHome = () => {
           <Navbar />
           <div className="w-full h-fullbg-red-200">
             <Routes>
-              <Route path="/" element={<AdminHomeComponent />} />
+              <Route path="/*" element={<AdminHomeComponent />} />
               <Route path="/user-management" element={<UserManagement />} />
               <Route path="/post-management" element={<PostManagement />} />
               <Route path="/premium-management" element={<PremiumManagement />} />

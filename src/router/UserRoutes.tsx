@@ -26,7 +26,6 @@ import { useState } from "react";
 const UserRoutes = () => {
   useListenMessages(); // to listen for messages all the time when a user is logged in
   const callDetails = useListenToVideoCalls();  // to listen for calls all the time when a user is logged in
-  console.log("callDetails", callDetails);
 
   const [showIncomingCallModal, setShowIncomingCallModal] = useState(false);
 

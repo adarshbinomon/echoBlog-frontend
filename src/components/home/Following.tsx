@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { UserData, PostData } from "../../utils/interfaces/inteface";
 import { timeParser } from "../../helper/timeParser";
 import { dateParser } from "../../helper/dateParser";
@@ -13,8 +14,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { addUser } from "../../redux/slices/userSlices";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Following = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
@@ -23,6 +23,8 @@ const Following = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [index, setIndex] = useState<number>(4);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -36,21 +38,45 @@ const Following = () => {
     setLoading(true);
     axios
       .post(
-        `${postServiceBaseUrl}/posts-from-following`,
+        `${postServiceBaseUrl}/posts-from-following?offset=0`,
         { following },
         { withCredentials: true }
       )
       .then((res) => {
-        setPosts(res.data.posts);
         setTimeout(() => {
+          setPosts((prevItems) => [...prevItems, ...res.data.posts]);
+          console.log("posts", res);
           setLoading(false);
-        }, 1000);
+          res.data.posts.length > 0 ? setHasMore(true) : setHasMore(false);
+          setIndex((prevIndex) => prevIndex + 4);
+        }, 500);
       })
       .catch((error) => {
         setError(true);
         console.error("Error fetching posts:", error);
       });
   }, [userData.following]);
+
+  const fetchNextPage = () => {
+    const following = userData.following;
+    axios
+      .post(
+        `${postServiceBaseUrl}/posts-from-following?offset=${index}`,
+        { following },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        setTimeout(() => {
+          setPosts((prevItems) => [...prevItems, ...res.data.posts]);
+          res.data.posts.length > 0 ? setHasMore(true) : setHasMore(false);
+          setIndex((prevIndex) => prevIndex + 4);
+        }, 500);
+      })
+      .catch((error) => {
+        setError(true);
+        console.error("Error fetching posts:", error);
+      });
+  };
 
   const handlePost = (id: string) => {
     navigate(`/post/${id}`);
@@ -62,23 +88,22 @@ const Following = () => {
       userId: userData._id,
     };
 
-    try {
-      axios
-        .put(`${userServiceBaseUrl}/save-post/`, data, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          dispatch(addUser(res.data.user));
-        });
-    } catch (error) {
-      console.log("error", error);
-    }
+    axios
+      .put(`${userServiceBaseUrl}/save-post/`, data, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        dispatch(addUser(res.data.user));
+      })
+      .catch((error) => {
+        console.log("Error saving post:", error);
+      });
   };
 
   return (
     <div>
       {loading ? (
-        <div className="flex justify-center mt-10 ">
+        <div className="flex justify-center mt-10">
           <span className="loading loading-bars loading-sm justify-center text-indigo-600"></span>
         </div>
       ) : (
@@ -88,14 +113,29 @@ const Following = () => {
               <h3>Seems like Post Service is Down 🤐☹️</h3>
             </div>
           )}
-          {posts.length > 0 &&
-            posts
-              .slice()
-              .reverse()
-              .map((post: PostData) => (
+          {posts.length > 0 && (
+            <InfiniteScroll
+              dataLength={posts.length}
+              next={fetchNextPage}
+              hasMore={hasMore}
+              loader={
+                <div className="flex justify-center" key="loader">
+                  <span className="loading loading-bars loading-sm justify-center text-indigo-600"></span>
+                </div>
+              }
+              endMessage={
+                <p
+                  className="font-semibold text-gray-500"
+                  style={{ textAlign: "center" }}
+                >
+                  You saw everything! 🫡
+                </p>
+              }
+            >
+              {posts.map((post: PostData) => (
                 <div
                   key={post._id}
-                  className="border p-10 text-center m-4 relative rounded-lg shadow-md  text-gray-600 bg-white"
+                  className="border p-10 text-center m-4 relative rounded-lg shadow-md text-gray-600 bg-white"
                 >
                   <Link to={`/user/${post?.createdBy?._id}`}>
                     <div className="flex space-x-3 -ms-8 -mt-8">
@@ -113,9 +153,9 @@ const Following = () => {
                   </Link>
                   <div
                     className="flex justify-between cursor-pointer"
-                    onClick={() => handlePost(post._id)}
+                    onMouseDown={() => handlePost(post._id)}
                   >
-                    <div className="text-black font-medium  text-xl w-3/4 flex ">
+                    <div className="text-black font-medium text-xl w-3/4 flex">
                       <div className="w-3/4 p-8">
                         <p className="mt-2">{post.title}</p>
                       </div>
@@ -149,13 +189,13 @@ const Following = () => {
                   <div className="absolute bottom-0 right-0 mr-2 mb-2 cursor-pointer">
                     {userData.savedPosts?.includes(post._id) ? (
                       <BookmarkCheck
-                        onClick={() => {
+                        onMouseDown={() => {
                           handleSave(post._id);
                         }}
                       />
                     ) : (
                       <Bookmark
-                        onClick={() => {
+                        onMouseDown={() => {
                           handleSave(post._id);
                         }}
                       />
@@ -163,6 +203,8 @@ const Following = () => {
                   </div>
                 </div>
               ))}
+            </InfiniteScroll>
+          )}
         </div>
       )}
     </div>

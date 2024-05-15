@@ -23,9 +23,8 @@ const Navbar = () => {
 
   const { unreadMessages } = useConversation();
 
-  console.log('ddd',unreadMessages?.length);
   
-  const count = unreadMessages?.length
+  // const count = unreadMessages?.length
 
   const [searchValue, setSearchValue] = useState("");
   const [userSuggestions, setUserSuggestions] = useState<UserData[]>([]);

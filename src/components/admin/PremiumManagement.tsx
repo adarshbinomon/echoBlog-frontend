@@ -80,9 +80,9 @@ const PremiumManagement = () => {
         <div className="card w-52 bg-white shadow-xl">
           <figure className="px-10 pt-10"></figure>
           <div className="card-body items-center text-center">
-          <h2 className="card-title">Total Revenue generated</h2>
-            <h2 className="text-3xl font-extrabold text-red-500 mt-5">₹
-              {premiumUsers.length * 1999}
+            <h2 className="card-title">Total Revenue generated</h2>
+            <h2 className="text-3xl font-extrabold text-red-500 mt-5">
+              ₹{premiumUsers.length * 1999}
             </h2>
           </div>
         </div>

@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 5173
 
-CMD ["nodemon", "src/index.ts", "--exec", "ts-node"] 
+CMD ["npm", "run" , "dev"] 

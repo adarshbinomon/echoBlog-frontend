@@ -46,9 +46,7 @@ const CommunityPosts = () => {
       )
       .then((res) => {
         setPosts(res.data.posts);
-        setTimeout(() => {
-          setLoading(false);
-        }, 500);
+        setLoading(false);
       })
       .catch((error) => {
         setError(true);
@@ -66,11 +64,9 @@ const CommunityPosts = () => {
       )
       .then((res) => {
         setPosts((prevItems) => [...prevItems, ...res.data.posts]);
-        setTimeout(() => {
-          setLoading(false);
-          res.data.posts.length > 0 ? setHasMore(true) : setHasMore(false);
-          setIndex((prevIndex) => prevIndex + 4);
-        }, 500);
+        setLoading(false);
+        res.data.posts.length > 0 ? setHasMore(true) : setHasMore(false);
+        setIndex((prevIndex) => prevIndex + 4);
       })
       .catch((error) => {
         setError(true);

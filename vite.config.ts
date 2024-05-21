@@ -7,4 +7,9 @@ dotenv.config();
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server:{
+    host:true,
+    strictPort:true,
+    port:5173
+  },
 });

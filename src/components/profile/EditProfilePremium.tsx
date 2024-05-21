@@ -6,6 +6,7 @@ import { UserData } from "../../utils/interfaces/inteface";
 import { addUser } from "../../redux/slices/userSlices";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 
 const userServiceBaseUrl = import.meta.env.VITE_USER_SERVICE_BASEURL;
 
@@ -13,10 +14,17 @@ const EditProfilePremium = () => {
   const [stripe, setStripe] = useState<Stripe | null>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [paymentProcessing, setPaymentProcessing] = useState<string>();
 
   const userData = useSelector(
     (state: UserData) => state.persisted.user.userData
   );
+  useEffect(() => {
+    setTimeout(() => {
+      setPaymentProcessing("false");
+      localStorage.setItem("buttonClicked", "false");
+    }, 60000);
+  }, [paymentProcessing]);
 
   useEffect(() => {
     axios
@@ -44,28 +52,36 @@ const EditProfilePremium = () => {
   }, []);
 
   const handlePayment = async () => {
-    if (!stripe) return;
+    const buttonClicked = localStorage.getItem("buttonClicked");
+    if (buttonClicked === "false") {
+      localStorage.setItem("buttonClicked", "true");
+      setPaymentProcessing("true");
 
-    const body = {
-      monthlySubscription: 199,
-    };
+      if (!stripe) return;
 
-    try {
-      const response = await axios.post(
-        `${userServiceBaseUrl}/create-checkout-session`,
-        JSON.stringify(body)
-      );
+      const body = {
+        monthlySubscription: 199,
+      };
 
-      const sessionId = response.data.id;
+      try {
+        const response = await axios.post(
+          `${userServiceBaseUrl}/create-checkout-session`,
+          JSON.stringify(body)
+        );
 
-      const result = await stripe.redirectToCheckout({
-        sessionId: sessionId,
-      });
-      if (result.error) {
-        console.log(result.error);
+        const sessionId = response.data.id;
+
+        const result = await stripe.redirectToCheckout({
+          sessionId: sessionId,
+        });
+        if (result.error) {
+          console.log(result.error);
+        }
+      } catch (error) {
+        console.error("Error creating checkout session:", error);
       }
-    } catch (error) {
-      console.error("Error creating checkout session:", error);
+    } else if (buttonClicked === "true") {
+      toast.error("Payment processing");
     }
   };
 

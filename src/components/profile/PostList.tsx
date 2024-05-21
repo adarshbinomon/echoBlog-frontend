@@ -38,9 +38,7 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
         })
         .then((res) => {
           setPosts(res.data.posts);
-          setTimeout(() => {
             setLoading(false);
-          }, 1000);
         })
         .catch((error) => {
           setError(true);

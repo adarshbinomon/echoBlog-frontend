@@ -43,9 +43,7 @@ const ForYou = () => {
       })
       .then((res) => {
         setPosts(res.data.posts);
-        setTimeout(() => {
-          setLoading(false);
-        }, 500);
+        setLoading(false);
       })
       .catch((error) => {
         setError(true);
@@ -59,11 +57,9 @@ const ForYou = () => {
         withCredentials: true,
       })
       .then((res) => {
-        setTimeout(() => {
-          setPosts((prevItems) => [...prevItems, ...res.data.posts]);
-          res.data.posts.length > 0 ? setHasMore(true) : setHasMore(false);
-          setIndex((prevIndex) => prevIndex + 4);
-        }, 500);
+        setPosts((prevItems) => [...prevItems, ...res.data.posts]);
+        res.data.posts.length > 0 ? setHasMore(true) : setHasMore(false);
+        setIndex((prevIndex) => prevIndex + 4);
       })
       .catch((error) => {
         setError(true);

@@ -41,9 +41,7 @@ const SavedPosts = () => {
           console.log(res);
           setReload(false);
           setPosts(res.data.posts);
-          setTimeout(() => {
-            setLoading(false);
-          }, 1000);
+          setLoading(false);
         })
         .catch((error) => {
           console.log("error", error);

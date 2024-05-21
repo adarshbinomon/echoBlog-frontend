@@ -2,7 +2,7 @@ name: Publish Docker image
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
 
 jobs:
   push_to_registry:
@@ -11,23 +11,51 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
-      
+
       - name: Log in to Docker Hub
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
+
+      - name: Set up environment variables
+        run: |
+          echo "VITE_FIREBASE_API_KEY=${{ secrets.VITE_FIREBASE_API_KEY }}" >> .env
+          echo "VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}" >> .env
+          echo "VITE_FIREBASE_PROJECT_ID=${{ secrets.VITE_FIREBASE_PROJECT_ID }}" >> .env
+          echo "VITE_FIREBASE_STORAGE_BUCKET=${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}" >> .env
+          echo "VITE_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}" >> .env
+          echo "VITE_FIREBASE_APP_ID=${{ secrets.VITE_FIREBASE_APP_ID }}" >> .env
+          echo "VITE_AUTH_SERVICE_BASEURL=${{ secrets.VITE_AUTH_SERVICE_BASEURL }}" >> .env
+          echo "VITE_AUTH_SERVICE_ADMIN_BASEURL=${{ secrets.VITE_AUTH_SERVICE_ADMIN_BASEURL }}" >> .env
+          echo "VITE_AUTH_SERVICE_ADMIN_BASEURL=${{ secrets.VITE_AUTH_SERVICE_ADMIN_BASEURL }}" >> .env
+          echo "VITE_AUTH_SERVICE_ADMIN_BASEURL=${{ secrets.VITE_AUTH_SERVICE_ADMIN_BASEURL }}" >> .env
+          echo "VITE_GROUP_SERVICE_BASEURL=${{ secrets.VITE_GROUP_SERVICE_BASEURL }}" >> .env
+          echo "VITE_CHAT_SERVICE_BASEURL=${{ secrets.VITE_CHAT_SERVICE_BASEURL }}" >> .env
+          echo "VITE_ZEGO_CLOUD_SERVER_SECRET=${{ secrets.VITE_ZEGO_CLOUD_SERVER_SECRET }}" >> .env
+          echo "VITE_ZEGO_CLOUD_APP_ID=${{ secrets.VITE_ZEGO_CLOUD_APP_ID }}" >> .env
+         
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@v3
         with:
           images: adarshbinomon/echoblog-frontend
-      
+
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: adarshbinomon/echoblog-frontend:latest
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Set up DigitalOcean CLI
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Fetch Kubernetes credentials
+        run: doctl kubernetes cluster kubeconfig save ${{ secrets.DIGITALOCEAN_CLUSTER_ID }}
+
+      - name: Restart Kubernetes deployment
+        run: kubectl rollout restart deployment/client-deployment

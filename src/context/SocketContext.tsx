@@ -26,12 +26,11 @@ export const SocketContextProvider: React.FC<{ children: React.ReactNode }> = ({
     let newSocket: Socket | undefined = undefined;
 
     if (userData) {      
-      newSocket = io("http://localhost:8081", {
+      newSocket = io("https://echoblog.live", {
         query: {
           userId: userData._id,
         },
       });
-// console.log("I am Socket");
 
       setSocket(newSocket);
 

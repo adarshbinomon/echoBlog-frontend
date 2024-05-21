@@ -35,6 +35,7 @@ export interface Values {
 }
 
 export interface UserData {
+  community: unknown;
   savedPosts: any;
   userData: UserData;
   user: UserData;

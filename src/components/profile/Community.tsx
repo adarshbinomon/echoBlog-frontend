@@ -5,7 +5,7 @@ import {
   CommunityData,
   PostData,
   UserData,
-} from "../../utils/interfaces/interface"; // Corrected typo in 'interface'
+} from "../../utils/interfaces/inteface"; 
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { addUser } from "../../redux/slices/userSlices";
@@ -45,9 +45,7 @@ const Community = () => {
         })
         .then((res) => {
           setCommunities(res.data.communities);
-          setTimeout(() => {
             setLoading(false);
-          }, 500);
         });
     } catch (error) {
       console.log("Error in finding communities:", error);

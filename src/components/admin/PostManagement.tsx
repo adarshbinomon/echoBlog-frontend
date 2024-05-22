@@ -9,6 +9,7 @@ const postServiceBaseUrl = import.meta.env.VITE_POST_SERVICE_BASEURL;
 const PostManagement = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
   const [reload, setReload] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const columns: TableColumn<PostData>[] = [
     {
@@ -53,9 +54,10 @@ const PostManagement = () => {
 
   useEffect(() => {
     console.log(`${postServiceBaseUrl}/all-posts`);
+    setLoading(true);
 
     axios
-      .get(`${postServiceBaseUrl}/all-posts`,{withCredentials:true})
+      .get(`${postServiceBaseUrl}/all-posts`, { withCredentials: true })
       .then((res) => {
         const mappedData = res.data.posts.map((post: PostData) => ({
           _id: post._id,
@@ -69,7 +71,8 @@ const PostManagement = () => {
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
-      });
+      })
+      .finally(() => setLoading(false));
   }, [reload]);
 
   const handleStatusChange = (postId: string) => {
@@ -81,7 +84,9 @@ const PostManagement = () => {
           label: "Change",
           onClick: () => {
             axios
-              .put(`${postServiceBaseUrl}/update-post-status/${postId}`,{withCredentials:true})
+              .put(`${postServiceBaseUrl}/update-post-status/${postId}`, {
+                withCredentials: true,
+              })
               .then(() => {
                 setReload(!reload);
                 toast.success("Post status updated successfully");
@@ -103,7 +108,16 @@ const PostManagement = () => {
     <div className="flex flex-col items-center">
       <h1 className="text-2xl font-bold">Post Management</h1>
       <div className="w-4/5 mt-16 border justify-center">
-        <DataTable columns={columns} data={posts} pagination highlightOnHover />
+        {loading ? (
+          <span className="loading loading-spinner loading-lg"></span>
+        ) : (
+          <DataTable
+            columns={columns}
+            data={posts}
+            pagination
+            highlightOnHover
+          />
+        )}
       </div>
     </div>
   );

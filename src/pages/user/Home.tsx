@@ -37,8 +37,7 @@ const Home = () => {
       })
       .then((res) => {
         if (res.status) {
-          console.log('if res.status');
-          
+          console.log('if res.status');  
           dispatch(addUser(res.data.user));
         } else if (
           !res.status &&
